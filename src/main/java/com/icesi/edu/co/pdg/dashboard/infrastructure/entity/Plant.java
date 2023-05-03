@@ -35,4 +35,6 @@ public class Plant implements Serializable {
 	@Column(name = "plant_photo")
 	private byte[] plantPhoto;
 
+	@Column(name = "plant_photo_plc")
+	private byte[] plantPhotoPLC;
 }

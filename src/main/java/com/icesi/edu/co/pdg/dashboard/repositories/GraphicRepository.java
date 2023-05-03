@@ -1,9 +1,9 @@
-package com.icesi.edu.co.pdg.dashboard.infrastructure.repository;
+package com.icesi.edu.co.pdg.dashboard.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.icesi.edu.co.pdg.dashboard.infrastructure.entity.Graphic;
+import com.icesi.edu.co.pdg.dashboard.model.entity.Graphic;
 
 @Repository
 public interface GraphicRepository  extends JpaRepository<Graphic, Long>{

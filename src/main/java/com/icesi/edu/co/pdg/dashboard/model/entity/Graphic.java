@@ -1,4 +1,4 @@
-package com.icesi.edu.co.pdg.dashboard.infrastructure.entity;
+package com.icesi.edu.co.pdg.dashboard.model.entity;
 
 import java.io.Serializable;
 

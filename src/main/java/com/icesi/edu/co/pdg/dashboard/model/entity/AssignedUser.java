@@ -15,7 +15,7 @@ import lombok.Setter;
 @Table(name = "user_event")
 @Getter
 @Setter
-public class UserEvent  implements Serializable{
+public class AssignedUser  implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	

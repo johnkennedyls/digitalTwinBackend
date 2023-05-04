@@ -1,41 +1,82 @@
 package com.icesi.edu.co.pdg.dashboard.model.entity;
 
+
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import javax.persistence.*;
+import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
-import lombok.Getter;
-import lombok.Setter;
-
+/**
+ * The persistent class for the log_type database table.
+ * 
+ */
 @Entity
-@Table(name = "log_type")
-@Getter
-@Setter
+@Table(name="log_type")
+@NamedQuery(name="LogType.findAll", query="SELECT l FROM LogType l")
 public class LogType implements Serializable {
-	
 	private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO )
-    private Long id;
-    
-	
-	
+	@Id
 	@Column(name="log_type_id")
-	private Long log_type_id;
-	
-	@Column(name="log_type_name")
-	private String log_type_name;
-	
+	private Integer logTypeId;
+
 	@Column(name="log_type_description")
-	private String log_type_description;
-	
+	private String logTypeDescription;
+
+	@Column(name="log_type_name")
+	private String logTypeName;
+
+	//bi-directional many-to-one association to Log
+	@OneToMany(mappedBy="logType")
+	private List<Log> logs;
+
+	public LogType() {
+	}
+
+	public Integer getLogTypeId() {
+		return this.logTypeId;
+	}
+
+	public void setLogTypeId(Integer logTypeId) {
+		this.logTypeId = logTypeId;
+	}
+
+	public String getLogTypeDescription() {
+		return this.logTypeDescription;
+	}
+
+	public void setLogTypeDescription(String logTypeDescription) {
+		this.logTypeDescription = logTypeDescription;
+	}
+
+	public String getLogTypeName() {
+		return this.logTypeName;
+	}
+
+	public void setLogTypeName(String logTypeName) {
+		this.logTypeName = logTypeName;
+	}
+
+	public List<Log> getLogs() {
+		return this.logs;
+	}
+
+	public void setLogs(List<Log> logs) {
+		this.logs = logs;
+	}
+
+	public Log addLog(Log log) {
+		getLogs().add(log);
+		log.setLogType(this);
+
+		return log;
+	}
+
+	public Log removeLog(Log log) {
+		getLogs().remove(log);
+		log.setLogType(null);
+
+		return log;
+	}
+
 }
-
-

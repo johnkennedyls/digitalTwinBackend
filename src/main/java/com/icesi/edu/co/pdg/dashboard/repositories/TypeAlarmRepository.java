@@ -5,7 +5,12 @@ import org.springframework.stereotype.Repository;
 
 import com.icesi.edu.co.pdg.dashboard.model.entity.TypeAlarm;
 
+
 @Repository
-public interface TypeAlarmRepository extends JpaRepository<TypeAlarm, Long> {
+public interface TypeAlarmRepository extends JpaRepository<TypeAlarm, Integer> {
+	
+	public TypeAlarm findByTypeAlarmName(String name);
+	
+	public TypeAlarm findByCondition(String condition);
 
 }

@@ -3,7 +3,7 @@ package com.icesi.edu.co.pdg.dashboard.model.dtos.out;
 import java.sql.Timestamp;
 import java.util.List;
 
-public class AlarmOutDao {
+public class AlarmListOutDTO {
 	
 	private String typeAlarmName;
     private String condition;

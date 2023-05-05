@@ -1,8 +1,18 @@
 package com.icesi.edu.co.pdg.dashboard.services.interfaces;
 
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
-@Repository
+import com.icesi.edu.co.pdg.dashboard.model.dtos.in.AlarmCommentInDTO;
+import com.icesi.edu.co.pdg.dashboard.model.dtos.in.AlarmGenerateInDTO;
+import com.icesi.edu.co.pdg.dashboard.model.dtos.out.AlarmListOutDTO;
+import com.icesi.edu.co.pdg.dashboard.model.entity.Alarm;
+
 public interface AlarmService {
+	
+	public List<AlarmListOutDTO> getAllAlarms () throws Exception;
+	
+	public Alarm addAlarm(AlarmGenerateInDTO alarm) throws Exception;
+	
+	public Alarm editAlarm(AlarmCommentInDTO alarm) throws Exception;
 
 }

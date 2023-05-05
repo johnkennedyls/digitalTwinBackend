@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.icesi.edu.co.pdg.dashboard.model.entity.Log;
 
 @Repository
-public interface LogRepository extends JpaRepository<Log, Long> {
+public interface LogRepository extends JpaRepository<Log, Integer> {
 
 }

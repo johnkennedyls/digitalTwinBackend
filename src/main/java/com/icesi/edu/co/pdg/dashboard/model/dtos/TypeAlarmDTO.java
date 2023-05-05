@@ -1,17 +1,16 @@
-package com.icesi.edu.co.pdg.dashboard.model.dtos.out;
+package com.icesi.edu.co.pdg.dashboard.model.dtos;
 
 import java.util.List;
 
-import com.icesi.edu.co.pdg.dashboard.model.entity.Comment;
+import com.icesi.edu.co.pdg.dashboard.model.entity.AssignedUser;
 
-public class AlarmDetailOutDao {
+public class TypeAlarmDTO {
 	
 	private String typeAlarmName;
 	private String typeAlarmDescription;
 	private String tagName;
     private String condition;
-    private List<String> usersAssigned;
-    private List<Comment> comments;
+    private List<AssignedUser> usersAssigned;
 	
 	public String getTypeAlarmName() {
 		return typeAlarmName;
@@ -37,17 +36,12 @@ public class AlarmDetailOutDao {
 	public void setCondition(String condition) {
 		this.condition = condition;
 	}
-	public List<String> getUsersAssigned() {
+	public List<AssignedUser> getUsersAssigned() {
 		return usersAssigned;
 	}
-	public void setUsersAssigned(List<String> usersAssigned) {
+	public void setUsersAssigned(List<AssignedUser> usersAssigned) {
 		this.usersAssigned = usersAssigned;
 	}
-	public List<Comment> getComments() {
-		return comments;
-	}
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
-	}
+
 
 }

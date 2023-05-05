@@ -6,11 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.icesi.edu.co.pdg.dashboard.model.entity.Plant;
 
-
-
-
-
 @Repository
-public interface PlantRepository extends JpaRepository<Plant, Long>{
+public interface PlantRepository extends JpaRepository<Plant, Integer>{
 
 }

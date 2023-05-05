@@ -2,14 +2,17 @@ package com.icesi.edu.co.pdg.dashboard.model.dtos.out;
 
 import java.util.List;
 
-public class TypeAlarmOutDTO {
-	
+import com.icesi.edu.co.pdg.dashboard.model.entity.ActionHistory;
+
+
+public class AlarmDetailOutDTO {
 	
 	private String typeAlarmName;
 	private String typeAlarmDescription;
 	private String tagName;
     private String condition;
     private List<String> usersAssigned;
+    private List<ActionHistory> actionsHistory;
 	
 	public String getTypeAlarmName() {
 		return typeAlarmName;
@@ -40,6 +43,12 @@ public class TypeAlarmOutDTO {
 	}
 	public void setUsersAssigned(List<String> usersAssigned) {
 		this.usersAssigned = usersAssigned;
+	}
+	public List<ActionHistory> getActionsHistory() {
+		return actionsHistory;
+	}
+	public void setActionsHistory(List<ActionHistory> actionsHistory) {
+		this.actionsHistory = actionsHistory;
 	}
 
 }

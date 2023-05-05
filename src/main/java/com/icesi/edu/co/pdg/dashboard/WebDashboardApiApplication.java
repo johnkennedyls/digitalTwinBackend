@@ -13,7 +13,6 @@ public class WebDashboardApiApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(WebDashboardApiApplication.class, args);
-		System.out.println("Inicia pdg");
 	}
 
 }

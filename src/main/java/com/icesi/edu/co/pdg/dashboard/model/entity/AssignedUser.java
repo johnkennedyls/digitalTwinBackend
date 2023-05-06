@@ -5,14 +5,14 @@ package com.icesi.edu.co.pdg.dashboard.model.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.*;
-
-
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
 
 @Entity
-@Table(name="assigned_users")
 @NamedQuery(name="AssignedUser.findAll", query="SELECT a FROM AssignedUser a")
 public class AssignedUser implements Serializable {
 	private static final long serialVersionUID = 1L;

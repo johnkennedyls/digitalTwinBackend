@@ -2,16 +2,20 @@ package com.icesi.edu.co.pdg.dashboard.model.entity;
 
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.List;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 
 /**
  * The persistent class for the type_alarm database table.
  * 
  */
 @Entity
-@Table(name="type_alarm")
 @NamedQuery(name="TypeAlarm.findAll", query="SELECT t FROM TypeAlarm t")
 public class TypeAlarm implements Serializable {
 	private static final long serialVersionUID = 1L;

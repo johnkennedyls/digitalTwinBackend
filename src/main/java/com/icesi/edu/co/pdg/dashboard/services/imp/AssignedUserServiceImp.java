@@ -1,23 +1,24 @@
 package com.icesi.edu.co.pdg.dashboard.services.imp;
 
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.icesi.edu.co.pdg.dashboard.exceptions.BadRequestDataException;
 import com.icesi.edu.co.pdg.dashboard.exceptions.NoResultException;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.AssignedUserDTO;
-import com.icesi.edu.co.pdg.dashboard.model.dtos.TypeAlarmDTO;
 import com.icesi.edu.co.pdg.dashboard.model.entity.AssignedUser;
 import com.icesi.edu.co.pdg.dashboard.model.entity.TypeAlarm;
 import com.icesi.edu.co.pdg.dashboard.model.mappers.interfaces.AssignedUserMapper;
-import com.icesi.edu.co.pdg.dashboard.model.mappers.interfaces.TypeAlarmMapper;
 import com.icesi.edu.co.pdg.dashboard.repositories.AssignedUserRepository;
 import com.icesi.edu.co.pdg.dashboard.repositories.TypeAlarmRepository;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.AssignedUserService;
 
+@Service
 public class AssignedUserServiceImp implements AssignedUserService{
 
 	@Autowired

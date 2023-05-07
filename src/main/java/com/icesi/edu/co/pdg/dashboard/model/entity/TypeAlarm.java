@@ -2,16 +2,20 @@ package com.icesi.edu.co.pdg.dashboard.model.entity;
 
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.List;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 
 /**
  * The persistent class for the type_alarm database table.
  * 
  */
 @Entity
-@Table(name="type_alarm")
 @NamedQuery(name="TypeAlarm.findAll", query="SELECT t FROM TypeAlarm t")
 public class TypeAlarm implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -27,6 +31,9 @@ public class TypeAlarm implements Serializable {
 
 	@Column(name="type_alarm_name")
 	private String typeAlarmName;
+	
+	@Column(name="tag_name")
+	private String tagName;
 
 	//bi-directional many-to-one association to Alarm
 	@OneToMany(mappedBy="typeAlarm")
@@ -40,11 +47,6 @@ public class TypeAlarm implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="event_id")
 	private DashboardEvent dashboardEvent;
-
-	//bi-directional many-to-one association to DashboardValue
-	@ManyToOne
-	@JoinColumn(name="value_id")
-	private DashboardValue dashboardValue;
 
 	//bi-directional many-to-one association to Plant
 	@ManyToOne
@@ -138,20 +140,20 @@ public class TypeAlarm implements Serializable {
 		this.dashboardEvent = dashboardEvent;
 	}
 
-	public DashboardValue getDashboardValue() {
-		return this.dashboardValue;
-	}
-
-	public void setDashboardValue(DashboardValue dashboardValue) {
-		this.dashboardValue = dashboardValue;
-	}
-
 	public Plant getPlant() {
 		return this.plant;
 	}
 
 	public void setPlant(Plant plant) {
 		this.plant = plant;
+	}
+	
+	public String getTagName() {
+		return tagName;
+	}
+
+	public void setTagName(String tagName) {
+		this.tagName = tagName;
 	}
 
 }

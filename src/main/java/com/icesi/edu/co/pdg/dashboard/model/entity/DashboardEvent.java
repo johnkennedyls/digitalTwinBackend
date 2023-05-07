@@ -2,7 +2,11 @@ package com.icesi.edu.co.pdg.dashboard.model.entity;
 
 
 import java.io.Serializable;
-import javax.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 import java.util.List;
 
 
@@ -11,7 +15,6 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="dashboard_event")
 @NamedQuery(name="DashboardEvent.findAll", query="SELECT d FROM DashboardEvent d")
 public class DashboardEvent implements Serializable {
 	private static final long serialVersionUID = 1L;

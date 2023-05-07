@@ -1,6 +1,8 @@
 package com.icesi.edu.co.pdg.dashboard;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -14,7 +16,7 @@ public class WebDashboardApiApplicationConfig implements WebSocketMessageBrokerC
 	
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/websocket").setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint("/websocket").setAllowedOriginPatterns("*").withSockJS();
     }
 
 	@Override
@@ -22,5 +24,9 @@ public class WebDashboardApiApplicationConfig implements WebSocketMessageBrokerC
         registry.enableSimpleBroker("/topic");
         registry.setApplicationDestinationPrefixes("/app");
     }
-    
+	
+    @Bean
+    public SpelExpressionParser spelExpressionParser() {
+        return new SpelExpressionParser();
+    }
 }

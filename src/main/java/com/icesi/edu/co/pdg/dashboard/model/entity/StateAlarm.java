@@ -2,8 +2,15 @@ package com.icesi.edu.co.pdg.dashboard.model.entity;
 
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 
 
 /**
@@ -11,7 +18,6 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="state_alarm")
 @NamedQuery(name="StateAlarm.findAll", query="SELECT s FROM StateAlarm s")
 public class StateAlarm implements Serializable {
 	private static final long serialVersionUID = 1L;

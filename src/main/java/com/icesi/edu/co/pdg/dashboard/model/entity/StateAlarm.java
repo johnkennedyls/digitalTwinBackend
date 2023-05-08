@@ -6,11 +6,14 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 
 
 /**
@@ -24,6 +27,8 @@ public class StateAlarm implements Serializable {
 
 	@Id
 	@Column(name="state_alarm_id")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "state_alarm_seq_gen")
+    @SequenceGenerator(name = "state_alarm_seq_gen", sequenceName = "state_alarm_seq")
 	private Integer stateAlarmId;
 
 	@Column(name="state_alarm_description")

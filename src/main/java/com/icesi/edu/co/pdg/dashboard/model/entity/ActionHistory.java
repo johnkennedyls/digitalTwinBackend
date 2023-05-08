@@ -5,10 +5,13 @@ import java.sql.Timestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.SequenceGenerator;
 
 
 /**
@@ -22,6 +25,8 @@ public class ActionHistory implements Serializable {
 
 	@Id
 	@Column(name="action_history_id")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "action_history_seq_gen")
+    @SequenceGenerator(name = "action_history_seq_gen", sequenceName = "action_history_seq", allocationSize = 1)
 	private Integer actionHistoryId;
 
 	@Column(name="action_history_date")

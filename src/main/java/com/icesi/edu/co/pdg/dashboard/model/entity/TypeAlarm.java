@@ -2,29 +2,38 @@ package com.icesi.edu.co.pdg.dashboard.model.entity;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 
 /**
  * The persistent class for the type_alarm database table.
  * 
  */
 @Entity
+@Table(name = "type_alarm")
 @NamedQuery(name="TypeAlarm.findAll", query="SELECT t FROM TypeAlarm t")
 public class TypeAlarm implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="type_alarm_id")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "type_alarm_seq_gen")
+    @SequenceGenerator(name = "type_alarm_seq_gen", sequenceName = "type_alarm_seq")
 	private Integer typeAlarmId;
 
-	private String condition;
+	private String condition;	
+
+	private Integer numberAlarmsMax;
 
 	@Column(name="type_alarm_description")
 	private String typeAlarmDescription;
@@ -32,9 +41,6 @@ public class TypeAlarm implements Serializable {
 	@Column(name="type_alarm_name")
 	private String typeAlarmName;
 	
-	@Column(name="tag_name")
-	private String tagName;
-
 	//bi-directional many-to-one association to Alarm
 	@OneToMany(mappedBy="typeAlarm")
 	private List<Alarm> alarms;
@@ -147,13 +153,28 @@ public class TypeAlarm implements Serializable {
 	public void setPlant(Plant plant) {
 		this.plant = plant;
 	}
-	
-	public String getTagName() {
-		return tagName;
+	public Integer getNumberAlarmsMax() {
+		return numberAlarmsMax;
 	}
 
-	public void setTagName(String tagName) {
-		this.tagName = tagName;
+	public void setNumberAlarmsMax(Integer numberAlarmsMax) {
+		this.numberAlarmsMax = numberAlarmsMax;
 	}
+	public List<String> getEmailsAssignedUsers() {
+		 if ( this.assignedUsers == null ) {
+	            return null;
+	        }
+		 
+		 List<String> list = new ArrayList<String>( this.assignedUsers.size() );
+		 
+		  for ( AssignedUser assignedUser : this.assignedUsers ) {
+			  String email= assignedUser.getEmail();
+			  list.add(email);
+	        }
+		  
+		  return list;
+		 
+	}
+	
 
 }

@@ -6,9 +6,12 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 
 /**
  * The persistent class for the plant database table.
@@ -21,6 +24,8 @@ public class Plant implements Serializable {
 
 	@Id
 	@Column(name="plant_id")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "plant_seq_gen")
+    @SequenceGenerator(name = "plant_seq_gen", sequenceName = "plant_seq")
 	private Integer plantId;
 
 	private String conventions;

@@ -2,11 +2,14 @@ package com.icesi.edu.co.pdg.dashboard.model.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -24,10 +27,15 @@ public class Alarm implements Serializable {
 
 	@Id
 	@Column(name="alarm_id")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "alarm_seq_gen")
+    @SequenceGenerator(name = "alarm_seq_gen", sequenceName = "alarm_seq", allocationSize = 1)
 	private Integer alarmId;
 
 	@Column(name="activation_date")
 	private Timestamp activationDate;
+	
+	@Column(name="tag_value")
+	private double tagValue;
 
 	//bi-directional many-to-one association to ActionHistory
 	@OneToMany(mappedBy="alarm")
@@ -99,5 +107,13 @@ public class Alarm implements Serializable {
 	public void setTypeAlarm(TypeAlarm typeAlarm) {
 		this.typeAlarm = typeAlarm;
 	}
+	public double getTagValue() {
+		return tagValue;
+	}
+
+	public void setTagValue(double tagValue) {
+		this.tagValue = tagValue;
+	}
+
 
 }

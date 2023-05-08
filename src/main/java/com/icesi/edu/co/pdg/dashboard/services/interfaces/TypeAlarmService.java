@@ -8,9 +8,9 @@ import com.icesi.edu.co.pdg.dashboard.model.entity.TypeAlarm;
 
 public interface TypeAlarmService {
 	
-	public TypeAlarm addTypeAlarm(TypeAlarmDTO typeAlarm) throws Exception;
+	public TypeAlarmDTO addTypeAlarm(TypeAlarmDTO typeAlarm) throws Exception;
 
-	public TypeAlarm editTypeAlarm(Integer typeAlarmid, TypeAlarmDTO typeAlarm) throws Exception;
+	public TypeAlarmDTO editTypeAlarm(Integer typeAlarmid, TypeAlarmDTO typeAlarm) throws Exception;
 
 	public TypeAlarm deleteTypeAlarm(Integer typeAlarmid) throws Exception;
 	

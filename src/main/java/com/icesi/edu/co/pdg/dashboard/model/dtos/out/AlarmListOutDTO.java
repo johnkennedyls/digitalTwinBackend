@@ -6,8 +6,9 @@ import java.util.List;
 public class AlarmListOutDTO {
 	
 	private String typeAlarmName;
+	private String plantName;
     private String condition;
-    private String state;
+	private String stateAlarmName;
     private Timestamp activationDate;
 	private List<String> usersAssigned;
     
@@ -23,11 +24,11 @@ public class AlarmListOutDTO {
 	public void setCondition(String condition) {
 		this.condition = condition;
 	}
-	public String getState() {
-		return state;
+    public String getStateAlarmName() {
+		return stateAlarmName;
 	}
-	public void setState(String state) {
-		this.state = state;
+	public void setStateAlarmName(String stateAlarmName) {
+		this.stateAlarmName = stateAlarmName;
 	}
 	public Timestamp getActivationDate() {
 		return activationDate;
@@ -41,6 +42,11 @@ public class AlarmListOutDTO {
 	public void setUsersAssigned(List<String> usersAssigned) {
 		this.usersAssigned = usersAssigned;
 	}
-    
+	public String getPlantName() {
+		return plantName;
+	}
+	public void setPlantName(String plantName) {
+		this.plantName = plantName;
+	}
 
 }

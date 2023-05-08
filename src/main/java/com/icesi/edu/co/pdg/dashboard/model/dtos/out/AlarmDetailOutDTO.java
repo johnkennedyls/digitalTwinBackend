@@ -2,17 +2,18 @@ package com.icesi.edu.co.pdg.dashboard.model.dtos.out;
 
 import java.util.List;
 
-import com.icesi.edu.co.pdg.dashboard.model.entity.ActionHistory;
-
+import com.icesi.edu.co.pdg.dashboard.model.dtos.ActionHistoryDTO;
 
 public class AlarmDetailOutDTO {
 	
 	private String typeAlarmName;
+	private String plantName;
 	private String typeAlarmDescription;
 	private String tagName;
-    private String condition;
+	private String stateAlarmName;
+	private String condition;
     private List<String> usersAssigned;
-    private List<ActionHistory> actionsHistory;
+    private List<ActionHistoryDTO> actionsHistory;
 	
 	public String getTypeAlarmName() {
 		return typeAlarmName;
@@ -44,11 +45,23 @@ public class AlarmDetailOutDTO {
 	public void setUsersAssigned(List<String> usersAssigned) {
 		this.usersAssigned = usersAssigned;
 	}
-	public List<ActionHistory> getActionsHistory() {
+	public List<ActionHistoryDTO> getActionsHistory() {
 		return actionsHistory;
 	}
-	public void setActionsHistory(List<ActionHistory> actionsHistory) {
+	public void setActionsHistory(List<ActionHistoryDTO> actionsHistory) {
 		this.actionsHistory = actionsHistory;
+	}
+	public String getPlantName() {
+		return plantName;
+	}
+	public void setPlantName(String plantName) {
+		this.plantName = plantName;
+	}
+    public String getStateAlarmName() {
+		return stateAlarmName;
+	}
+	public void setStateAlarmName(String stateAlarmName) {
+		this.stateAlarmName = stateAlarmName;
 	}
 
 }

@@ -59,8 +59,8 @@ public class TypeAlarmControllerImp implements TypeAlarmController{
 
 	@Override
 	@PostMapping("/create")
-	public ResponseEntity<TypeAlarm> addTypeAlarm(@RequestBody TypeAlarmDTO typealarm) throws Exception {
-		TypeAlarm alarm;
+	public ResponseEntity<TypeAlarmDTO> addTypeAlarm(@RequestBody TypeAlarmDTO typealarm) throws Exception {
+		TypeAlarmDTO alarm;
 		try {
 			alarm = typeAlarmService.addTypeAlarm(typealarm);
 			return new ResponseEntity<>(alarm, HttpStatus.CREATED);
@@ -73,8 +73,8 @@ public class TypeAlarmControllerImp implements TypeAlarmController{
 
 	@Override
 	@PutMapping("/edit/{typealarmid}")
-	public ResponseEntity<TypeAlarm> editTypeAlarm(@PathVariable("typealarmid") Integer typealarmid, @RequestBody TypeAlarmDTO typealarm) throws Exception {
-		TypeAlarm alarm;
+	public ResponseEntity<TypeAlarmDTO> editTypeAlarm(@PathVariable("typealarmid") Integer typealarmid, @RequestBody TypeAlarmDTO typealarm) throws Exception {
+		TypeAlarmDTO alarm;
 		try {
 			alarm = typeAlarmService.editTypeAlarm(typealarmid,typealarm);
 			return new ResponseEntity<>(alarm, HttpStatus.OK);

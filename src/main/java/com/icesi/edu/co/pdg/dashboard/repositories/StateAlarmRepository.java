@@ -5,4 +5,5 @@ import com.icesi.edu.co.pdg.dashboard.model.entity.StateAlarm;
 
 public interface StateAlarmRepository extends JpaRepository<StateAlarm, Integer>{
 
+	StateAlarm findByStateAlarmNameContaining(String name);
 }

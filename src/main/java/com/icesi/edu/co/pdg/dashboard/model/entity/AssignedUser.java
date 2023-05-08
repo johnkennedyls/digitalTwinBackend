@@ -5,6 +5,10 @@ package com.icesi.edu.co.pdg.dashboard.model.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.SequenceGenerator;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -19,6 +23,8 @@ public class AssignedUser implements Serializable {
 
 	@Id
 	@Column(name="assigned_users_id")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "assigned_user_seq_gen")
+    @SequenceGenerator(name = "assigned_user_seq_gen", sequenceName = "assigned_user_seq")
 	private Integer assignedUsersId;
 
 	private String email;

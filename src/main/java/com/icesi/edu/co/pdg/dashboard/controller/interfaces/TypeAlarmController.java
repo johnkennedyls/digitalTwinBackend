@@ -12,8 +12,8 @@ public interface TypeAlarmController {
 	
 	public ResponseEntity<TypeAlarmDTO> getTypeAlarm(Integer typealarmid) throws Exception;
 	public ResponseEntity<List<TypeAlarmDTO>> getAllTypeAlarms() throws Exception;
-	public ResponseEntity<TypeAlarm> addTypeAlarm(TypeAlarmDTO typealarm) throws Exception;
-	public ResponseEntity<TypeAlarm> editTypeAlarm(Integer typealarmid, TypeAlarmDTO typealarm) throws Exception;
+	public ResponseEntity<TypeAlarmDTO> addTypeAlarm(TypeAlarmDTO typealarm) throws Exception;
+	public ResponseEntity<TypeAlarmDTO> editTypeAlarm(Integer typealarmid, TypeAlarmDTO typealarm) throws Exception;
 	public ResponseEntity<String> deleteTypeAlarm(Integer typealarmid) throws Exception;
 
 

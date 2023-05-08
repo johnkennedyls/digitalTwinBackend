@@ -14,7 +14,7 @@ import com.icesi.edu.co.pdg.dashboard.exceptions.NoResultException;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.AssignedUserDTO;
 import com.icesi.edu.co.pdg.dashboard.model.entity.AssignedUser;
 import com.icesi.edu.co.pdg.dashboard.model.entity.TypeAlarm;
-import com.icesi.edu.co.pdg.dashboard.model.mappers.interfaces.AssignedUserMapper;
+import com.icesi.edu.co.pdg.dashboard.model.mappers.AssignedUserMapper;
 import com.icesi.edu.co.pdg.dashboard.repositories.AssignedUserRepository;
 import com.icesi.edu.co.pdg.dashboard.repositories.TypeAlarmRepository;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.AssignedUserService;

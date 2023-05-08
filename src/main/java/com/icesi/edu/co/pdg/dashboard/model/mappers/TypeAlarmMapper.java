@@ -1,4 +1,4 @@
-package com.icesi.edu.co.pdg.dashboard.model.mappers.interfaces;
+package com.icesi.edu.co.pdg.dashboard.model.mappers;
 
 import java.util.List;
 

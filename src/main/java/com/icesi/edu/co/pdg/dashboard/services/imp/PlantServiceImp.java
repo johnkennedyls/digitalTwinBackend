@@ -35,13 +35,14 @@ public class PlantServiceImp implements PlantService {
 	        } else {
 	            if (plantRepository.existsByPlantName(plant.getPlantName().trim())) {
 	                throw new IllegalArgumentException("El nombre de Planta ya esta en uso");
-	            }
+	            }else {
 
 	           //PlantMapper plantMapper = Mappers.getMapper(PlantMapper.class);
 	            PlantMapper  mapper = 	PlantMapper.INSTANCE;
 	            Plant plantA = mapper.addplantDtoToPlant(plant);
 	            Plant newplant = plantRepository.save(plantA);
 	            return newplant;
+	            }
 	        }
 	   
 	}
@@ -59,7 +60,7 @@ public class PlantServiceImp implements PlantService {
 			if (!existingPlant.getPlantName().equals(plant.getPlantName())
 					&& plantRepository.existsByPlantName(plant.getPlantName().trim())) {
 				throw new IllegalArgumentException("El nombre de Planta ya está en uso");
-			}
+			}else {
 
 			existingPlant.setPlantName(plant.getPlantName());
 			existingPlant.setPlantDescription(plant.getPlantDescription());
@@ -67,7 +68,7 @@ public class PlantServiceImp implements PlantService {
 			existingPlant.setPlantPhoto(plant.getPlantPhoto());
 
 			return plantRepository.save(existingPlant);
-
+			}
 		} catch (NoSuchElementException e) {
 			throw new Exception("La planta no existe");
 		}

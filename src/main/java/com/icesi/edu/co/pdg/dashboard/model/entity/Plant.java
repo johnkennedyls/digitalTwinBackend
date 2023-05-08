@@ -6,6 +6,8 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
@@ -21,6 +23,7 @@ public class Plant implements Serializable {
 
 	@Id
 	@Column(name="plant_id")
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer plantId;
 
 	private String conventions;

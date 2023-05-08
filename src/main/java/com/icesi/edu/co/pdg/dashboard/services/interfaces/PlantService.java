@@ -16,10 +16,12 @@ public interface PlantService {
 
 
 
-	Plant AddPlant(Plant plant) throws BadRequestDataException, IllegalArgumentException;
 
-	Plant modifyPlant(Plant plant, Integer plantId) throws Exception;
 
 	void deletePlant(Integer plantId) throws Exception;
+
+	Plant AddPlant(PlantDTO plant) throws BadRequestDataException, IllegalArgumentException;
+
+	Plant modifyPlant(PlantDTO plant, Integer plantId) throws Exception;
 
 }

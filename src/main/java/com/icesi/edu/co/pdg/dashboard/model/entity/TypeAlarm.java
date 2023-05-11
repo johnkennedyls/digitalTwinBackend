@@ -27,8 +27,7 @@ public class TypeAlarm implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "type_alarm_seq_gen")
-    @SequenceGenerator(name = "type_alarm_seq_gen", sequenceName = "type_alarm_seq")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer typeAlarmId;
 
 	private String condition;	

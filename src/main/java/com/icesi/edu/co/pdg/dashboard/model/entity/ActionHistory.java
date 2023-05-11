@@ -25,8 +25,7 @@ public class ActionHistory implements Serializable {
 
 	@Id
 	@Column(name="action_history_id")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "action_history_seq_gen")
-    @SequenceGenerator(name = "action_history_seq_gen", sequenceName = "action_history_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer actionHistoryId;
 
 	@Column(name="action_history_date")

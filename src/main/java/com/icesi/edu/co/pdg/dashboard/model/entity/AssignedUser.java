@@ -1,16 +1,13 @@
 
 package com.icesi.edu.co.pdg.dashboard.model.entity;
 
-
-
 import java.io.Serializable;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.SequenceGenerator;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -23,13 +20,11 @@ public class AssignedUser implements Serializable {
 
 	@Id
 	@Column(name="assigned_users_id")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "assigned_user_seq_gen")
-    @SequenceGenerator(name = "assigned_user_seq_gen", sequenceName = "assigned_user_seq")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer assignedUsersId;
 
 	private String email;
 
-	private String username;
 
 	//bi-directional many-to-one association to TypeAlarm
 	@ManyToOne
@@ -55,13 +50,6 @@ public class AssignedUser implements Serializable {
 		this.email = email;
 	}
 
-	public String getUsername() {
-		return this.username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
 
 	public TypeAlarm getTypeAlarm() {
 		return this.typeAlarm;

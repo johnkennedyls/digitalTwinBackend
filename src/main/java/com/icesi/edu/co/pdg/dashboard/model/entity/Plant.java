@@ -24,8 +24,6 @@ public class Plant implements Serializable {
 
 	@Id
 	@Column(name="plant_id")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "plant_seq_gen")
-    @SequenceGenerator(name = "plant_seq_gen", sequenceName = "plant_seq")
 	private Integer plantId;
 
 	private String conventions;

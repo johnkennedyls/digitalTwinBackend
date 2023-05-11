@@ -27,8 +27,7 @@ public class Alarm implements Serializable {
 
 	@Id
 	@Column(name="alarm_id")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "alarm_seq_gen")
-    @SequenceGenerator(name = "alarm_seq_gen", sequenceName = "alarm_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer alarmId;
 
 	@Column(name="activation_date")

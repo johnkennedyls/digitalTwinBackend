@@ -10,7 +10,10 @@ import com.icesi.edu.co.pdg.dashboard.model.entity.AssignedUser;
 		private String typeAlarmName;
 		private String typeAlarmDescription;
 	    private String condition;
-	    private List<String> usersAssigned;
+	    private Integer numberAlarmsMax;
+		private Integer plant_id;
+		private Integer event_id;
+		private List<String> usersAssigned;
 	
 	public String getTypeAlarmName() {
 		return typeAlarmName;
@@ -36,6 +39,24 @@ import com.icesi.edu.co.pdg.dashboard.model.entity.AssignedUser;
 	public void setUsersAssigned(List<String> usersAssigned) {
 		this.usersAssigned = usersAssigned;
 	}
+    public Integer getNumberAlarmsMax() {
+		return numberAlarmsMax;
+	}
+	public void setNumberAlarmsMax(Integer numberAlarmsMax) {
+		this.numberAlarmsMax = numberAlarmsMax;
+	}
+	public Integer getPlant_id() {
+		return plant_id;
+	}
+	public void setPlant_id(Integer plant_id) {
+		this.plant_id = plant_id;
+	}
+	public Integer getEvent_id() {
+		return event_id;
+	}
+	public void setEvent_id(Integer event_id) {
+		this.event_id = event_id;
+	}
 	public List<AssignedUser> assignedUserListDTOoAssignedUserList() {
 		 if ( this.usersAssigned == null ) {
 	            return null;
@@ -45,7 +66,6 @@ import com.icesi.edu.co.pdg.dashboard.model.entity.AssignedUser;
 		 
 		  for ( String assignedUser : this.usersAssigned ) {
 			  AssignedUser newUser= new AssignedUser();
-			  newUser.setAssignedUsersId(1);
 			  newUser.setEmail(assignedUser);
 			  list.add(newUser);
 	        }

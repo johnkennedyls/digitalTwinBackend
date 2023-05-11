@@ -1,5 +1,6 @@
 package com.icesi.edu.co.pdg.dashboard.services.imp;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,10 +11,19 @@ import org.springframework.transaction.annotation.Transactional;
 import com.icesi.edu.co.pdg.dashboard.exceptions.BadRequestDataException;
 import com.icesi.edu.co.pdg.dashboard.exceptions.NoResultException;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.TypeAlarmDTO;
+import com.icesi.edu.co.pdg.dashboard.model.dtos.out.AlarmListOutDTO;
+import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmDetailOutDTO;
+import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmListOutDTO;
+import com.icesi.edu.co.pdg.dashboard.model.entity.Alarm;
 import com.icesi.edu.co.pdg.dashboard.model.entity.AssignedUser;
+import com.icesi.edu.co.pdg.dashboard.model.entity.DashboardEvent;
+import com.icesi.edu.co.pdg.dashboard.model.entity.Plant;
 import com.icesi.edu.co.pdg.dashboard.model.entity.TypeAlarm;
+import com.icesi.edu.co.pdg.dashboard.model.mappers.AlarmMapper;
 import com.icesi.edu.co.pdg.dashboard.model.mappers.AssignedUserMapper;
 import com.icesi.edu.co.pdg.dashboard.model.mappers.TypeAlarmMapper;
+import com.icesi.edu.co.pdg.dashboard.repositories.DashboardEventRepository;
+import com.icesi.edu.co.pdg.dashboard.repositories.PlantRepository;
 import com.icesi.edu.co.pdg.dashboard.repositories.TypeAlarmRepository;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.AssignedUserService;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.TypeAlarmService;
@@ -24,6 +34,10 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
 	
 	@Autowired
     private TypeAlarmRepository typeAlarmRepository;
+	@Autowired
+    private PlantRepository plantRepository;
+	@Autowired
+    private DashboardEventRepository dashboardEventRepository;
 	@Autowired
 	private AssignedUserService assignedUserService;
 
@@ -38,8 +52,17 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
 			if(ta==null) {
 				ta=typeAlarmRepository.findByCondition(typeAlarm.getCondition());
 				if(ta==null) {
-					TypeAlarm typealarm=TypeAlarmMapper.INSTANCE.addTypeAlarmDTOtotypeAlarm(typeAlarm);		
-					TypeAlarm saved=typeAlarmRepository.save(typealarm);
+					Optional<Plant> plant=plantRepository.findById(typeAlarm.getPlant_id());
+					TypeAlarm saved = null;
+					if(!plant.isEmpty()) {
+						Optional<DashboardEvent> event=dashboardEventRepository.findById(typeAlarm.getEvent_id());
+						if(!event.isEmpty()) {
+							TypeAlarm typealarm=TypeAlarmMapper.INSTANCE.addTypeAlarmDTOtotypeAlarm(typeAlarm);
+							typealarm.setPlant(plant.get());
+							typealarm.setDashboardEvent(event.get());
+							saved=typeAlarmRepository.save(typealarm);
+						}
+					}
 					if(typeAlarm.getUsersAssigned()!=null) {
 						List <AssignedUser> list=typeAlarm.assignedUserListDTOoAssignedUserList();
 						assignedUserService.addAssignedUser(list, saved.getTypeAlarmId());
@@ -54,6 +77,7 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
 			}
 			
 		}
+		
 	}
 
 	@Override
@@ -100,13 +124,14 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
 	}
 
 	@Override
-	public TypeAlarmDTO getTypeAlarm(Integer typeAlarmid) throws Exception {
+	public TypeAlarmDetailOutDTO getTypeAlarm(Integer typeAlarmid) throws Exception {
 		if(typeAlarmid<0 || typeAlarmid==null) {
 			throw new BadRequestDataException();
 		}else {
 			Optional<TypeAlarm> typeAlarm=typeAlarmRepository.findById(typeAlarmid);
 			if(!typeAlarm.isEmpty()) {
-				TypeAlarmDTO typeAlarmDTO=TypeAlarmMapper.INSTANCE.typeAlarmToTypeAlarmDTO(typeAlarm.get());
+				TypeAlarmDetailOutDTO typeAlarmDTO=TypeAlarmMapper.INSTANCE.typeAlarmToTypeAlarmDetailOutDTO(typeAlarm.get().getTypeAlarmId(),typeAlarm.get(),typeAlarm.get().getPlant(),typeAlarm.get().getDashboardEvent());
+				typeAlarmDTO.setUsersAssigned(typeAlarm.get().getEmailsAssignedUsers());
 				return typeAlarmDTO;
 			}else{
 				throw new NoResultException();
@@ -115,13 +140,19 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
 	}
 
 	@Override
-	public List<TypeAlarmDTO> getAllTypeAlarms() throws Exception {
+	public List<TypeAlarmListOutDTO> getAllTypeAlarms() throws Exception {
 		List<TypeAlarm> typeAlarms = typeAlarmRepository.findAll();
         if(typeAlarms.isEmpty()) {
 			throw new NoResultException();
         }else {
-            List<TypeAlarmDTO> typeAlarmsDTO = TypeAlarmMapper.INSTANCE.asListTypeAlarmDTO(typeAlarms);
-            return typeAlarmsDTO;
+            List<TypeAlarmListOutDTO> typealarmsDTO = new ArrayList<TypeAlarmListOutDTO>();
+            for(TypeAlarm typeAlarm:typeAlarms) {
+            	TypeAlarmListOutDTO alarmListDTO=TypeAlarmMapper.INSTANCE.typeAlarmToAlarmListOutDTO(typeAlarm, typeAlarm.getPlant());
+            	alarmListDTO.setUsersAssigned(typeAlarm.getEmailsAssignedUsers());
+            	typealarmsDTO.add(alarmListDTO);
+            }
+                       
+            return typealarmsDTO;
         }
 	}
 }

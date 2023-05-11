@@ -20,6 +20,8 @@ import com.icesi.edu.co.pdg.dashboard.controller.interfaces.TypeAlarmController;
 import com.icesi.edu.co.pdg.dashboard.exceptions.BadRequestDataException;
 import com.icesi.edu.co.pdg.dashboard.exceptions.NoResultException;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.TypeAlarmDTO;
+import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmDetailOutDTO;
+import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.entity.TypeAlarm;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.TypeAlarmService;
 
@@ -33,8 +35,8 @@ public class TypeAlarmControllerImp implements TypeAlarmController{
 
 	@Override
 	@GetMapping("/{typealarmid}")
-	public ResponseEntity<TypeAlarmDTO> getTypeAlarm(@PathVariable("typealarmid") Integer typealarmid) throws Exception {
-		TypeAlarmDTO alarm;
+	public ResponseEntity<TypeAlarmDetailOutDTO> getTypeAlarm(@PathVariable("typealarmid") Integer typealarmid) throws Exception {
+		TypeAlarmDetailOutDTO alarm;
 		try {
 			alarm = typeAlarmService.getTypeAlarm(typealarmid);
 			return new ResponseEntity<>(alarm, HttpStatus.OK);
@@ -47,8 +49,8 @@ public class TypeAlarmControllerImp implements TypeAlarmController{
 
 	@Override
 	@GetMapping("/")
-	public ResponseEntity<List<TypeAlarmDTO>> getAllTypeAlarms() throws Exception {
-		List<TypeAlarmDTO> respOutDTO = new ArrayList<TypeAlarmDTO>();
+	public ResponseEntity<List<TypeAlarmListOutDTO>> getAllTypeAlarms() throws Exception {
+		List<TypeAlarmListOutDTO> respOutDTO = new ArrayList<TypeAlarmListOutDTO>();
 		try {
 			respOutDTO = typeAlarmService.getAllTypeAlarms();
 			return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
@@ -61,6 +63,7 @@ public class TypeAlarmControllerImp implements TypeAlarmController{
 	@PostMapping("/create")
 	public ResponseEntity<TypeAlarmDTO> addTypeAlarm(@RequestBody TypeAlarmDTO typealarm) throws Exception {
 		TypeAlarmDTO alarm;
+		System.out.println("olitas");
 		try {
 			alarm = typeAlarmService.addTypeAlarm(typealarm);
 			return new ResponseEntity<>(alarm, HttpStatus.CREATED);

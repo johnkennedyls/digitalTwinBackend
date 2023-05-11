@@ -27,8 +27,6 @@ public class StateAlarm implements Serializable {
 
 	@Id
 	@Column(name="state_alarm_id")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "state_alarm_seq_gen")
-    @SequenceGenerator(name = "state_alarm_seq_gen", sequenceName = "state_alarm_seq")
 	private Integer stateAlarmId;
 
 	@Column(name="state_alarm_description")

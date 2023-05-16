@@ -5,6 +5,7 @@ import java.util.List;
 
 public class AlarmListOutDTO {
 	
+	private Integer alarmId;
 	private String typeAlarmName;
 	private String plantName;
     private String condition;
@@ -47,6 +48,12 @@ public class AlarmListOutDTO {
 	}
 	public void setPlantName(String plantName) {
 		this.plantName = plantName;
+	}
+	public Integer getAlarmId() {
+		return alarmId;
+	}
+	public void setAlarmId(Integer alarmId) {
+		this.alarmId = alarmId;
 	}
 
 }

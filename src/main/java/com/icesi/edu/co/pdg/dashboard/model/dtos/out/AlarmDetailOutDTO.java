@@ -1,5 +1,6 @@
 package com.icesi.edu.co.pdg.dashboard.model.dtos.out;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import com.icesi.edu.co.pdg.dashboard.model.dtos.ActionHistoryDTO;
@@ -8,8 +9,8 @@ public class AlarmDetailOutDTO {
 	
 	private String typeAlarmName;
 	private String plantName;
-	private String typeAlarmDescription;
-	private String tagName;
+	private Timestamp activationDate;
+	private double tagValue;
 	private String stateAlarmName;
 	private String condition;
     private List<String> usersAssigned;
@@ -21,17 +22,11 @@ public class AlarmDetailOutDTO {
 	public void setTypeAlarmName(String typeAlarmName) {
 		this.typeAlarmName = typeAlarmName;
 	}
-	public String getTypeAlarmDescription() {
-		return typeAlarmDescription;
+	public double getTagValue() {
+		return tagValue;
 	}
-	public void setTypeAlarmDescription(String typeAlarmDescription) {
-		this.typeAlarmDescription = typeAlarmDescription;
-	}
-	public String getTagName() {
-		return tagName;
-	}
-	public void setTagName(String tagName) {
-		this.tagName = tagName;
+	public void setTagValue(double tagValue) {
+		this.tagValue = tagValue;
 	}
 	public String getCondition() {
 		return condition;
@@ -63,5 +58,10 @@ public class AlarmDetailOutDTO {
 	public void setStateAlarmName(String stateAlarmName) {
 		this.stateAlarmName = stateAlarmName;
 	}
-
+	public Timestamp getActivationDate() {
+		return activationDate;
+	}
+	public void setActivationDate(Timestamp activationDate) {
+		this.activationDate = activationDate;
+	}
 }

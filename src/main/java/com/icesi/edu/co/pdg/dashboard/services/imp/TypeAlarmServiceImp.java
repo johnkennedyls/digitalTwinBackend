@@ -11,16 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.icesi.edu.co.pdg.dashboard.exceptions.BadRequestDataException;
 import com.icesi.edu.co.pdg.dashboard.exceptions.NoResultException;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.TypeAlarmDTO;
-import com.icesi.edu.co.pdg.dashboard.model.dtos.out.AlarmListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmDetailOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmListOutDTO;
-import com.icesi.edu.co.pdg.dashboard.model.entity.Alarm;
 import com.icesi.edu.co.pdg.dashboard.model.entity.AssignedUser;
 import com.icesi.edu.co.pdg.dashboard.model.entity.DashboardEvent;
 import com.icesi.edu.co.pdg.dashboard.model.entity.Plant;
 import com.icesi.edu.co.pdg.dashboard.model.entity.TypeAlarm;
-import com.icesi.edu.co.pdg.dashboard.model.mappers.AlarmMapper;
-import com.icesi.edu.co.pdg.dashboard.model.mappers.AssignedUserMapper;
 import com.icesi.edu.co.pdg.dashboard.model.mappers.TypeAlarmMapper;
 import com.icesi.edu.co.pdg.dashboard.repositories.DashboardEventRepository;
 import com.icesi.edu.co.pdg.dashboard.repositories.PlantRepository;
@@ -154,5 +150,17 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
                        
             return typealarmsDTO;
         }
+	}
+	@Override
+	public List<TypeAlarmListOutDTO> getAllTypeAlarmsByPlantid(Integer plantid) throws Exception {
+		List<TypeAlarm> typeAlarms = typeAlarmRepository.findByPlantPlantId(plantid);
+            List<TypeAlarmListOutDTO> typealarmsDTO = new ArrayList<TypeAlarmListOutDTO>();
+            for(TypeAlarm typeAlarm:typeAlarms) {
+            	TypeAlarmListOutDTO alarmListDTO=TypeAlarmMapper.INSTANCE.typeAlarmToAlarmListOutDTO(typeAlarm, typeAlarm.getPlant());
+            	alarmListDTO.setUsersAssigned(typeAlarm.getEmailsAssignedUsers());
+            	typealarmsDTO.add(alarmListDTO);
+            }
+                       
+            return typealarmsDTO;
 	}
 }

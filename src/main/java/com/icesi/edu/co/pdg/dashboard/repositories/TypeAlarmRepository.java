@@ -14,5 +14,7 @@ public interface TypeAlarmRepository extends JpaRepository<TypeAlarm, Integer> {
 	public TypeAlarm findByCondition(String condition);
 	
 	List<TypeAlarm> findByConditionContaining(String nombre);
+	
+	List<TypeAlarm> findByPlantPlantId(Integer plantid);
 
 }

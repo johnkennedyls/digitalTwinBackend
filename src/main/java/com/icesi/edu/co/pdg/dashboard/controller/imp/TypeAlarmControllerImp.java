@@ -58,12 +58,23 @@ public class TypeAlarmControllerImp implements TypeAlarmController{
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@Override
+	@GetMapping("/plant/{plantid}")
+	public ResponseEntity<List<TypeAlarmListOutDTO>> getAllTypeAlarmsByPlant(@PathVariable("plantid") Integer plantid) throws Exception {
+		List<TypeAlarmListOutDTO> respOutDTO = new ArrayList<TypeAlarmListOutDTO>();
+		try {
+			respOutDTO = typeAlarmService.getAllTypeAlarmsByPlantid(plantid);
+			return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
+		}catch(NoResultException e) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+	}
 
 	@Override
 	@PostMapping("/create")
 	public ResponseEntity<TypeAlarmDTO> addTypeAlarm(@RequestBody TypeAlarmDTO typealarm) throws Exception {
 		TypeAlarmDTO alarm;
-		System.out.println("olitas");
 		try {
 			alarm = typeAlarmService.addTypeAlarm(typealarm);
 			return new ResponseEntity<>(alarm, HttpStatus.CREATED);

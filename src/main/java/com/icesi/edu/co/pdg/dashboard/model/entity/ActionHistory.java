@@ -3,6 +3,8 @@ package com.icesi.edu.co.pdg.dashboard.model.entity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import com.icesi.edu.co.pdg.dashboard.model.dtos.ActionHistoryDTO;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -95,5 +97,6 @@ public class ActionHistory implements Serializable {
 	public void setAlarm(Alarm alarm) {
 		this.alarm = alarm;
 	}
+
 
 }

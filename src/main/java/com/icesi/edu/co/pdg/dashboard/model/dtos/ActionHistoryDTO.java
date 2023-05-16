@@ -9,8 +9,6 @@ public class ActionHistoryDTO {
 
 	private String actionHistoryDescription;
 
-	private String actionHistoryEmail;
-
 	private String actionHistoryUsername;
 	
 	public Timestamp getActionHistoryDate() {
@@ -27,14 +25,6 @@ public class ActionHistoryDTO {
 
 	public void setActionHistoryDescription(String actionHistoryDescription) {
 		this.actionHistoryDescription = actionHistoryDescription;
-	}
-
-	public String getActionHistoryEmail() {
-		return actionHistoryEmail;
-	}
-
-	public void setActionHistoryEmail(String actionHistoryEmail) {
-		this.actionHistoryEmail = actionHistoryEmail;
 	}
 
 	public String getActionHistoryUsername() {

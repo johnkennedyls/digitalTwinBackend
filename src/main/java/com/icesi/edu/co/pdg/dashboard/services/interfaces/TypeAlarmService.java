@@ -19,4 +19,6 @@ public interface TypeAlarmService {
 	public TypeAlarmDetailOutDTO getTypeAlarm(Integer typeAlarmid) throws Exception;
 
 	public List<TypeAlarmListOutDTO> getAllTypeAlarms () throws Exception;
+
+	List<TypeAlarmListOutDTO> getAllTypeAlarmsByPlantid(Integer plantid) throws Exception;
 }

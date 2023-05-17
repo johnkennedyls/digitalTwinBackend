@@ -35,6 +35,20 @@ public class AlarmControllerImp implements AlarmController {
 		respOutDTO = alarmService.getAllAlarms();
 		return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
 	}
+	@Override
+	@GetMapping("/history")
+	public ResponseEntity<List<AlarmListOutDTO>> getAllAlarmsClosed() throws Exception {
+		List<AlarmListOutDTO> respOutDTO = new ArrayList<AlarmListOutDTO>();
+		respOutDTO = alarmService.getAllAlarmsClosed();
+		return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
+	}
+	@Override
+	@GetMapping("/active")
+	public ResponseEntity<List<AlarmListOutDTO>> getAllAlarmsActive() throws Exception {
+		List<AlarmListOutDTO> respOutDTO = new ArrayList<AlarmListOutDTO>();
+		respOutDTO = alarmService.getAllAlarmsActive();
+		return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
+	}
 	
 	@Override
 	@GetMapping("/{alarmid}")

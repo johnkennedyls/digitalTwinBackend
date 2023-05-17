@@ -15,5 +15,11 @@ public interface AlarmRepository  extends JpaRepository<Alarm,Integer>{
     
     List<Alarm> findByTypeAlarmTypeAlarmId( Integer typeAlarmId);
     
+    @Query("SELECT a FROM Alarm a WHERE a.stateAlarm.stateAlarmName = 'Cerrado'")
+    List<Alarm> findClosedAlarms();
+
+    @Query("SELECT a FROM Alarm a WHERE a.stateAlarm.stateAlarmName IN ('Activa', 'En Revision')")
+    List<Alarm> findActiveOrUnderReviewAlarms();
+    
 
 }

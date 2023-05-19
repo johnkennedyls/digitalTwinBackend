@@ -14,8 +14,7 @@ import jakarta.persistence.NamedQuery;
  * 
  */
 @Entity
-@NamedQuery(name="Log.findAll", query="SELECT l FROM Log l")
-public class Log implements Serializable {
+public class LogDashboard implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -33,9 +32,9 @@ public class Log implements Serializable {
 	//bi-directional many-to-one association to LogType
 	@ManyToOne
 	@JoinColumn(name="log_type_id")
-	private LogType logType;
+	private LogTypeDashboard logType;
 
-	public Log() {
+	public LogDashboard() {
 	}
 
 	public Integer getLogId() {
@@ -70,11 +69,11 @@ public class Log implements Serializable {
 		this.user = user;
 	}
 
-	public LogType getLogType() {
+	public LogTypeDashboard getLogType() {
 		return this.logType;
 	}
 
-	public void setLogType(LogType logType) {
+	public void setLogType(LogTypeDashboard logType) {
 		this.logType = logType;
 	}
 

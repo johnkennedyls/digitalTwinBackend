@@ -8,6 +8,7 @@
 		<version>3.0.6</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+	<packaging>war</packaging>
 	<groupId>com.icesi.edu.co.pdg</groupId>
 	<artifactId>web-dashboard-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -72,7 +73,7 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 		</dependency>	
-
+		
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -102,6 +103,9 @@
 
 	<build>
 		<plugins>
+			<plugin>
+			    <artifactId>maven-war-plugin</artifactId>
+			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

@@ -15,8 +15,7 @@ import jakarta.persistence.OneToMany;
  * 
  */
 @Entity
-@NamedQuery(name="LogType.findAll", query="SELECT l FROM LogType l")
-public class LogType implements Serializable {
+public class LogTypeDashboard implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -31,9 +30,9 @@ public class LogType implements Serializable {
 
 	//bi-directional many-to-one association to Log
 	@OneToMany(mappedBy="logType")
-	private List<Log> logs;
+	private List<LogDashboard> logs;
 
-	public LogType() {
+	public LogTypeDashboard() {
 	}
 
 	public Integer getLogTypeId() {
@@ -60,22 +59,22 @@ public class LogType implements Serializable {
 		this.logTypeName = logTypeName;
 	}
 
-	public List<Log> getLogs() {
+	public List<LogDashboard> getLogs() {
 		return this.logs;
 	}
 
-	public void setLogs(List<Log> logs) {
+	public void setLogs(List<LogDashboard> logs) {
 		this.logs = logs;
 	}
 
-	public Log addLog(Log log) {
+	public LogDashboard addLog(LogDashboard log) {
 		getLogs().add(log);
 		log.setLogType(this);
 
 		return log;
 	}
 
-	public Log removeLog(Log log) {
+	public LogDashboard removeLog(LogDashboard log) {
 		getLogs().remove(log);
 		log.setLogType(null);
 

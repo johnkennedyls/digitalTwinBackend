@@ -19,7 +19,6 @@ import com.icesi.edu.co.pdg.dashboard.exceptions.BadRequestDataException;
 import com.icesi.edu.co.pdg.dashboard.exceptions.NoResultException;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.ActionHistoryDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.in.ActionHistoryInDTO;
-import com.icesi.edu.co.pdg.dashboard.model.entity.ActionHistory;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.ActionHistoryService;
 
 @RestController

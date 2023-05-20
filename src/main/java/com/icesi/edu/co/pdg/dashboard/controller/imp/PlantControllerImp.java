@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.icesi.edu.co.pdg.dashboard.controller.interfaces.PlantController;
-import com.icesi.edu.co.pdg.dashboard.model.dtos.AssetDTO;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.PlantService;
+
+import icesi.plantapiloto.common.dtos.output.AssetDTO;
 
 @RestController()
 @RequestMapping("/dashboardapi/plants")

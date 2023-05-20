@@ -4,13 +4,12 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.icesi.edu.co.pdg.dashboard.model.dtos.TagValueDTO;
+import icesi.plantapiloto.common.dtos.output.AssetDTO;
 
 @Service
 class WebSocketServerService {
 
     private final SimpMessagingTemplate template;
-
     public WebSocketServerService(SimpMessagingTemplate template) {
         this.template = template;
     }
@@ -18,7 +17,7 @@ class WebSocketServerService {
     @Scheduled(fixedRate = 3000)
     public void enviarDatoAleatorio() {
     	
-        this.template.convertAndSend("/topic/random", TagValueDTO.getTagValueDummy());
+        this.template.convertAndSend("/topic/random", "");
     }
 
 }

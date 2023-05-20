@@ -1,4 +1,4 @@
-package com.icesi.edu.co.pdg.dashboard;
+package com.icesi.edu.co.pdg.dashboard.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +14,8 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableScheduling
 public class WebDashboardApiApplicationConfig implements WebSocketMessageBrokerConfigurer {
 	
+	
+	
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/websocket").setAllowedOriginPatterns("*").withSockJS();
@@ -24,9 +26,11 @@ public class WebDashboardApiApplicationConfig implements WebSocketMessageBrokerC
         registry.enableSimpleBroker("/topic");
         registry.setApplicationDestinationPrefixes("/app");
     }
-	
+
     @Bean
-    public SpelExpressionParser spelExpressionParser() {
+    SpelExpressionParser spelExpressionParser() {
         return new SpelExpressionParser();
     }
+    
+   
 }

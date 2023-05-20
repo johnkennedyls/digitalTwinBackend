@@ -3,7 +3,6 @@ package com.icesi.edu.co.pdg.dashboard.model.entity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-import com.icesi.edu.co.pdg.dashboard.model.dtos.ActionHistoryDTO;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,8 +12,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
-import jakarta.persistence.SequenceGenerator;
-
 
 /**
  * The persistent class for the action_history database table.

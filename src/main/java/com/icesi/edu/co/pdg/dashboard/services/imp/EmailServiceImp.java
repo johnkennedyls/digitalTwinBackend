@@ -1,8 +1,12 @@
 package com.icesi.edu.co.pdg.dashboard.services.imp;
 
 import java.io.IOException;
+
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -18,8 +22,7 @@ import com.icesi.edu.co.pdg.dashboard.model.entity.Alarm;
 import com.icesi.edu.co.pdg.dashboard.model.entity.TypeAlarm;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.EmailService;
 
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
+
 
 @Service
 public class EmailServiceImp implements EmailService{

@@ -17,6 +17,10 @@ public interface AlarmService {
 	public AlarmDetailOutDTO getAlarm (Integer alarmid) throws Exception;
 	
 	Boolean checkMaxAlarmsReached(TypeAlarm typeAlarm);
+
+	List<AlarmListOutDTO> getAllAlarmsClosed() throws Exception;
+
+	List<AlarmListOutDTO> getAllAlarmsActive() throws Exception;
 	
 
 }

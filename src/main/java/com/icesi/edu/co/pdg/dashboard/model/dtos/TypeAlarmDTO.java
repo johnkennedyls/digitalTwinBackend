@@ -88,6 +88,17 @@ import com.icesi.edu.co.pdg.dashboard.model.entity.AssignedUser;
 		  return list;
 		 
 	}
+	public String toString() {
+        return "TypeAlarmDTO{" +
+                "typeAlarmName='" + typeAlarmName + '\'' +
+                ", typeAlarmDescription='" + typeAlarmDescription + '\'' +
+                ", condition='" + condition + '\'' +
+                ", numberAlarmsMax=" + numberAlarmsMax +
+                ", plant_id=" + plant_id +
+                ", event_id=" + event_id +
+                ", usersAssigned=" + usersAssigned +
+                '}';
+    }
 
 
 }

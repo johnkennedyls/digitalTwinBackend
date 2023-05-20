@@ -11,6 +11,11 @@ public class StateAlarmInDTO {
 	public void setStateAlarmName(String stateAlarmName) {
 		this.stateAlarmName = stateAlarmName;
 	}
+	public String toString() {
+        return "StateAlarmInDTO{" +
+                "stateAlarmName='" + stateAlarmName + '\'' +
+                '}';
+    }
 
 
 }

@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
@@ -15,11 +17,13 @@ import jakarta.persistence.OneToMany;
  * 
  */
 @Entity
+@NamedQuery(name="LogTypeDashboard.findAll", query="SELECT ltd FROM LogTypeDashboard ltd")
 public class LogTypeDashboard implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name="log_type_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer logTypeId;
 
 	@Column(name="log_type_description")

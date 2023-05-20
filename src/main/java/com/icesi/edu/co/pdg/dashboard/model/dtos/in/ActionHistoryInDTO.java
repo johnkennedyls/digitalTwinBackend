@@ -22,5 +22,11 @@ public class ActionHistoryInDTO {
 	public void setActionHistoryUsername(String actionHistoryUsername) {
 		this.actionHistoryUsername = actionHistoryUsername;
 	}
+	public String toString() {
+        return "ActionHistoryInDTO{" +
+                "actionHistoryDescription='" + actionHistoryDescription + '\'' +
+                ", actionHistoryUsername='" + actionHistoryUsername + '\'' +
+                '}';
+    }
 
 }

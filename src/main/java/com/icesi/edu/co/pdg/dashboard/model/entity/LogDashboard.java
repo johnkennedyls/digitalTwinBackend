@@ -5,6 +5,8 @@ import java.sql.Timestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -14,11 +16,13 @@ import jakarta.persistence.NamedQuery;
  * 
  */
 @Entity
+@NamedQuery(name="LogDashboard.findAll", query="SELECT ld FROM LogDashboard ld")
 public class LogDashboard implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name="log_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer logId;
 
 	@Column(name="detail_log")
@@ -27,7 +31,8 @@ public class LogDashboard implements Serializable {
 	@Column(name="log_date")
 	private Timestamp logDate;
 
-	private String user;
+	@Column(name="logged_user")
+	private String loggedUser;
 
 	//bi-directional many-to-one association to LogType
 	@ManyToOne
@@ -61,13 +66,6 @@ public class LogDashboard implements Serializable {
 		this.logDate = logDate;
 	}
 
-	public String getUser() {
-		return this.user;
-	}
-
-	public void setUser(String user) {
-		this.user = user;
-	}
 
 	public LogTypeDashboard getLogType() {
 		return this.logType;
@@ -75,6 +73,13 @@ public class LogDashboard implements Serializable {
 
 	public void setLogType(LogTypeDashboard logType) {
 		this.logType = logType;
+	}
+	public String getLoggedUser() {
+		return loggedUser;
+	}
+
+	public void setLoggedUser(String loggedUser) {
+		this.loggedUser = loggedUser;
 	}
 
 }

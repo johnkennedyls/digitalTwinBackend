@@ -13,4 +13,8 @@ public interface AlarmController {
 
 	public ResponseEntity<AlarmDetailOutDTO> getAlarmById(Integer alarmid) throws Exception;
 
+	public ResponseEntity<List<AlarmListOutDTO>> getAllAlarmsActive() throws Exception;
+
+	public ResponseEntity<List<AlarmListOutDTO>> getAllAlarmsClosed() throws Exception;
+
 }

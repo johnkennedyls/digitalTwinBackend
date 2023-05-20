@@ -112,5 +112,30 @@ public class AlarmServiceImp implements AlarmService {
 	        }
 		}
 	}
+	@Override
+	public List<AlarmListOutDTO> getAllAlarmsClosed() throws Exception {
+		List<Alarm> alarms = alarmRepository.findClosedAlarms();
+            List<AlarmListOutDTO> alarmsDTO = new ArrayList<AlarmListOutDTO>();
+            for(Alarm alarm:alarms) {
+            	AlarmListOutDTO alarmListDTO=AlarmMapper.INSTANCE.alarmToalarmListOutDTO(alarm,alarm.getTypeAlarm(),alarm.getTypeAlarm().getPlant(),alarm.getStateAlarm());
+            	alarmListDTO.setUsersAssigned(alarm.getTypeAlarm().getEmailsAssignedUsers());
+            	alarmsDTO.add(alarmListDTO);
+            }
+                       
+            return alarmsDTO;
+	}
+	
+	@Override
+	public List<AlarmListOutDTO> getAllAlarmsActive() throws Exception {
+		List<Alarm> alarms = alarmRepository.findActiveOrUnderReviewAlarms();
+            List<AlarmListOutDTO> alarmsDTO = new ArrayList<AlarmListOutDTO>();
+            for(Alarm alarm:alarms) {
+            	AlarmListOutDTO alarmListDTO=AlarmMapper.INSTANCE.alarmToalarmListOutDTO(alarm,alarm.getTypeAlarm(),alarm.getTypeAlarm().getPlant(),alarm.getStateAlarm());
+            	alarmListDTO.setUsersAssigned(alarm.getTypeAlarm().getEmailsAssignedUsers());
+            	alarmsDTO.add(alarmListDTO);
+            }
+                       
+            return alarmsDTO;
+	}
 
 }

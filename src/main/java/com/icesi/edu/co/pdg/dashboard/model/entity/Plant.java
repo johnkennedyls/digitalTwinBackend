@@ -11,7 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.SequenceGenerator;
 
 /**
  * The persistent class for the plant database table.
@@ -24,6 +23,7 @@ public class Plant implements Serializable {
 
 	@Id
 	@Column(name="plant_id")
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer plantId;
 
 	private String conventions;

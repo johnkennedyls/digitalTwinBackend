@@ -25,7 +25,7 @@ public class PlantControllerImp implements PlantController {
 	@Override
 	@GetMapping("")
 	public ResponseEntity<?> getAllPlants() {
-		List<AssetDTO> plants = service.getAllPlantData();
+		List<AssetDTO> plants = null;
 		return ResponseEntity.ok(plants);
 	}
 

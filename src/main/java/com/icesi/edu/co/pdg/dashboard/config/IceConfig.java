@@ -19,26 +19,23 @@ public class IceConfig {
 	
 	MeasurementDTO sd;
 	
-	@Bean
-    Communicator iceCommunicator() {
-        return Util.initialize();
-    }
-	
-	@Bean
-	WorkSpaceManagerControllerPrx workSpaceManagerProxy(Communicator com) {
-		return WorkSpaceManagerControllerPrx.checkedCast(com.stringToProxy("WorkSpaceManager:"+proxy));
-	}
-	
-	@Bean
-	AssetManagerControllerPrx assetManagerProxy(Communicator com) {
-		return AssetManagerControllerPrx.checkedCast(com.stringToProxy("AssetManager:"+proxy));
-	}
-	
-	@Bean
-	ProcessManagerControllerPrx processManagerProxy(Communicator com) {
-		return ProcessManagerControllerPrx.checkedCast(com.stringToProxy("ProcessManager:"+proxy));
-	}
-	
-	
-	
+//	@Bean
+//    Communicator iceCommunicator() {
+//        return Util.initialize();
+//    }
+//	
+//	@Bean
+//	WorkSpaceManagerControllerPrx workSpaceManagerProxy(Communicator com) {
+//		return WorkSpaceManagerControllerPrx.checkedCast(com.stringToProxy("WorkSpaceManager:"+proxy));
+//	}
+//	
+//	@Bean
+//	AssetManagerControllerPrx assetManagerProxy(Communicator com) {
+//		return AssetManagerControllerPrx.checkedCast(com.stringToProxy("AssetManager:"+proxy));
+//	}
+//	
+//	@Bean
+//	ProcessManagerControllerPrx processManagerProxy(Communicator com) {
+//		return ProcessManagerControllerPrx.checkedCast(com.stringToProxy("ProcessManager:"+proxy));
+//	}
 }

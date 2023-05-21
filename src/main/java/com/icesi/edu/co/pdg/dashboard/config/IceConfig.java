@@ -10,32 +10,29 @@ import com.zeroc.Ice.Util;
 import icesi.plantapiloto.common.controllers.AssetManagerControllerPrx;
 import icesi.plantapiloto.common.controllers.ProcessManagerControllerPrx;
 import icesi.plantapiloto.common.controllers.WorkSpaceManagerControllerPrx;
-import icesi.plantapiloto.common.dtos.MeasurementDTO;
 
 @Configuration
 public class IceConfig {
 	@Value("${ice.proxy}")
     private String proxy;
 	
-	MeasurementDTO sd;
+	@Bean
+    Communicator iceCommunicator() {
+        return Util.initialize();
+    }
 	
-//	@Bean
-//    Communicator iceCommunicator() {
-//        return Util.initialize();
-//    }
-//	
-//	@Bean
-//	WorkSpaceManagerControllerPrx workSpaceManagerProxy(Communicator com) {
-//		return WorkSpaceManagerControllerPrx.checkedCast(com.stringToProxy("WorkSpaceManager:"+proxy));
-//	}
-//	
-//	@Bean
-//	AssetManagerControllerPrx assetManagerProxy(Communicator com) {
-//		return AssetManagerControllerPrx.checkedCast(com.stringToProxy("AssetManager:"+proxy));
-//	}
-//	
-//	@Bean
-//	ProcessManagerControllerPrx processManagerProxy(Communicator com) {
-//		return ProcessManagerControllerPrx.checkedCast(com.stringToProxy("ProcessManager:"+proxy));
-//	}
+	@Bean
+	WorkSpaceManagerControllerPrx workSpaceManagerProxy(Communicator com) {
+		return WorkSpaceManagerControllerPrx.checkedCast(com.stringToProxy("WorkSpaceManager:"+proxy));
+	}
+	
+	@Bean
+	AssetManagerControllerPrx assetManagerProxy(Communicator com) {
+		return AssetManagerControllerPrx.checkedCast(com.stringToProxy("AssetManager:"+proxy));
+	}
+	
+	@Bean
+	ProcessManagerControllerPrx processManagerProxy(Communicator com) {
+		return ProcessManagerControllerPrx.checkedCast(com.stringToProxy("ProcessManager:"+proxy));
+	}
 }

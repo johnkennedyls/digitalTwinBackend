@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.LogDashboardService;
 
-@Aspect
-@Component
+//@Aspect
+//@Component
 public class LoggingAspect {
 	
 	@Autowired

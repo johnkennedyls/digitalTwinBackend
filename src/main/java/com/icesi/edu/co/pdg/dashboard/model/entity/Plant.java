@@ -5,19 +5,23 @@ import java.io.Serializable;
 
 import java.util.List;
 import javax.persistence.OneToMany;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 
 /**
  * The persistent class for the plant database table.
  * 
  */
+@Data
+@NoArgsConstructor
 @Entity
 @NamedQuery(name="Plant.findAll", query="SELECT p FROM Plant p")
 public class Plant implements Serializable {
@@ -40,7 +44,9 @@ public class Plant implements Serializable {
 	private String plantName;
 
 	@Column(name="plant_photo")
-	private byte[] plantPhoto;
+	private String plantPhoto;
+	
+	private String svgImage;
 
 	//bi-directional many-to-one association to Svg
 	@OneToMany(mappedBy="plant")
@@ -49,65 +55,6 @@ public class Plant implements Serializable {
 	//bi-directional many-to-one association to TypeAlarm
 	@OneToMany(mappedBy="plant")
 	private List<TypeAlarm> typeAlarms;
-
-	public Plant() {
-	}
-
-	public Integer getPlantId() {
-		return this.plantId;
-	}
-
-	public void setPlantId(Integer plantId) {
-		this.plantId = plantId;
-	}
-
-	public String getConventions() {
-		return this.conventions;
-	}
-
-	public void setConventions(String conventions) {
-		this.conventions = conventions;
-	}
-
-	public Integer getIdAsset() {
-		return this.idAsset;
-	}
-
-	public void setIdAsset(Integer idAsset) {
-		this.idAsset = idAsset;
-	}
-
-	public String getPlantDescription() {
-		return this.plantDescription;
-	}
-
-	public void setPlantDescription(String plantDescription) {
-		this.plantDescription = plantDescription;
-	}
-
-	public String getPlantName() {
-		return this.plantName;
-	}
-
-	public void setPlantName(String plantName) {
-		this.plantName = plantName;
-	}
-
-	public byte[] getPlantPhoto() {
-		return this.plantPhoto;
-	}
-
-	public void setPlantPhoto(byte[] plantPhoto) {
-		this.plantPhoto = plantPhoto;
-	}
-
-	public List<Svg> getSvgs() {
-		return this.svgs;
-	}
-
-	public void setSvgs(List<Svg> svgs) {
-		this.svgs = svgs;
-	}
 
 	public Svg addSvg(Svg svg) {
 		getSvgs().add(svg);

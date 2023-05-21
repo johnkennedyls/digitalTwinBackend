@@ -3,14 +3,15 @@ package com.icesi.edu.co.pdg.dashboard.services.interfaces;
 import java.util.List;
 
 import com.icesi.edu.co.pdg.dashboard.exceptions.BadRequestDataException;
-import com.icesi.edu.co.pdg.dashboard.model.dtos.PlantDTO;
-import com.icesi.edu.co.pdg.dashboard.model.entity.Plant;
+import com.icesi.edu.co.pdg.dashboard.exceptions.NoResultException;
+import com.icesi.edu.co.pdg.dashboard.model.dtos.in.PlantInDTO;
+import com.icesi.edu.co.pdg.dashboard.model.dtos.out.PlantListOutDTO;
+import com.icesi.edu.co.pdg.dashboard.model.dtos.out.PlantOutDTO;
 
 public interface PlantService {
-	List<Plant> getAllPlants();
-	Plant getbyIdPlant(Integer id) throws Exception;
-	
-	Plant AddPlant(PlantDTO plant) throws BadRequestDataException, IllegalArgumentException;
-	Plant modifyPlant(PlantDTO plant, Integer plantId) throws Exception;
-	void deletePlant(Integer plantId) throws Exception;
+	List<PlantListOutDTO> getAllPlants();
+	PlantOutDTO getByIdPlant(Integer id) throws NoResultException;
+	void addPlant(PlantInDTO plant) throws BadRequestDataException;
+	void editPlant(PlantInDTO plant, Integer plantId) throws BadRequestDataException ;
+	void deletePlant(Integer plantId);
 }

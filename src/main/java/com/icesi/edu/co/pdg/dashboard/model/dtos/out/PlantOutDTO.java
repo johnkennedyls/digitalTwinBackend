@@ -3,7 +3,7 @@ package com.icesi.edu.co.pdg.dashboard.model.dtos.out;
 import java.util.List;
 
 import com.icesi.edu.co.pdg.dashboard.model.dtos.TagDTO;
-import com.icesi.edu.co.pdg.dashboard.model.entity.Svg;
+import com.icesi.edu.co.pdg.dashboard.model.entity.MapSvgTag;
 
 public class PlantOutDTO {
 	private String plantName; 
@@ -12,7 +12,7 @@ public class PlantOutDTO {
 	private String plantPhoto;
 	private List<TagDTO> tags;
 	private String svgImage;
-	private List<Svg> svgs;
+	private List<MapSvgTag> svgs;
 	
 	
 	public String getPlantDescription() {
@@ -45,10 +45,10 @@ public class PlantOutDTO {
 	public void setSvgImage(String svgImage) {
 		this.svgImage = svgImage;
 	}
-	public List<Svg> getSvgs() {
+	public List<MapSvgTag> getSvgs() {
 		return svgs;
 	}
-	public void setSvgs(List<Svg> svgs) {
+	public void setSvgs(List<MapSvgTag> svgs) {
 		this.svgs = svgs;
 	}
 	public String getPlantName() {

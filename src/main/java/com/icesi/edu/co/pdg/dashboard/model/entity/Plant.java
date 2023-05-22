@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 import java.util.List;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,8 +29,8 @@ public class Plant implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="plant_id")
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@SequenceGenerator(name = "DASHBOARD_PLANT_PLANTID_GENERATOR", sequenceName = "dashboard_plant_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DASHBOARD_PLANT_PLANTID_GENERATOR")
 	private Integer plantId;
 
 	private String conventions;
@@ -50,20 +51,20 @@ public class Plant implements Serializable {
 
 	//bi-directional many-to-one association to Svg
 	@OneToMany(mappedBy="plant")
-	private List<Svg> svgs;
+	private List<MapSvgTag> svgs;
 
 	//bi-directional many-to-one association to TypeAlarm
 	@OneToMany(mappedBy="plant")
 	private List<TypeAlarm> typeAlarms;
 
-	public Svg addSvg(Svg svg) {
+	public MapSvgTag addSvg(MapSvgTag svg) {
 		getSvgs().add(svg);
 		svg.setPlant(this);
 
 		return svg;
 	}
 
-	public Svg removeSvg(Svg svg) {
+	public MapSvgTag removeSvg(MapSvgTag svg) {
 		getSvgs().remove(svg);
 		svg.setPlant(null);
 

@@ -15,13 +15,12 @@ import javax.persistence.NamedQuery;
  * 
  */
 @Entity
-@NamedQuery(name="Svg.findAll", query="SELECT s FROM Svg s")
-public class Svg implements Serializable {
+public class MapSvgTag implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name="id_svg")
-	private Integer idSvg;
+	private String idSvg;
 
 	@Column(name="id_asset")
 	private Integer idAsset;
@@ -31,17 +30,17 @@ public class Svg implements Serializable {
 	@JoinColumn(name="plant_id")
 	private Plant plant;
 
-	public Svg() {
+	public MapSvgTag() {
 	}
-
-	public Integer getIdSvg() {
-		return this.idSvg;
+	
+	public String getIdSvg() {
+		return idSvg;
 	}
-
-	public void setIdSvg(Integer idSvg) {
+	
+	public void setIdSvg(String idSvg) {
 		this.idSvg = idSvg;
 	}
-
+	
 	public Integer getIdAsset() {
 		return this.idAsset;
 	}

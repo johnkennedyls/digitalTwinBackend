@@ -19,7 +19,9 @@ import com.icesi.edu.co.pdg.dashboard.model.dtos.in.PlantInDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.PlantListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.PlantOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.entity.Plant;
+import com.icesi.edu.co.pdg.dashboard.model.entity.MapSvgTag;
 import com.icesi.edu.co.pdg.dashboard.model.mappers.PlantMapper;
+import com.icesi.edu.co.pdg.dashboard.repositories.MapSvgTagRepository;
 import com.icesi.edu.co.pdg.dashboard.repositories.PlantRepository;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.PlantService;
 
@@ -33,6 +35,8 @@ public class PlantServiceImp implements PlantService {
 	@Autowired
 	PlantRepository plantRepository;
 	@Autowired
+	MapSvgTagRepository mapRepository;
+	@Autowired
 	AssetManagerControllerPrx assetManager;
 	
 	@Value("${webdasboard.workspace.id}")
@@ -41,32 +45,45 @@ public class PlantServiceImp implements PlantService {
 	private Integer typePlantId;
 	@Value("${webdasboard.asset.tag.id}")
 	private Integer typeTagId;
-
+	@Value("${webdasboard.asset.tag.name}")
+	private String typeTagName;
 	@Override
 	public List<PlantListOutDTO> getAllPlants() {
 		List<PlantListOutDTO> result = new ArrayList<>();
-
+		
 		List<AssetDTO> assets = Arrays.asList(assetManager.findByWorkSpace(workspaceId));
-//		List<Plant> plants = plantRepository.findAll();
-//		
-//		Map<Integer, AssetDTO> assetMap = assets.stream().collect(Collectors.toMap(asset -> asset.assetId, asset -> asset));
-//		Map<Integer, Plant> plantMap = plants.stream().collect(Collectors.toMap(Plant::getIdAsset, plant -> plant));
-//		
-//				
-//		plantMap.forEach((id,plant) -> {
-//			AssetDTO asset = assetMap.get(id);
-//			PlantListOutDTO plantOut = PlantMapper.INSTANCE.plantToPlantListOutDTO(plant);
-//			List<TagDTO> tags = new ArrayList<>();
-//			for(AssetDTO tag: asset.childrens) {
-//				TagDTO currentTag = new TagDTO();
-//				currentTag.setName(tag.name);
-//				currentTag.setAssetId(tag.assetId);
-//				tags.add(currentTag);
-//			}
-//			
-//			plantOut.setTags(tags);
-//			result.add(plantOut);
-//		});
+		List<Plant> plants = plantRepository.findAll();
+		
+		for(AssetDTO asset: assets) {
+			if(asset.typeName==typeTagName) {
+				assets.remove(asset);
+			}
+		}
+		
+		if(assets.size()==0) {
+			return result;
+		}
+		
+		Map<Integer, AssetDTO> assetMap = assets.stream().collect(Collectors.toMap(asset -> asset.assetId, asset -> asset));
+		Map<Integer, Plant> plantMap = plants.stream().collect(Collectors.toMap(Plant::getIdAsset, plant -> plant));
+		
+				
+		plantMap.forEach((id,plant) -> {
+			AssetDTO asset = assetMap.get(id);
+			System.out.println(asset.name);
+			PlantListOutDTO plantOut = PlantMapper.INSTANCE.plantToPlantListOutDTO(plant);
+			List<TagDTO> tags = new ArrayList<>();
+			for(AssetDTO tag: asset.childrens) {
+				TagDTO currentTag = new TagDTO();
+				currentTag.setName(tag.name);
+				currentTag.setAssetId(tag.assetId);
+				currentTag.setState(tag.state.charAt(0));
+				tags.add(currentTag);
+			}
+			
+			plantOut.setTags(tags);
+			result.add(plantOut);
+		});
 		
 		return result;
 	}
@@ -84,12 +101,13 @@ public class PlantServiceImp implements PlantService {
 
 	@Override
 	public void addPlant(PlantInDTO plant) throws BadRequestDataException {
+		System.out.println(plant.getMapSvgTag().size());
 		if(
 			plant.getPlantName()==null || plant.getPlantName().isEmpty() ||
 			plant.getPlantDescription() == null || plant.getPlantDescription().isEmpty() ||
 			plant.getSvgImage() == null || plant.getSvgImage().isEmpty() || 
 			plant.getTags() == null || plant.getTags().size() == 0 ||
-			plant.getSvgs() == null || plant.getSvgs().size() == 0
+			plant.getMapSvgTag() == null || plant.getMapSvgTag().size() == 0
 		){
 			throw new BadRequestDataException();
 		}
@@ -99,18 +117,25 @@ public class PlantServiceImp implements PlantService {
 		String state = "A";
 		
 		Integer assetId = assetManager.saveAsset(name, desc, typePlantId, workspaceId, -1, state, null);
-		
+		Map<String, String> mapTagNameSvgId = plant.getMapSvgTag().stream().collect(Collectors.toMap(map -> map.getTagName(), map -> map.getSvgId()));
 		if(assetId==-1) {
 			throw new RuntimeException("Error interno, intente más tarde");
 		}
 		
-		for(TagDTO tag : plant.getTags()) {
-			assetManager.saveAsset(tag.getName(), tag.getDescription(), typeTagId, workspaceId, assetId, tag.getState().toString(), null);
-		}
-		
 		Plant finalPlant = PlantMapper.INSTANCE.plantInDTOToPlant(plant);
 		finalPlant.setIdAsset(assetId);
-		plantRepository.save(finalPlant);
+		finalPlant = plantRepository.save(finalPlant);
+		
+		List<MapSvgTag> svgs = new ArrayList<>();
+		for(TagDTO tag : plant.getTags()) {
+			Integer tagId = assetManager.saveAsset(tag.getName(), tag.getDescription(), typeTagId, workspaceId, assetId, state, null);
+			MapSvgTag svg = new MapSvgTag();
+			svg.setIdAsset(tagId);
+			svg.setIdSvg(mapTagNameSvgId.get(tag.getName()));
+			svg.setPlant(finalPlant);
+			svgs.add(svg);
+		}
+		mapRepository.saveAll(svgs);
 	}
 	
 	// TODO
@@ -122,7 +147,7 @@ public class PlantServiceImp implements PlantService {
 			plant.getPlantDescription() == null || plant.getPlantDescription().isEmpty() ||
 			plant.getSvgImage() == null || plant.getSvgImage().isEmpty() || 
 			plant.getTags() == null || plant.getTags().size() == 0 ||
-			plant.getSvgs() == null || plant.getSvgs().size() == 0
+			plant.getMapSvgTag() == null || plant.getMapSvgTag().size() == 0
 		){
 			throw new BadRequestDataException();
 		}
@@ -154,7 +179,7 @@ public class PlantServiceImp implements PlantService {
 		}
 		
 		for(TagDTO tag : plant.getTags()) {
-			assetManager.saveAsset(tag.getName(), tag.getDescription(), typeTagId, workspaceId, assetId, tag.getState().toString(), null);
+			assetManager.saveAsset(tag.getName(), tag.getDescription(), typeTagId, workspaceId, assetId, state, null);
 		}
 		
 		Plant finalPlant = PlantMapper.INSTANCE.plantInDTOToPlant(plant);
@@ -162,8 +187,6 @@ public class PlantServiceImp implements PlantService {
 		finalPlant.setIdAsset(assetId);
 		
 		plantRepository.save(finalPlant);
-		
-		
 	}
 
 	@Override

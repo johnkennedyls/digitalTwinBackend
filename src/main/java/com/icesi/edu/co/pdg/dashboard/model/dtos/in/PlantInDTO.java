@@ -2,8 +2,8 @@ package com.icesi.edu.co.pdg.dashboard.model.dtos.in;
 
 import java.util.List;
 
+import com.icesi.edu.co.pdg.dashboard.model.dtos.MapSvgTagDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.TagDTO;
-import com.icesi.edu.co.pdg.dashboard.model.entity.Svg;
 
 
 public class PlantInDTO {
@@ -13,7 +13,7 @@ public class PlantInDTO {
 	private String plantPhoto;
 	private List<TagDTO> tags;
 	private String svgImage;
-	private List<Svg> svgs;
+	private List<MapSvgTagDTO> mapSvgTag;
 	
 	public String getConventions() {
 		return conventions;
@@ -33,12 +33,6 @@ public class PlantInDTO {
 	public void setPlantPhoto(String plantPhoto) {
 		this.plantPhoto = plantPhoto;
 	}
-	public List<Svg> getSvgs() {
-		return svgs;
-	}
-	public void setSvgs(List<Svg> svgs) {
-		this.svgs = svgs;
-	}
 	public List<TagDTO> getTags() {
 		return tags;
 	}
@@ -56,6 +50,12 @@ public class PlantInDTO {
 	}
 	public void setPlantName(String plantName) {
 		this.plantName = plantName;
+	}
+	public List<MapSvgTagDTO> getMapSvgTag() {
+		return mapSvgTag;
+	}
+	public void setMapSvgTag(List<MapSvgTagDTO> mapSvgTag) {
+		this.mapSvgTag = mapSvgTag;
 	}
 	
 }

@@ -44,10 +44,10 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
 		typeAlarm.getCondition()==null || typeAlarm.getCondition().isEmpty()) {
 			throw new BadRequestDataException();
 		}else {
-			TypeAlarm ta=typeAlarmRepository.findByTypeAlarmName(typeAlarm.getTypeAlarmName());
-			if(ta==null) {
-				ta=typeAlarmRepository.findByCondition(typeAlarm.getCondition());
-				if(ta==null) {
+			TypeAlarm typeAlarmFoundNamAndConditione=typeAlarmRepository.findByTypeAlarmName(typeAlarm.getTypeAlarmName());
+			if(typeAlarmFoundNamAndConditione==null) {
+				typeAlarmFoundNamAndConditione=typeAlarmRepository.findByCondition(typeAlarm.getCondition());
+				if(typeAlarmFoundNamAndConditione==null) {
 					Optional<Plant> plant=plantRepository.findById(typeAlarm.getPlant_id());
 					TypeAlarm saved = null;
 					if(!plant.isEmpty()) {
@@ -66,10 +66,10 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
 					return typeAlarm;
 				}
 				else {
-					throw new BadRequestDataException();
+					throw new BadRequestDataException("La condición ya existe");
 				}
 			}else {
-				throw new BadRequestDataException();
+				throw new BadRequestDataException("El nombre ya existe");
 			}
 			
 		}

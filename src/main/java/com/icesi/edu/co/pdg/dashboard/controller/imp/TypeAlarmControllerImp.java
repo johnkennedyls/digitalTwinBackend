@@ -73,13 +73,13 @@ public class TypeAlarmControllerImp implements TypeAlarmController{
 
 	@Override
 	@PostMapping("/create")
-	public ResponseEntity<TypeAlarmDTO> addTypeAlarm(@RequestBody TypeAlarmDTO typealarm) throws Exception {
+	public ResponseEntity<?> addTypeAlarm(@RequestBody TypeAlarmDTO typealarm) throws Exception {
 		TypeAlarmDTO alarm;
 		try {
 			alarm = typeAlarmService.addTypeAlarm(typealarm);
 			return new ResponseEntity<>(alarm, HttpStatus.CREATED);
 		}catch(BadRequestDataException e) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}catch(NoResultException e) {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}

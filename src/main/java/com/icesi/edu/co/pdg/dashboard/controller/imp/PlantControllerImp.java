@@ -14,7 +14,7 @@ import com.icesi.edu.co.pdg.dashboard.model.dtos.AssetDTO;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.PlantService;
 
 @RestController()
-@RequestMapping("/dashboardapi/plants")
+@RequestMapping("/plants")
 @CrossOrigin("*")
 public class PlantControllerImp implements PlantController {
 	

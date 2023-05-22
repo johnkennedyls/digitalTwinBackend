@@ -34,9 +34,6 @@ public class ActionHistory implements Serializable {
 	@Column(name="action_history_description")
 	private String actionHistoryDescription;
 
-	@Column(name="action_history_email")
-	private String actionHistoryEmail;
-
 	@Column(name="action_history_username")
 	private String actionHistoryUsername;
 
@@ -72,13 +69,6 @@ public class ActionHistory implements Serializable {
 		this.actionHistoryDescription = actionHistoryDescription;
 	}
 
-	public String getActionHistoryEmail() {
-		return this.actionHistoryEmail;
-	}
-
-	public void setActionHistoryEmail(String actionHistoryEmail) {
-		this.actionHistoryEmail = actionHistoryEmail;
-	}
 
 	public String getActionHistoryUsername() {
 		return this.actionHistoryUsername;

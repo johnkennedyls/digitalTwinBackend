@@ -14,7 +14,7 @@ import com.icesi.edu.co.pdg.dashboard.model.dtos.TypeAlarmDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmDetailOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.entity.AssignedUser;
-import com.icesi.edu.co.pdg.dashboard.model.entity.DashboardEvent;
+import com.icesi.edu.co.pdg.dashboard.model.entity.EventDashboard;
 import com.icesi.edu.co.pdg.dashboard.model.entity.Plant;
 import com.icesi.edu.co.pdg.dashboard.model.entity.TypeAlarm;
 import com.icesi.edu.co.pdg.dashboard.model.mappers.TypeAlarmMapper;
@@ -51,7 +51,7 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
 					Optional<Plant> plant=plantRepository.findById(typeAlarm.getPlant_id());
 					TypeAlarm saved = null;
 					if(!plant.isEmpty()) {
-						Optional<DashboardEvent> event=dashboardEventRepository.findById(typeAlarm.getEvent_id());
+						Optional<EventDashboard> event=dashboardEventRepository.findById(typeAlarm.getEvent_id());
 						if(!event.isEmpty()) {
 							TypeAlarm typealarm=TypeAlarmMapper.INSTANCE.addTypeAlarmDTOtotypeAlarm(typeAlarm);
 							typealarm.setPlant(plant.get());

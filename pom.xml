@@ -87,10 +87,22 @@
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
+		<dependency>
+	        <groupId>icesi.plantapiloto</groupId>
+	        <artifactId>common</artifactId>
+	        <version>1.0</version>
+	    </dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+			<plugin>
+			    <groupId>org.springframework.boot</groupId>
+			    <artifactId>spring-boot-maven-plugin</artifactId>
+			    <configuration>
+			        <includeSystemScope>true</includeSystemScope>
+			    </configuration>
+			</plugin>
 			<plugin>
 			    <artifactId>maven-war-plugin</artifactId>
 			</plugin>

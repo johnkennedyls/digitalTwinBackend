@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.EventDashboardDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.AlarmListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.entity.Alarm;
-import com.icesi.edu.co.pdg.dashboard.model.entity.DashboardEvent;
+import com.icesi.edu.co.pdg.dashboard.model.entity.EventDashboard;
 import com.icesi.edu.co.pdg.dashboard.model.mappers.AlarmMapper;
 import com.icesi.edu.co.pdg.dashboard.model.mappers.EventDashboardMapper;
 import com.icesi.edu.co.pdg.dashboard.repositories.DashboardEventRepository;
@@ -25,9 +25,9 @@ public class DashboardEventServiceImp implements DashboardEventService {
 	@Override
 	@GetMapping("/")
 	public List<EventDashboardDTO> getAllEvents() throws Exception {
-		List<DashboardEvent> events = dashboardEventRepository.findAll();
+		List<EventDashboard> events = dashboardEventRepository.findAll();
         List<EventDashboardDTO>eventsDTO = new ArrayList<EventDashboardDTO>();
-        for(DashboardEvent event:events) {
+        for(EventDashboard event:events) {
         	EventDashboardDTO eventDTO=EventDashboardMapper.INSTANCE.eventDashboardToEventDashboardDTO(event);
         	eventsDTO.add(eventDTO);
         }                  

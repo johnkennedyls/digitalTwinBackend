@@ -14,13 +14,15 @@ import com.icesi.edu.co.pdg.dashboard.model.dtos.TypeAlarmDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmDetailOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.entity.AssignedUser;
-import com.icesi.edu.co.pdg.dashboard.model.entity.DashboardEvent;
+import com.icesi.edu.co.pdg.dashboard.model.entity.EventDashboard;
 import com.icesi.edu.co.pdg.dashboard.model.entity.Plant;
 import com.icesi.edu.co.pdg.dashboard.model.entity.TypeAlarm;
 import com.icesi.edu.co.pdg.dashboard.model.mappers.TypeAlarmMapper;
+import com.icesi.edu.co.pdg.dashboard.repositories.AlarmRepository;
 import com.icesi.edu.co.pdg.dashboard.repositories.DashboardEventRepository;
 import com.icesi.edu.co.pdg.dashboard.repositories.PlantRepository;
 import com.icesi.edu.co.pdg.dashboard.repositories.TypeAlarmRepository;
+import com.icesi.edu.co.pdg.dashboard.services.interfaces.AlarmService;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.AssignedUserService;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.TypeAlarmService;
 
@@ -30,6 +32,8 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
 	
 	@Autowired
     private TypeAlarmRepository typeAlarmRepository;
+	@Autowired
+    private AlarmService alarmService;
 	@Autowired
     private PlantRepository plantRepository;
 	@Autowired
@@ -52,7 +56,7 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
 					Optional<Plant> plant=plantRepository.findById(typeAlarm.getPlant_id());
 					TypeAlarm saved = null;
 					if(!plant.isEmpty()) {
-						Optional<DashboardEvent> event=dashboardEventRepository.findById(typeAlarm.getEvent_id());
+						Optional<EventDashboard> event=dashboardEventRepository.findById(typeAlarm.getEvent_id());
 						if(!event.isEmpty()) {
 							TypeAlarm typealarm=TypeAlarmMapper.INSTANCE.addTypeAlarmDTOtotypeAlarm(typeAlarm);
 							typealarm.setPlant(plant.get());
@@ -85,38 +89,43 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
 				|| typeAlarm.getEvent_id()==null || typeAlarm.getPlant_id()==null) {
 			throw new BadRequestDataException();
 		}else {
+			TypeAlarm typeAlarmFoundNamAndCondition=null;
 			TypeAlarm typeAlarmEdited=typeAlarmRepository.findById(typeAlarmid).get();
 			if(typeAlarmEdited!=null) {
 				Optional<Plant> plant=plantRepository.findById(typeAlarm.getPlant_id());
-				Optional<DashboardEvent> event=dashboardEventRepository.findById(typeAlarm.getEvent_id());
+				Optional<EventDashboard> event=dashboardEventRepository.findById(typeAlarm.getEvent_id());
 				
 				if(!plant.isEmpty() && !event.isEmpty()) {
-					TypeAlarm typeAlarmFoundNamAndConditione=typeAlarmRepository.findByTypeAlarmName(typeAlarm.getTypeAlarmName());
-					if(typeAlarmFoundNamAndConditione==null) {
-						typeAlarmFoundNamAndConditione=typeAlarmRepository.findByCondition(typeAlarm.getCondition());
-						if(typeAlarmFoundNamAndConditione==null) {
-							typeAlarmEdited.setTypeAlarmId(typeAlarmid);
-							typeAlarmEdited.setTypeAlarmName(typeAlarm.getTypeAlarmName());
-							typeAlarmEdited.setTypeAlarmDescription(typeAlarm.getTypeAlarmDescription());
-							typeAlarmEdited.setCondition(typeAlarm.getCondition());
-							typeAlarmEdited.setNumberAlarmsMax(typeAlarm.getNumberAlarmsMax());
-							typeAlarmEdited.setPlant(plant.get());
-							typeAlarmEdited.setDashboardEvent(event.get());
-							
-							if(typeAlarm.getUsersAssigned()!=null) {
-								assignedUserService.deleteByTypeAlarmTypeAlarmId(typeAlarmid);
-								List <AssignedUser> list=typeAlarm.assignedUserListDTOoAssignedUserList();
-								assignedUserService.addAssignedUser(list,typeAlarmid);
-							}
-											
-							typeAlarmRepository.save(typeAlarmEdited);	
-							return typeAlarm;
+					if(typeAlarmEdited.getTypeAlarmName().equals(typeAlarm.getTypeAlarmName())) {						
+						if(typeAlarmEdited.getCondition().equals(typeAlarm.getCondition())) {
+							return editTypeAlarmValidation(typeAlarmid,typeAlarm,typeAlarmEdited,plant.get(),event.get());
 						}else {
-							throw new BadRequestDataException("La condición del tipo de alarma ya existe");
+							typeAlarmFoundNamAndCondition=typeAlarmRepository.findByCondition(typeAlarm.getCondition());
+							if(typeAlarmFoundNamAndCondition==null) {
+								return editTypeAlarmValidation(typeAlarmid,typeAlarm,typeAlarmEdited,plant.get(),event.get());
+							}
+							else {
+								throw new BadRequestDataException("La condición del tipo de alarma ya existe");
+							}
 						}
 					}else {
-						throw new BadRequestDataException("El nombre del tipo de alarma ya existe");
-					}	
+						typeAlarmFoundNamAndCondition=typeAlarmRepository.findByTypeAlarmName(typeAlarm.getTypeAlarmName());
+						if(typeAlarmFoundNamAndCondition==null) {
+							if(typeAlarmEdited.getCondition().equals(typeAlarm.getCondition())) {
+								return editTypeAlarmValidation(typeAlarmid,typeAlarm,typeAlarmEdited,plant.get(),event.get());
+							}else {
+								typeAlarmFoundNamAndCondition=typeAlarmRepository.findByCondition(typeAlarm.getCondition());
+								if(typeAlarmFoundNamAndCondition==null) {
+									return editTypeAlarmValidation(typeAlarmid,typeAlarm,typeAlarmEdited,plant.get(),event.get());
+								}
+								else {
+									throw new BadRequestDataException("La condición del tipo de alarma ya existe");
+								}
+							}
+						}else {
+							throw new BadRequestDataException("El nombre del tipo de alarma ya existe");
+						}
+					}
 				}else {
 					throw new BadRequestDataException();
 				}
@@ -126,6 +135,26 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
 			}
 		}
 	}
+	@Override
+	public TypeAlarmDTO editTypeAlarmValidation(Integer typeAlarmid, TypeAlarmDTO typeAlarm,TypeAlarm typeAlarmEdited,Plant plant, EventDashboard event) throws Exception {
+		typeAlarmEdited.setTypeAlarmId(typeAlarmid);
+		typeAlarmEdited.setTypeAlarmName(typeAlarm.getTypeAlarmName());
+		typeAlarmEdited.setTypeAlarmDescription(typeAlarm.getTypeAlarmDescription());
+		typeAlarmEdited.setCondition(typeAlarm.getCondition());
+		typeAlarmEdited.setNumberAlarmsMax(typeAlarm.getNumberAlarmsMax());
+		typeAlarmEdited.setPlant(plant);
+		typeAlarmEdited.setDashboardEvent(event);
+		
+		if(typeAlarm.getUsersAssigned()!=null) {
+			assignedUserService.deleteByTypeAlarmTypeAlarmId(typeAlarmid);
+			List <AssignedUser> list=typeAlarm.assignedUserListDTOoAssignedUserList();
+			assignedUserService.addAssignedUser(list,typeAlarmid);
+		}
+						
+		typeAlarmRepository.save(typeAlarmEdited);	
+		return typeAlarm;
+	}
+	
 
 	@Override
 	public TypeAlarm deleteTypeAlarm(Integer typeAlarmid) throws Exception {
@@ -135,6 +164,7 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
 			Optional<TypeAlarm> typeAlarmDeleted=typeAlarmRepository.findById(typeAlarmid);
 			if(!typeAlarmDeleted.isEmpty()) {
 				assignedUserService.deleteByTypeAlarmTypeAlarmId(typeAlarmid);
+				alarmService.deleteByTypeAlarmTypeAlarmId(typeAlarmid);
 				typeAlarmRepository.deleteById(typeAlarmid);
 				return typeAlarmDeleted.get();
 			}else {
@@ -187,4 +217,5 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
                        
             return typealarmsDTO;
 	}
+
 }

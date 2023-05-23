@@ -25,6 +25,8 @@ public interface AlarmService {
 	List<AlarmListOutDTO> getAllAlarmsActiveByPlantId(Integer plantid) throws Exception;
 
 	List<AlarmListOutDTO> getAllAlarmsClosedByPlantId(Integer plantid) throws Exception;
+
+	void deleteByTypeAlarmTypeAlarmId(Integer typeAlarmid) throws Exception;
 	
 
 }

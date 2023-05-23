@@ -4,11 +4,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import com.icesi.edu.co.pdg.dashboard.model.dtos.EventDashboardDTO;
-import com.icesi.edu.co.pdg.dashboard.model.entity.DashboardEvent;
+import com.icesi.edu.co.pdg.dashboard.model.entity.EventDashboard;
 @Mapper
 public interface EventDashboardMapper {
 	EventDashboardMapper INSTANCE = Mappers.getMapper(EventDashboardMapper.class);
 	
-	EventDashboardDTO eventDashboardToEventDashboardDTO(DashboardEvent eventDashboard);
+	EventDashboardDTO eventDashboardToEventDashboardDTO(EventDashboard eventDashboard);
 
 }

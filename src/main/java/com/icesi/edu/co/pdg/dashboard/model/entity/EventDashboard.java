@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 
 import java.util.List;
 
@@ -21,12 +22,14 @@ import java.util.List;
  * 
  */
 @Entity
-@NamedQuery(name="DashboardEvent.findAll", query="SELECT d FROM DashboardEvent d")
-public class DashboardEvent implements Serializable {
+@NamedQuery(name="EventDashboard.findAll", query="SELECT d FROM EventDashboard d")
+public class EventDashboard implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name="event_id")
+	@SequenceGenerator(name = "DASHBOARD_EVENT_EVENTID_GENERATOR", sequenceName = "dashboard_event_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DASHBOARD_EVENT_EVENTID_GENERATOR")
 	private Integer eventId;
 
 	@Column(name="event_description")
@@ -42,7 +45,7 @@ public class DashboardEvent implements Serializable {
 	@OneToMany(mappedBy="dashboardEvent")
 	private List<TypeAlarm> typeAlarms;
 
-	public DashboardEvent() {
+	public EventDashboard() {
 	}
 
 	public Integer getEventId() {

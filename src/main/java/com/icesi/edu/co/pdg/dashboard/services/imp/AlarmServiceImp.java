@@ -24,6 +24,7 @@ import com.icesi.edu.co.pdg.dashboard.model.mappers.AlarmMapper;
 import com.icesi.edu.co.pdg.dashboard.model.mappers.TypeAlarmMapper;
 import com.icesi.edu.co.pdg.dashboard.repositories.AlarmRepository;
 import com.icesi.edu.co.pdg.dashboard.repositories.StateAlarmRepository;
+import com.icesi.edu.co.pdg.dashboard.repositories.TypeAlarmRepository;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.AlarmService;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.EmailService;
 
@@ -33,6 +34,8 @@ public class AlarmServiceImp implements AlarmService {
 	
 	@Autowired
 	private AlarmRepository alarmRepository;
+	@Autowired
+	private TypeAlarmRepository typeAlarmRepository;
 	@Autowired
 	private StateAlarmRepository stateAlarmRepository;
 	@Autowired
@@ -157,6 +160,21 @@ public class AlarmServiceImp implements AlarmService {
             }
                        
             return alarmsDTO;
+	}
+	
+	@Override
+	public void deleteByTypeAlarmTypeAlarmId(Integer typeAlarmid) throws Exception {
+		if( typeAlarmid<0 || typeAlarmid==null) {
+			throw new BadRequestDataException();
+		}else {
+			Optional<TypeAlarm> typeAlarm=typeAlarmRepository.findById(typeAlarmid);
+			if(!typeAlarm.isEmpty()) {
+				alarmRepository.deleteByTypeAlarmTypeAlarmId(typeAlarmid);
+			}else {
+				throw new NoResultException();
+			}
+		}
+		
 	}
 
 }

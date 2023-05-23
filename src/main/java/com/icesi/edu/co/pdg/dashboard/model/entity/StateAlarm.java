@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.NamedQuery;
 
 
@@ -27,6 +28,8 @@ public class StateAlarm implements Serializable {
 
 	@Id
 	@Column(name="state_alarm_id")
+	@SequenceGenerator(name = "DASHBOARD_STATEALARM_STATEALARMID_GENERATOR", sequenceName = "dashboard_state_alarm_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DASHBOARD_STATEALARM_STATEALARMID_GENERATOR")
 	private Integer stateAlarmId;
 
 	@Column(name="state_alarm_description")

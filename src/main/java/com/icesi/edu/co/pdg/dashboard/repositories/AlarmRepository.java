@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.icesi.edu.co.pdg.dashboard.model.entity.Alarm;
+import com.icesi.edu.co.pdg.dashboard.model.entity.AssignedUser;
 
 public interface AlarmRepository  extends JpaRepository<Alarm,Integer>{	
 
@@ -26,6 +27,8 @@ public interface AlarmRepository  extends JpaRepository<Alarm,Integer>{
 
     @Query("SELECT a FROM Alarm a WHERE a.stateAlarm.stateAlarmName IN ('Activa', 'En Revision') AND a.typeAlarm.plant.plantId=:plantid")
     List<Alarm> findActiveOrUnderReviewAlarmsAndPlantid(@Param("plantid")Integer plantid);
+    
+	public List<Alarm> deleteByTypeAlarmTypeAlarmId(Integer typeAlarmid);
     
 
 }

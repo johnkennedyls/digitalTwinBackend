@@ -124,6 +124,6 @@ public class LoggingAspect {
 
 	@AfterThrowing(pointcut = "allDashboardOperations()", throwing = "ex")
 	public void afterExceptionInDashboardOperations(JoinPoint joinPoint, Exception ex) throws Exception {
-		  logDashboardService.save("INFO", ex.toString());
+		  logDashboardService.save("ERROR", ex.toString());
 	}
 }

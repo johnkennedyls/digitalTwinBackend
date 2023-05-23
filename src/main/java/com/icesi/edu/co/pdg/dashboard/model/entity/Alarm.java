@@ -9,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -26,7 +27,8 @@ public class Alarm implements Serializable {
 
 	@Id
 	@Column(name="alarm_id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@SequenceGenerator(name = "DASHBOARD_ALARM_ALARMID_GENERATOR", sequenceName = "dashboard_alarm_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DASHBOARD_ALARM_ALARMID_GENERATOR")
 	private Integer alarmId;
 
 	@Column(name="activation_date")

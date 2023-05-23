@@ -19,13 +19,7 @@ public interface AlarmMapper {
 	AlarmMapper INSTANCE = Mappers.getMapper(AlarmMapper.class);
 	
 	Alarm alarmDTOtoalarm(AlarmDTO alarmDTO);
-	
 	AlarmListOutDTO alarmToalarmListOutDTO(Alarm alarm,TypeAlarm typeAlarm,Plant plant,StateAlarm stateAlarm);
-	
 	List<Alarm> alarmDTOToalarm(List<AlarmDTO> alarmsDTO);
-	
 	AlarmDetailOutDTO alarmtoalarmDetailOutDTO(Alarm alarm,TypeAlarm typeAlarm,Plant plant,StateAlarm stateAlarm);
-	
-
-
 }

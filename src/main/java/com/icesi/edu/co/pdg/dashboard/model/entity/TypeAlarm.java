@@ -52,7 +52,7 @@ public class TypeAlarm implements Serializable {
 	//bi-directional many-to-one association to DashboardEvent
 	@ManyToOne
 	@JoinColumn(name="event_id")
-	private DashboardEvent dashboardEvent;
+	private EventDashboard dashboardEvent;
 
 	//bi-directional many-to-one association to Plant
 	@ManyToOne
@@ -138,11 +138,11 @@ public class TypeAlarm implements Serializable {
 		return assignedUser;
 	}
 
-	public DashboardEvent getDashboardEvent() {
+	public EventDashboard getDashboardEvent() {
 		return this.dashboardEvent;
 	}
 
-	public void setDashboardEvent(DashboardEvent dashboardEvent) {
+	public void setDashboardEvent(EventDashboard dashboardEvent) {
 		this.dashboardEvent = dashboardEvent;
 	}
 

@@ -8,8 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
-
 /**
  * The persistent class for the svg database table.
  * 
@@ -24,8 +22,10 @@ public class MapSvgTag implements Serializable {
 
 	@Column(name="id_asset")
 	private Integer idAsset;
+	
+	@Column(name="tag_name")
+	private String tagName;
 
-	//bi-directional many-to-one association to Plant
 	@ManyToOne
 	@JoinColumn(name="plant_id")
 	private Plant plant;
@@ -55,6 +55,14 @@ public class MapSvgTag implements Serializable {
 
 	public void setPlant(Plant plant) {
 		this.plant = plant;
+	}
+	
+	public String getTagName() {
+		return tagName;
+	}
+
+	public void setTagName(String tagName) {
+		this.tagName = tagName;
 	}
 
 }

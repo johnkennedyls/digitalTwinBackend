@@ -1,5 +1,7 @@
 package com.icesi.edu.co.pdg.dashboard.config;
 
+import javax.annotation.PreDestroy;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,10 +17,12 @@ import icesi.plantapiloto.common.controllers.WorkSpaceManagerControllerPrx;
 public class IceConfig {
 	@Value("${ice.proxy}")
     private String proxy;
+	private Communicator communicator;
 	
 	@Bean
     Communicator iceCommunicator() {
-        return Util.initialize();
+        this.communicator = Util.initialize();
+        return this.communicator;
     }
 	
 	@Bean
@@ -35,4 +39,11 @@ public class IceConfig {
 	ProcessManagerControllerPrx processManagerProxy(Communicator com) {
 		return ProcessManagerControllerPrx.checkedCast(com.stringToProxy("ProcessManager:"+proxy));
 	}
+	
+	@PreDestroy
+    public void preDestroy() {
+        if (this.communicator != null) {
+            this.communicator.destroy();
+        }
+    }
 }

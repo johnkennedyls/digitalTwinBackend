@@ -36,7 +36,7 @@ public class Plant implements Serializable {
 	private String conventions;
 
 	@Column(name="id_asset")
-	private Integer idAsset;
+	private Integer assetId;
 
 	@Column(name="plant_description")
 	private String plantDescription;

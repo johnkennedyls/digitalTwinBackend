@@ -10,8 +10,8 @@ import com.icesi.edu.co.pdg.dashboard.model.dtos.out.PlantOutDTO;
 
 public interface PlantService {
 	List<PlantListOutDTO> getAllPlants();
-	PlantOutDTO getByIdPlant(Integer id) throws NoResultException;
+	PlantOutDTO getPlantById(Integer id) throws NoResultException;
 	void addPlant(PlantInDTO plant) throws BadRequestDataException;
 	void editPlant(PlantInDTO plant, Integer plantId) throws BadRequestDataException ;
-	void deletePlant(Integer plantId);
+	void deletePlant(Integer plantId) throws BadRequestDataException;
 }

@@ -43,7 +43,7 @@ public class PlantControllerImp implements PlantController {
 	public ResponseEntity<?> getPlantById(@PathVariable Integer plantId) {
 		PlantOutDTO plant = null;
 		try {
-			plant = service.getByIdPlant(plantId);
+			plant = service.getPlantById(plantId);
 		} catch (NoResultException e) {
 			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
 		}
@@ -55,6 +55,7 @@ public class PlantControllerImp implements PlantController {
 	@PostMapping("/add")
 	public ResponseEntity<?> addPlant(@RequestBody PlantInDTO plantDTO)  {
 		try {
+			System.out.println(plantDTO.toString());
 			service.addPlant(plantDTO);
 		} catch (BadRequestDataException e) {
 			return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
@@ -77,8 +78,12 @@ public class PlantControllerImp implements PlantController {
 
 	@Override
 	@DeleteMapping("/delete/{plantId}")
-	public ResponseEntity<?> deletePlant(Integer plantId) {
-		service.deletePlant(plantId);
+	public ResponseEntity<?> deletePlant(@PathVariable Integer plantId) {
+		try {
+			service.deletePlant(plantId);
+		} catch (BadRequestDataException e) {
+			return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
+		}
 		return ResponseEntity.ok("Eliminado correctamente");
 	}
 }

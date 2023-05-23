@@ -2,8 +2,8 @@ package com.icesi.edu.co.pdg.dashboard.model.dtos.out;
 
 import java.util.List;
 
+import com.icesi.edu.co.pdg.dashboard.model.dtos.MapSvgTagDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.TagDTO;
-import com.icesi.edu.co.pdg.dashboard.model.entity.MapSvgTag;
 
 public class PlantOutDTO {
 	private String plantName; 
@@ -12,8 +12,7 @@ public class PlantOutDTO {
 	private String plantPhoto;
 	private List<TagDTO> tags;
 	private String svgImage;
-	private List<MapSvgTag> svgs;
-	
+	private List<MapSvgTagDTO> mapSvgTag;
 	
 	public String getPlantDescription() {
 		return plantDescription;
@@ -45,16 +44,16 @@ public class PlantOutDTO {
 	public void setSvgImage(String svgImage) {
 		this.svgImage = svgImage;
 	}
-	public List<MapSvgTag> getSvgs() {
-		return svgs;
-	}
-	public void setSvgs(List<MapSvgTag> svgs) {
-		this.svgs = svgs;
-	}
 	public String getPlantName() {
 		return plantName;
 	}
 	public void setPlantName(String plantName) {
 		this.plantName = plantName;
+	}
+	public List<MapSvgTagDTO> getMapSvgTag() {
+		return mapSvgTag;
+	}
+	public void setMapSvgTag(List<MapSvgTagDTO> mapSvgTag) {
+		this.mapSvgTag = mapSvgTag;
 	}
 }

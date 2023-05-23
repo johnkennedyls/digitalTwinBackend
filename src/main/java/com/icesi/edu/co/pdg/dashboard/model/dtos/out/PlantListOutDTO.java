@@ -6,10 +6,11 @@ import com.icesi.edu.co.pdg.dashboard.model.dtos.TagDTO;
 
 public class PlantListOutDTO {
 	private Integer plantId;
-	private Integer idAsset;
+	private Integer assetId;
 	private String plantName; 
 	private String plantDescription;
 	private String plantPhoto;
+	private List<TagDTO> tags;
 	
 	public Integer getPlantId() {
 		return plantId;
@@ -41,11 +42,11 @@ public class PlantListOutDTO {
 	public void setTags(List<TagDTO> tags) {
 		this.tags = tags;
 	}
-	public Integer getIdAsset() {
-		return idAsset;
+	public Integer getAssetId() {
+		return assetId;
 	}
-	public void setIdAsset(Integer idAsset) {
-		this.idAsset = idAsset;
+	public void setAssetId(Integer assetId) {
+		this.assetId = assetId;
 	}
-	private List<TagDTO> tags;
+	
 }

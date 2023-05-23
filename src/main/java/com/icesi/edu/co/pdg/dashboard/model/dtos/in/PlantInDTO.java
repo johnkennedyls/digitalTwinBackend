@@ -58,4 +58,11 @@ public class PlantInDTO {
 		this.mapSvgTag = mapSvgTag;
 	}
 	
+	@Override
+	public String toString() {
+		return "PlantInDTO [plantName=" + plantName + ", plantDescription=" + plantDescription + ", conventions="
+				+ conventions + ", plantPhoto=Dummy" + ", tags=" + tags
+				+ ", mapSvgTag=" + mapSvgTag + "]";
+	}
+	
 }

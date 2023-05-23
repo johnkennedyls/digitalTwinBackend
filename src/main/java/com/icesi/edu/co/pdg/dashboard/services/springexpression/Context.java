@@ -34,6 +34,7 @@ public class Context {
 		for (TagValueDTO tagValue : tagValueList) {
 			List<TypeAlarm> typeAlarms=functions.loadTypeAlarmsFromDatabase(tagValue.getAssetName());
 			for (TypeAlarm typeAlarm : typeAlarms) {
+				System.out.println(typeAlarm.getCondition());
 				if (evaluateCondition(tagValue, typeAlarm.getCondition())) {
 					AlarmDTO alarm=new AlarmDTO();
 					alarm.setTypeAlarm(typeAlarm);

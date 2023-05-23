@@ -4,7 +4,6 @@ public class ActionHistoryInDTO {
 	
 	private String actionHistoryDescription;
 
-	private String actionHistoryUsername;
 
 	
 	public String getActionHistoryDescription() {
@@ -15,12 +14,10 @@ public class ActionHistoryInDTO {
 		this.actionHistoryDescription = actionHistoryDescription;
 	}
 
-	public String getActionHistoryUsername() {
-		return actionHistoryUsername;
-	}
-
-	public void setActionHistoryUsername(String actionHistoryUsername) {
-		this.actionHistoryUsername = actionHistoryUsername;
-	}
+	public String toString() {
+        return "ActionHistoryInDTO{" +
+                "actionHistoryDescription='" + actionHistoryDescription + '\'' +
+                '}';
+    }
 
 }

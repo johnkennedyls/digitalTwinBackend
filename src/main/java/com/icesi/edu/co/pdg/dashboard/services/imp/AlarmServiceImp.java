@@ -60,10 +60,7 @@ public class AlarmServiceImp implements AlarmService {
 				alarmRepository.save(alarm);
 				alarmsToSend.add(alarm);
 				if(checkMaxAlarmsReached(alarm.getTypeAlarm())) {
-					System.out.println("CORREO ENVIADO");
-					List<String> email = new ArrayList<>();
-					email.add("carolinapasuy@hotmail.com");
-					emailService.sendEmail(email, alarmsDTO.get(0).getTypeAlarm(),alarmsToSend);
+					emailService.sendEmail(alarm.getTypeAlarm().getEmailsAssignedUsers(), alarmsDTO.get(0).getTypeAlarm(),alarmsToSend);
 					alarmsToSend.clear();
 				}
 	        }

@@ -1,8 +1,12 @@
 package com.icesi.edu.co.pdg.dashboard.services.imp;
 
 import java.io.IOException;
+
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -18,8 +22,7 @@ import com.icesi.edu.co.pdg.dashboard.model.entity.Alarm;
 import com.icesi.edu.co.pdg.dashboard.model.entity.TypeAlarm;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.EmailService;
 
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
+
 
 @Service
 public class EmailServiceImp implements EmailService{
@@ -32,7 +35,7 @@ public class EmailServiceImp implements EmailService{
 }
 	
 	@Override
-	public void sendEmail(List<String> email, TypeAlarm typeAlarm,List<Alarm> alarms) throws IOException, MessagingException {
+	public void sendEmail(List<String> emails, TypeAlarm typeAlarm,List<Alarm> alarms) throws IOException, MessagingException {
 		MimeMessage mimeMessage = mailSender.createMimeMessage();
 		MimeMessageHelper mimeHelper = new MimeMessageHelper(mimeMessage, "UTF-8");
 		
@@ -65,17 +68,13 @@ public class EmailServiceImp implements EmailService{
 		  }
 		  htmlBuilder.replace(index, index + "%ALARMS_TABLE%".length(), alarmsTable);
 		}
+		for(String email:emails) {
+			mimeHelper.setText(htmlBuilder.toString(), true);
+			mimeHelper.setTo(email);
+			mimeHelper.setSubject("Notificación en Planta "+typeAlarm.getPlant().getPlantName() );
 
-		mimeHelper.setText(htmlBuilder.toString(), true);
-
-		mimeHelper.setText(htmlBuilder.toString(), true);
-		mimeHelper.setTo(email.get(0));
-		mimeHelper.setSubject("Notificación en Planta "+typeAlarm.getPlant().getPlantName() );
-
-		mailSender.send(mimeMessage);
-
-	
-
+			mailSender.send(mimeMessage);
+		}
 		
 	}
 

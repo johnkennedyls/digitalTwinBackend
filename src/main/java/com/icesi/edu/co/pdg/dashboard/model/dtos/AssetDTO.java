@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,7 +22,11 @@ public class AssetDTO implements Serializable {
     public String state;
     public AssetDTO[] childrens;
     
-    public static AssetDTO[] getAssetListDummy() {
+    public AssetDTO(int i, String string, String string2, String string3, Object object) {
+		// TODO Auto-generated constructor stub
+	}
+
+	public static AssetDTO[] getAssetListDummy() {
     	 AssetDTO s1BR40L = new AssetDTO(2, "Temperatura", "TAG", "activo", null);
          AssetDTO s2BR40L = new AssetDTO(3, "Presión", "TAG", "activo", null);
          AssetDTO s3BR40L = new AssetDTO(4, "Volumen de líquido", "TAG", "activo", null);

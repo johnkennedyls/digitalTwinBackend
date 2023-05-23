@@ -33,8 +33,7 @@ public class ActionHistoryServiceImp implements ActionHistoryService{
 
 	@Override
 	public ActionHistoryDTO addActionHistory(ActionHistoryInDTO actionHistory,Integer alarmid) throws Exception {
-		if(alarmid<0 || alarmid==null || actionHistory.getActionHistoryDescription()==null || actionHistory.getActionHistoryDescription().isEmpty()
-				|| actionHistory.getActionHistoryUsername()==null || actionHistory.getActionHistoryUsername().isEmpty()) {
+		if(alarmid<0 || alarmid==null || actionHistory.getActionHistoryDescription()==null || actionHistory.getActionHistoryDescription().isEmpty()) {
 			throw new BadRequestDataException();
 		}else {
 			Optional<Alarm> alarm=alarmRepository.findById(alarmid);
@@ -47,6 +46,7 @@ public class ActionHistoryServiceImp implements ActionHistoryService{
 				Timestamp timestamp = Timestamp.from(instant);
 				action.setActionHistoryDate(timestamp);
 				action.setAlarm(alarm.get());
+				action.setActionHistoryUsername("CPASUY");
 				action=actionHistoryRepository.save(action);
 				ActionHistoryDTO actionHistoryDTO=ActionHistoryMapper.INSTANCE.actionHistorytoActionHistoryDTO(action);
 				return actionHistoryDTO;

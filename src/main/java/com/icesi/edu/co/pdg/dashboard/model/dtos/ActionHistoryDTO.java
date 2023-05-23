@@ -5,11 +5,22 @@ import java.sql.Timestamp;
 
 public class ActionHistoryDTO {
 	
+
+	private Integer actionHistoryId;
+	
 	private Timestamp actionHistoryDate;
 
 	private String actionHistoryDescription;
 
 	private String actionHistoryUsername;
+	
+	public Integer getActionHistoryId() {
+		return actionHistoryId;
+	}
+
+	public void setActionHistoryId(Integer actionHistoryId) {
+		this.actionHistoryId = actionHistoryId;
+	}
 	
 	public Timestamp getActionHistoryDate() {
 		return actionHistoryDate;

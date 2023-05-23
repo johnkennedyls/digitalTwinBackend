@@ -36,4 +36,11 @@ public class AlarmDTO {
 	public void setActivationDate(Timestamp activationDate) {
 		this.activationDate = activationDate;
 	}
+	public String toString() {
+        return "AlarmDTO{" +
+                "typeAlarm=" + typeAlarm +
+                ", activationDate=" + activationDate +
+                ", tagValue=" + tagValue +
+                '}';
+    }
 }

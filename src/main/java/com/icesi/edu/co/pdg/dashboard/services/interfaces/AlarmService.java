@@ -21,6 +21,10 @@ public interface AlarmService {
 	List<AlarmListOutDTO> getAllAlarmsClosed() throws Exception;
 
 	List<AlarmListOutDTO> getAllAlarmsActive() throws Exception;
+
+	List<AlarmListOutDTO> getAllAlarmsActiveByPlantId(Integer plantid) throws Exception;
+
+	List<AlarmListOutDTO> getAllAlarmsClosedByPlantId(Integer plantid) throws Exception;
 	
 
 }

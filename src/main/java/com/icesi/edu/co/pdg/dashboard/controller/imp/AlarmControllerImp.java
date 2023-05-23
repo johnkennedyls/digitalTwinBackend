@@ -49,7 +49,20 @@ public class AlarmControllerImp implements AlarmController {
 		respOutDTO = alarmService.getAllAlarmsActive();
 		return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
 	}
-	
+	@Override
+	@GetMapping("/history/{plantid}")
+	public ResponseEntity<List<AlarmListOutDTO>> getAllAlarmsClosedByPlantId(@PathVariable("plantid") Integer plantid) throws Exception {
+		List<AlarmListOutDTO> respOutDTO = new ArrayList<AlarmListOutDTO>();
+		respOutDTO = alarmService.getAllAlarmsClosedByPlantId(plantid);
+		return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
+	}
+	@Override
+	@GetMapping("/active/{plantid}")
+	public ResponseEntity<List<AlarmListOutDTO>> getAllAlarmsActiveByPlantId(@PathVariable("plantid") Integer plantid) throws Exception {
+		List<AlarmListOutDTO> respOutDTO = new ArrayList<AlarmListOutDTO>();
+		respOutDTO = alarmService.getAllAlarmsActiveByPlantId(plantid);
+		return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
+	}
 	@Override
 	@GetMapping("/{alarmid}")
 	public ResponseEntity<AlarmDetailOutDTO> getAlarmById(@PathVariable("alarmid") Integer alarmid) throws Exception {

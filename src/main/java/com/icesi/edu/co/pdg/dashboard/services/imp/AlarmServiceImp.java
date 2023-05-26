@@ -44,7 +44,6 @@ public class AlarmServiceImp implements AlarmService {
 	public AlarmServiceImp() {
 		this.alarmsToSend = new ArrayList<>();
 	}
-	
 
 	@Override
 	public void addAlarms(List<AlarmDTO> alarmsDTO) throws Exception {

@@ -16,8 +16,6 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableAspectJAutoProxy
 public class WebDashboardApiApplicationConfig implements WebSocketMessageBrokerConfigurer {
 	
-	
-	
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/websocket").setAllowedOriginPatterns("*").withSockJS();
@@ -33,6 +31,4 @@ public class WebDashboardApiApplicationConfig implements WebSocketMessageBrokerC
     SpelExpressionParser spelExpressionParser() {
         return new SpelExpressionParser();
     }
-    
-   
 }

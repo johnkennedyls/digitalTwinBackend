@@ -1,10 +1,9 @@
-package com.icesi.edu.co.pdg.dashboard.websocket.service;
+package com.icesi.edu.co.pdg.dashboard.services.connection;
 
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import icesi.plantapiloto.common.dtos.output.AssetDTO;
+import icesi.plantapiloto.common.dtos.MeasurementDTO;
 
 @Service
 class WebSocketServerService {
@@ -13,11 +12,9 @@ class WebSocketServerService {
     public WebSocketServerService(SimpMessagingTemplate template) {
         this.template = template;
     }
-
-    @Scheduled(fixedRate = 3000)
-    public void enviarDatoAleatorio() {
-    	
-        this.template.convertAndSend("/topic/random", "");
+    
+    public void sendMeasure(MeasurementDTO measure) {
+    	this.template.convertAndSend("/topic/realtime",measure);
     }
 
 }

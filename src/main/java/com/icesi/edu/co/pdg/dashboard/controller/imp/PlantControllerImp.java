@@ -1,7 +1,6 @@
 package com.icesi.edu.co.pdg.dashboard.controller.imp;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +20,13 @@ import com.icesi.edu.co.pdg.dashboard.exceptions.NoResultException;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.in.PlantInDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.PlantListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.PlantOutDTO;
+import com.icesi.edu.co.pdg.dashboard.security.SaamfiUserDetails;
+import com.icesi.edu.co.pdg.dashboard.security.SecurityUtils;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.PlantService;
 
 @RestController()
 @RequestMapping("/plants")
-@CrossOrigin("*")
+@CrossOrigin("Access-Control-Allow-Origin")
 public class PlantControllerImp implements PlantController {
 	
 	@Autowired
@@ -34,6 +35,8 @@ public class PlantControllerImp implements PlantController {
 	@Override
 	@GetMapping("")
 	public ResponseEntity<?> getAllPlants() {
+		SaamfiUserDetails userDetails = SecurityUtils.getCurrentUser();
+		System.out.println("USUARIO LOGUEADO ES: "+userDetails.getUsername());
 		List<PlantListOutDTO> plants = service.getAllPlants();
 		return ResponseEntity.ok(plants);
 	}

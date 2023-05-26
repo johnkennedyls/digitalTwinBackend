@@ -21,7 +21,6 @@ import com.icesi.edu.co.pdg.dashboard.model.dtos.out.PlantListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.PlantOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.entity.Plant;
 import com.icesi.edu.co.pdg.dashboard.model.entity.MapSvgTag;
-import com.icesi.edu.co.pdg.dashboard.model.mappers.AssetMapper;
 import com.icesi.edu.co.pdg.dashboard.model.mappers.PlantMapper;
 import com.icesi.edu.co.pdg.dashboard.repositories.MapSvgTagRepository;
 import com.icesi.edu.co.pdg.dashboard.repositories.PlantRepository;

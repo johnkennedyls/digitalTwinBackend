@@ -10,6 +10,8 @@ import com.icesi.edu.co.pdg.dashboard.model.entity.LogDashboard;
 import com.icesi.edu.co.pdg.dashboard.model.entity.LogTypeDashboard;
 import com.icesi.edu.co.pdg.dashboard.repositories.LogDashboardRepository;
 import com.icesi.edu.co.pdg.dashboard.repositories.LogTypeDashboardRepository;
+import com.icesi.edu.co.pdg.dashboard.security.SaamfiUserDetails;
+import com.icesi.edu.co.pdg.dashboard.security.SecurityUtils;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.LogDashboardService;
 
 @Service
@@ -24,11 +26,12 @@ public class LogDashboardServiceImp implements LogDashboardService{
 	public void save(String logTypeName, String description) throws Exception {
 		LogTypeDashboard logtype=logTypeDashboardRepository.findByLogTypeName(logTypeName);
 		if(logtype!=null) {
+			SaamfiUserDetails userDetails = SecurityUtils.getCurrentUser();
 			LogDashboard log =new LogDashboard();
 			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 			log.setLogDate(timestamp);
 			log.setLogType(logtype);
-			log.setLoggedUser("yo");
+			log.setLoggedUser(userDetails.getUsername());
 			log.setDetailLog(description);
 			logDashboardRepository.save(log);
 		}else {

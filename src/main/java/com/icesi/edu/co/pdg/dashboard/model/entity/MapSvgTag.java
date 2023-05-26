@@ -5,45 +5,42 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
-
 /**
  * The persistent class for the svg database table.
  * 
  */
 @Entity
-@NamedQuery(name="Svg.findAll", query="SELECT s FROM Svg s")
-public class Svg implements Serializable {
+public class MapSvgTag implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name="id_svg")
-	private Integer idSvg;
+	private String idSvg;
 
 	@Column(name="id_asset")
 	private Integer idAsset;
+	
+	@Column(name="tag_name")
+	private String tagName;
 
-	//bi-directional many-to-one association to Plant
 	@ManyToOne
 	@JoinColumn(name="plant_id")
 	private Plant plant;
 
-	public Svg() {
+	public MapSvgTag() {
 	}
-
-	public Integer getIdSvg() {
-		return this.idSvg;
+	
+	public String getIdSvg() {
+		return idSvg;
 	}
-
-	public void setIdSvg(Integer idSvg) {
+	
+	public void setIdSvg(String idSvg) {
 		this.idSvg = idSvg;
 	}
-
+	
 	public Integer getIdAsset() {
 		return this.idAsset;
 	}
@@ -58,6 +55,14 @@ public class Svg implements Serializable {
 
 	public void setPlant(Plant plant) {
 		this.plant = plant;
+	}
+	
+	public String getTagName() {
+		return tagName;
+	}
+
+	public void setTagName(String tagName) {
+		this.tagName = tagName;
 	}
 
 }

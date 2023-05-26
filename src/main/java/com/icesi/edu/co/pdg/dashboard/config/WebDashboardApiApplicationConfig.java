@@ -1,11 +1,10 @@
-package com.icesi.edu.co.pdg.dashboard;
+package com.icesi.edu.co.pdg.dashboard.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
@@ -27,9 +26,9 @@ public class WebDashboardApiApplicationConfig implements WebSocketMessageBrokerC
         registry.enableSimpleBroker("/topic");
         registry.setApplicationDestinationPrefixes("/app");
     }
-	
+
     @Bean
-    public SpelExpressionParser spelExpressionParser() {
+    SpelExpressionParser spelExpressionParser() {
         return new SpelExpressionParser();
     }
 }

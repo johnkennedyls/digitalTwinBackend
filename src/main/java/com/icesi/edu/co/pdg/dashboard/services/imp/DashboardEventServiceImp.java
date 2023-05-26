@@ -8,10 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.icesi.edu.co.pdg.dashboard.model.dtos.EventDashboardDTO;
-import com.icesi.edu.co.pdg.dashboard.model.dtos.out.AlarmListOutDTO;
-import com.icesi.edu.co.pdg.dashboard.model.entity.Alarm;
 import com.icesi.edu.co.pdg.dashboard.model.entity.EventDashboard;
-import com.icesi.edu.co.pdg.dashboard.model.mappers.AlarmMapper;
 import com.icesi.edu.co.pdg.dashboard.model.mappers.EventDashboardMapper;
 import com.icesi.edu.co.pdg.dashboard.repositories.DashboardEventRepository;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.DashboardEventService;

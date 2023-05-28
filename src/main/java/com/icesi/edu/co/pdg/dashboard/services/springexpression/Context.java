@@ -16,8 +16,6 @@ import icesi.plantapiloto.common.dtos.MeasurementDTO;
 @Service
 public class Context {
 
-	private List<MeasurementDTO> tagValueList = new ArrayList<>();
-
 	@Autowired
 	private Functions functions;
 	@Autowired
@@ -25,30 +23,20 @@ public class Context {
 	@Autowired
 	private AlarmService alarmService;
 
-	public void updateTagValues(List<MeasurementDTO> newTagValues) {
-		tagValueList = newTagValues;
-	}
+	public void checkAlarms(MeasurementDTO measurementDTO) throws Exception {
+		AlarmDTO alarmDTO=null;
 
-	public List<AlarmDTO> checkAlarms() throws Exception {
-		List<AlarmDTO> triggeredAlarms = new ArrayList<>();
-
-		for (MeasurementDTO tagValue : tagValueList) {
-			
-			List<TypeAlarm> typeAlarms=functions.loadTypeAlarmsFromDatabase(tagValue.assetName);
-			for (TypeAlarm typeAlarm : typeAlarms) {
-				System.out.println(typeAlarm.getCondition());
-				if (evaluateCondition(tagValue, typeAlarm.getCondition())) {
-					AlarmDTO alarm=new AlarmDTO();
-					alarm.setTypeAlarm(typeAlarm);
-					alarm.setTagValue(tagValue.value);
-					Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-					alarm.setActivationDate(timestamp);
-					triggeredAlarms.add(alarm);
-				}
+		List<TypeAlarm> typeAlarms=functions.loadTypeAlarmsFromDatabase(measurementDTO.assetName);
+		for (TypeAlarm typeAlarm : typeAlarms) {
+			if (evaluateCondition(measurementDTO, typeAlarm.getCondition())) {
+				alarmDTO=new AlarmDTO();
+				alarmDTO.setTypeAlarm(typeAlarm);
+				alarmDTO.setTagValue(measurementDTO.value);
+				Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+				alarmDTO.setActivationDate(timestamp);
 			}
 		}
-		alarmService.addAlarms(triggeredAlarms);
-		return triggeredAlarms;
+		alarmService.addAlarm(alarmDTO);
 	}
 
 	private boolean evaluateCondition(MeasurementDTO tagValue, String condition) {

@@ -49,22 +49,18 @@ public class AlarmServiceImp implements AlarmService {
 	}
 
 	@Override
-	public void addAlarms(List<AlarmDTO> alarmsDTO) throws Exception {
+	public void addAlarm(AlarmDTO alarmDTO) throws Exception {
 		StateAlarm stateAlarm=stateAlarmRepository.findByStateAlarmNameContaining("Activa");
 		if(stateAlarm==null) {
 			throw new NoResultException();
 		}else {
-			for (AlarmDTO alarmDTO : alarmsDTO) {
-				alarmDTO.setStateAlarm(stateAlarm);
-	        }
-			List<Alarm> alarms = AlarmMapper.INSTANCE.alarmDTOToalarm(alarmsDTO);
-			for (Alarm alarm : alarms) {
-				alarmRepository.save(alarm);
-				alarmsToSend.add(alarm);
-				if(checkMaxAlarmsReached(alarm.getTypeAlarm())) {
-					emailService.sendEmail(alarm.getTypeAlarm().getEmailsAssignedUsers(), alarmsDTO.get(0).getTypeAlarm(),alarmsToSend);
-					alarmsToSend.clear();
-				}
+			alarmDTO.setStateAlarm(stateAlarm);
+			Alarm alarm = AlarmMapper.INSTANCE.alarmDTOtoalarm(alarmDTO);
+			alarmRepository.save(alarm);
+			alarmsToSend.add(alarm);
+			if(checkMaxAlarmsReached(alarm.getTypeAlarm())) {
+				emailService.sendEmail(alarm.getTypeAlarm().getEmailsAssignedUsers(), alarmDTO.getTypeAlarm(),alarmsToSend);
+				alarmsToSend.clear();
 	        }
 		}
 	}

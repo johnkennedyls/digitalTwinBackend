@@ -52,7 +52,6 @@ public class PlantServiceImp implements PlantService {
 	@Override
 	public List<PlantListOutDTO> getAllPlants() {
 		List<PlantListOutDTO> result = new ArrayList<>();
-		
 		List<AssetDTO> assets = Arrays.asList(assetManager.findByWorkSpace(workspaceId));
 		List<Plant> plants = plantRepository.findAll();
 		
@@ -70,11 +69,8 @@ public class PlantServiceImp implements PlantService {
 		Map<Integer, Plant> plantMap = plants.stream().collect(Collectors.toMap(Plant::getAssetId, plant -> plant));
 				
 		plantMap.forEach((id,plant) -> {
-			System.out.println("como asi");
-			System.out.println(id);
-			/*
-			AssetDTO asset = assetMap.get(id);
-			System.out.println(asset.name);
+			AssetDTO asset = assetMap.get(id);	
+
 			PlantListOutDTO plantOut = PlantMapper.INSTANCE.plantToPlantListOutDTO(plant);
 			List<TagDTO> tags = new ArrayList<>();
 			for(AssetDTO tag: asset.childrens) {
@@ -86,7 +82,7 @@ public class PlantServiceImp implements PlantService {
 			}
 			
 			plantOut.setTags(tags);
-			result.add(plantOut);*/
+			result.add(plantOut);
 		});
 		
 		return result;

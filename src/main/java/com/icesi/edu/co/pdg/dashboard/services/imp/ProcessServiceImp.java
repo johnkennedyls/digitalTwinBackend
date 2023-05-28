@@ -1,14 +1,18 @@
 package com.icesi.edu.co.pdg.dashboard.services.imp;
 
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.icesi.edu.co.pdg.dashboard.exceptions.BadRequestDataException;
+import com.icesi.edu.co.pdg.dashboard.exceptions.UnexpectedException;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.in.ProcessInDTO;
+import com.icesi.edu.co.pdg.dashboard.services.connection.MqttManager;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.ProcessService;
 
 import icesi.plantapiloto.common.controllers.ProcessManagerControllerPrx;
+import icesi.plantapiloto.common.dtos.ExecutionDTO;
 import icesi.plantapiloto.common.dtos.ProcessDTO;
 
 
@@ -17,6 +21,9 @@ public class ProcessServiceImp implements ProcessService{
 	
 	@Autowired
 	private ProcessManagerControllerPrx processManager;
+	@Autowired
+	private MqttManager mqttManager;
+	
 	@Value("${webdasboard.workspace.id}")
 	private Integer workspaceId;
 	
@@ -52,42 +59,53 @@ public class ProcessServiceImp implements ProcessService{
 			processManager.addAssetToProcess(assetId, processId, 10000);
 		}
 	}
-
-	@Override
-	public void deleteProcess(Integer processId) {
-		
-	}
 	
 	@Override
-	public void startExecution(Integer processId) throws BadRequestDataException {
+	public void startExecution(Integer processId) throws BadRequestDataException, UnexpectedException{
 		if(processId==null) {
 			throw new BadRequestDataException();
 		}
-		processManager.startProcess(processId, null);
+		ExecutionDTO[] currentExecutions = processManager.findExecutions(processId, 0, 0, true);
+		if(currentExecutions.length>0) {
+			return;
+		}
+		Integer executionId = processManager.startProcess(processId, "Usuario de prueba");
+		try {
+			mqttManager.subscribeToMqtt(executionId+"");
+		} catch (Exception e) {
+			throw new UnexpectedException();
+		}
 	}
 
 	@Override
-	public void pauseExecution(Integer executionId) throws BadRequestDataException {
+	public void pauseExecution(Integer executionId) throws BadRequestDataException, MqttException {
 		if(executionId==null) {
 			throw new BadRequestDataException();
 		}
 		processManager.pauseExecutionProcess(executionId);
+		mqttManager.unsubscribeOfMqtt(executionId+"");
 	}
 
 	@Override
-	public void continueExecution(Integer executionId) throws BadRequestDataException {
+	public void continueExecution(Integer executionId) throws BadRequestDataException, UnexpectedException{
 		if(executionId==null) {
 			throw new BadRequestDataException();
 		}
 		processManager.continueExecutionProcess(executionId);
+		try {
+			mqttManager.subscribeToMqtt(executionId+"");
+		} catch (Exception e) {
+			throw new UnexpectedException();
+		}
 	}
 
 	@Override
-	public void stopExecution(Integer executionId) throws BadRequestDataException {
+	public void stopExecution(Integer executionId) throws BadRequestDataException, MqttException {
 		if(executionId==null) {
 			throw new BadRequestDataException();
 		}
 		processManager.stopExecutionProcess(executionId);
+		mqttManager.unsubscribeOfMqtt(executionId+"");
 	}
 	
 }

@@ -20,8 +20,6 @@ import com.icesi.edu.co.pdg.dashboard.exceptions.NoResultException;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.in.PlantInDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.PlantListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.PlantOutDTO;
-import com.icesi.edu.co.pdg.dashboard.security.SaamfiUserDetails;
-import com.icesi.edu.co.pdg.dashboard.security.SecurityUtils;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.PlantService;
 
 @RestController()
@@ -35,8 +33,6 @@ public class PlantControllerImp implements PlantController {
 	@Override
 	@GetMapping("")
 	public ResponseEntity<?> getAllPlants() {
-		SaamfiUserDetails userDetails = SecurityUtils.getCurrentUser();
-		System.out.println("USUARIO LOGUEADO ES: "+userDetails.getUsername());
 		List<PlantListOutDTO> plants = service.getAllPlants();
 		return ResponseEntity.ok(plants);
 	}

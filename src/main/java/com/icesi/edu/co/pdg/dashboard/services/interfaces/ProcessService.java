@@ -9,12 +9,11 @@ import icesi.plantapiloto.common.dtos.ProcessDTO;
 
 public interface ProcessService {
 	public ProcessDTO[] getAllProcess();
-	public ProcessInDTO getProcess();
 	public void addProcess(ProcessInDTO sd) throws BadRequestDataException;
 	
 	public void startExecution(Integer processId) throws BadRequestDataException, UnexpectedException;
-	public void pauseExecution(Integer executionId) throws BadRequestDataException, MqttException;
-	public void continueExecution(Integer executionId) throws BadRequestDataException, UnexpectedException;
-	public void stopExecution(Integer executionId) throws BadRequestDataException, MqttException;
+	public void pauseExecution(Integer processId) throws BadRequestDataException, MqttException;
+	public void continueExecution(Integer processId) throws BadRequestDataException, UnexpectedException;
+	public void stopExecution(Integer processId) throws BadRequestDataException, MqttException;
 	
 }

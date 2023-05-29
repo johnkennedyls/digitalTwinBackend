@@ -39,7 +39,6 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-core'
     implementation 'com.fasterxml.jackson.core:jackson-annotations'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
-    implementation 'io.jsonwebtoken:jjwt'
     implementation 'icesi.plantapiloto:common:1.0'
     runtimeOnly 'org.springframework.boot:spring-boot-devtools'
     

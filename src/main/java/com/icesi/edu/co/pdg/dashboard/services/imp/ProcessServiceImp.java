@@ -32,13 +32,7 @@ public class ProcessServiceImp implements ProcessService{
 		ProcessDTO[] processList = processManager.findProcessByWorkSpace(workspaceId);
 		return processList;
 	}
-
-	@Override
-	public ProcessInDTO getProcess() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	@Override
 	public void addProcess(ProcessInDTO sd) throws BadRequestDataException {
 		if(sd == null) {
@@ -78,19 +72,26 @@ public class ProcessServiceImp implements ProcessService{
 	}
 
 	@Override
-	public void pauseExecution(Integer executionId) throws BadRequestDataException, MqttException {
-		if(executionId==null) {
+	public void pauseExecution(Integer processId) throws BadRequestDataException, MqttException {
+		
+		ExecutionDTO[] currentExecutions = processManager.findExecutions(processId, 0, 0, true);
+		if(currentExecutions.length<=0) {
 			throw new BadRequestDataException();
 		}
+		int executionId = currentExecutions[0].id;
+		
 		processManager.pauseExecutionProcess(executionId);
 		mqttManager.unsubscribeOfMqtt(executionId+"");
 	}
 
 	@Override
-	public void continueExecution(Integer executionId) throws BadRequestDataException, UnexpectedException{
-		if(executionId==null) {
+	public void continueExecution(Integer processId) throws BadRequestDataException, UnexpectedException{
+		
+		ExecutionDTO[] currentExecutions = processManager.findExecutions(processId, 0, 0, true);
+		if(currentExecutions.length<=0) {
 			throw new BadRequestDataException();
 		}
+		int executionId = currentExecutions[0].id;
 		processManager.continueExecutionProcess(executionId);
 		try {
 			mqttManager.subscribeToMqtt(executionId+"");
@@ -100,10 +101,13 @@ public class ProcessServiceImp implements ProcessService{
 	}
 
 	@Override
-	public void stopExecution(Integer executionId) throws BadRequestDataException, MqttException {
-		if(executionId==null) {
+	public void stopExecution(Integer processId) throws BadRequestDataException, MqttException {
+		ExecutionDTO[] currentExecutions = processManager.findExecutions(processId, 0, 0, true);
+		if(currentExecutions.length<=0) {
 			throw new BadRequestDataException();
 		}
+		int executionId = currentExecutions[0].id;
+		
 		processManager.stopExecutionProcess(executionId);
 		mqttManager.unsubscribeOfMqtt(executionId+"");
 	}

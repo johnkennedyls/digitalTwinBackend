@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.icesi.edu.co.pdg.dashboard.controller.interfaces.ProcessController;
 import com.icesi.edu.co.pdg.dashboard.exceptions.BadRequestDataException;
+import com.icesi.edu.co.pdg.dashboard.exceptions.UnexpectedException;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.in.ProcessInDTO;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.ProcessService;
 
@@ -32,13 +33,6 @@ public class ProcessControllerImp implements ProcessController {
 	}
 
 	@Override
-	@GetMapping("/{processId}")
-	public ResponseEntity<?> getProcess(@PathVariable Integer processId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	@PostMapping("/add")
 	public ResponseEntity<?> addProcess(@RequestBody ProcessInDTO processDto) {
 		try {
@@ -50,15 +44,15 @@ public class ProcessControllerImp implements ProcessController {
 	}
 
 	@Override
-	public ResponseEntity<?> editProcess(@RequestBody ProcessInDTO processDto,@PathVariable Integer processId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ResponseEntity<?> removeProcess(@PathVariable Integer processId) {
-		// TODO Auto-generated method stub
-		return null;
+	public ResponseEntity<?> startProcess(@PathVariable Integer processId) {
+		try {
+			processService.startExecution(processId);
+		} catch (BadRequestDataException e) {
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+		} catch(UnexpectedException e) {
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return ResponseEntity.ok("Proceso inciado correctamente");
 	}
 
 }

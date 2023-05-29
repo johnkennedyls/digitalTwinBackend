@@ -9,12 +9,14 @@ import com.icesi.edu.co.pdg.dashboard.model.entity.TypeAlarm;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
+import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-05-28T21:13:02-0500",
+    date = "2023-05-29T12:36:44-0500",
     comments = "version: 1.3.1.Final, compiler: Eclipse JDT (IDE) 1.4.300.v20221108-0856, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
+@Component
 public class TypeAlarmMapperImpl implements TypeAlarmMapper {
 
     @Override

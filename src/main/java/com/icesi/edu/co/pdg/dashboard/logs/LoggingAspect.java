@@ -119,7 +119,7 @@ public class LoggingAspect {
 	    
 	}
 	
-	@Pointcut("execution(* com.icesi.edu.co.pdg.dashboard..*.*(..))")
+	@Pointcut("execution(* com.icesi.edu.co.pdg.dashboard..*.*(..)) && !execution(* com.icesi.edu.co.pdg.dashboard.logs.LoggingAspect.*(..)) && !execution(* com.icesi.edu.co.pdg.dashboard.services.imp.LogDashboardServiceImp.*(..))")
 	public void allDashboardOperations() {}
 
 	@AfterThrowing(pointcut = "allDashboardOperations()", throwing = "ex")

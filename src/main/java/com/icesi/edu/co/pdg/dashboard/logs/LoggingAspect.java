@@ -61,6 +61,36 @@ public class LoggingAspect {
 	    logDashboardService.save("INFO", description);
 	    
 	}
+	@Pointcut("execution(* com.icesi.edu.co.pdg.dashboard.services.imp.ProcessServiceImp.addProcess(..)) || "
+			+ "execution(* com.icesi.edu.co.pdg.dashboard.services.imp.ProcessServiceImp.startExecution(..)) || "
+			+ "execution(* com.icesi.edu.co.pdg.dashboard.services.imp.ProcessServiceImp.pauseExecution(..)) || "
+			+ "execution(* com.icesi.edu.co.pdg.dashboard.services.imp.ProcessServiceImp.continueExecution(..)) || "
+			+ "execution(* com.icesi.edu.co.pdg.dashboard.services.imp.ProcessServiceImp.stopExecution(..))")
+	public void processOperations() {}
+	
+	@AfterReturning("processOperations()")
+	public void afterSuccessfulProccessOperations(JoinPoint joinPoint) throws Exception {
+		String description="";
+	    String methodName = joinPoint.getSignature().getName();
+	    if(methodName.equals("addProcess")) {
+	    	Object[] args = joinPoint.getArgs();
+	    	description = "Se creo el proceso con id: " + args[0];
+	    }else if(methodName.equals("startExecution")) {
+	    	Object[] args = joinPoint.getArgs();
+	    	description = "Se inició el proceso con id: " + args[0] ;
+	    }else if(methodName.equals("pauseExecution")) {
+	    	Object[] args = joinPoint.getArgs();
+	    	description = "Se pauso el proceso con id: " + args[0] ;
+	    }else if(methodName.equals("continueExecution")) {
+	    	Object[] args = joinPoint.getArgs();
+	    	description = "Se reanudo el proceso con id: " + args[0] ;
+	    }else {
+	    	Object[] args = joinPoint.getArgs();
+		    description = "Se detuvo el proceso con id: " + args[0] ;
+	    }
+	    logDashboardService.save("INFO", description);
+	    
+	}
 	@Pointcut("execution(* com.icesi.edu.co.pdg.dashboard.services.imp.PlantServiceImp.addPlant(..))")
 	public void alarmOperation() {}
 	

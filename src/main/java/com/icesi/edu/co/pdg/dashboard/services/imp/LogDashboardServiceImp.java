@@ -50,20 +50,21 @@ public class LogDashboardServiceImp implements LogDashboardService{
 	public void save(String logTypeName, String description) throws Exception {		
 		if(!logTypeName.isEmpty()) {
 			String token = (String) SecurityContextHolder.getContext().getAuthentication().getCredentials();
-
-			LogDashboard log =new LogDashboard();
-			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-			log.setLogDate(timestamp);
-			if(logTypeName.equals(info.getLogTypeName())) {
-				log.setLogType(info);
-			}else if(logTypeName.equals(warn.getLogTypeName())) {
-				log.setLogType(warn);
-			}else {
-				log.setLogType(error);
+			if(token!=null) {
+				LogDashboard log =new LogDashboard();
+				Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+				log.setLogDate(timestamp);
+				if(logTypeName.equals(info.getLogTypeName())) {
+					log.setLogType(info);
+				}else if(logTypeName.equals(warn.getLogTypeName())) {
+					log.setLogType(warn);
+				}else {
+					log.setLogType(error);
+				}
+				log.setLoggedUser(saamfiDelegate.getUsernameFromJWT(token));
+				log.setDetailLog(description);
+				logDashboardRepository.save(log);
 			}
-			log.setLoggedUser(saamfiDelegate.getUsernameFromJWT(token));
-			log.setDetailLog(description);
-			logDashboardRepository.save(log);
 		}else {
 			throw new BadRequestDataException();
 		}

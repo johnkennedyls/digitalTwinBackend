@@ -8,10 +8,13 @@ import com.icesi.edu.co.pdg.dashboard.model.dtos.in.PlantInDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.PlantListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.PlantOutDTO;
 
+import icesi.plantapiloto.common.dtos.MeasurementDTO;
+
 public interface PlantService {
 	List<PlantListOutDTO> getAllPlants();
 	PlantOutDTO getPlantById(Integer id) throws NoResultException;
 	void addPlant(PlantInDTO plant) throws BadRequestDataException;
 	void editPlant(PlantInDTO plant, Integer plantId) throws BadRequestDataException ;
 	void deletePlant(Integer plantId) throws BadRequestDataException;
+	List<MeasurementDTO> getTagValuesByStartAndEndDate(Integer plantId, Long startDate, Long endDate) throws BadRequestDataException;
 }

@@ -10,6 +10,7 @@ import com.zeroc.Ice.Communicator;
 import com.zeroc.Ice.Util;
 
 import icesi.plantapiloto.common.controllers.AssetManagerControllerPrx;
+import icesi.plantapiloto.common.controllers.MeasurementManagerControllerPrx;
 import icesi.plantapiloto.common.controllers.ProcessManagerControllerPrx;
 import icesi.plantapiloto.common.controllers.WorkSpaceManagerControllerPrx;
 
@@ -38,6 +39,11 @@ public class IceConfig {
 	@Bean
 	ProcessManagerControllerPrx processManagerProxy(Communicator com) {
 		return ProcessManagerControllerPrx.checkedCast(com.stringToProxy("ProcessManager:"+proxy));
+	}
+	
+	@Bean
+	MeasurementManagerControllerPrx measureManagerProxy(Communicator com) {
+		return MeasurementManagerControllerPrx.checkedCast(com.stringToProxy("MeasureManager:"+proxy));
 	}
 	
 	@PreDestroy

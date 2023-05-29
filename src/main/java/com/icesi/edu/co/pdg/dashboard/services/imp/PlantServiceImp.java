@@ -27,6 +27,8 @@ import com.icesi.edu.co.pdg.dashboard.repositories.PlantRepository;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.PlantService;
 
 import icesi.plantapiloto.common.controllers.AssetManagerControllerPrx;
+import icesi.plantapiloto.common.controllers.MeasurementManagerControllerPrx;
+import icesi.plantapiloto.common.dtos.MeasurementDTO;
 import icesi.plantapiloto.common.dtos.output.AssetDTO;
 
 @Service
@@ -39,6 +41,8 @@ public class PlantServiceImp implements PlantService {
 	MapSvgTagRepository mapRepository;
 	@Autowired
 	AssetManagerControllerPrx assetManager;
+	@Autowired
+	MeasurementManagerControllerPrx measureManager;
 	
 	@Value("${webdasboard.workspace.id}")
 	private Integer workspaceId;
@@ -266,5 +270,27 @@ public class PlantServiceImp implements PlantService {
 		}
 		assetManager.deletById(assetPlant.assetId);	
 		plantRepository.deleteById(plantId);
+	}
+	
+	@Override
+	public List<MeasurementDTO> getTagValuesByStartAndEndDate(Integer plantId, Long startDate, Long endDate) throws BadRequestDataException {
+		Optional<Plant> plantOp = plantRepository.findById(plantId);
+		if(plantOp.isEmpty()) {
+			throw new BadRequestDataException();
+		}
+		Plant plant = plantOp.get();
+		List<MeasurementDTO> measures = new ArrayList<>();
+		AssetDTO[] assetList = assetManager.findByWorkSpace(workspaceId);
+		AssetDTO asset = new AssetDTO();
+		for(AssetDTO cAsset : assetList) {
+			if(cAsset.assetId==plant.getAssetId()) {
+				asset = cAsset;
+				break;
+			}
+		}
+		for(AssetDTO cAsset : asset.childrens) {
+			measures.addAll(Arrays.asList(measureManager.getMeasurments(cAsset.assetId, startDate, endDate)));
+		}
+		return measures;
 	}
 }

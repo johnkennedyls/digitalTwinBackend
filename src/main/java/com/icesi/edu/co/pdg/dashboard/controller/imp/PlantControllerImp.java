@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,8 @@ import com.icesi.edu.co.pdg.dashboard.model.dtos.in.PlantInDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.PlantListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.PlantOutDTO;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.PlantService;
+
+import icesi.plantapiloto.common.dtos.MeasurementDTO;
 
 @RestController()
 @RequestMapping("/plants")
@@ -51,6 +54,7 @@ public class PlantControllerImp implements PlantController {
 	}
 	
 	@Override
+	@PreAuthorize("hasAnyRole('Admin-plant','Create-users')")
 	@PostMapping("/add")
 	public ResponseEntity<?> addPlant(@RequestBody PlantInDTO plantDTO)  {
 		try {
@@ -84,5 +88,17 @@ public class PlantControllerImp implements PlantController {
 			return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
 		}
 		return ResponseEntity.ok("Eliminado correctamente");
+	}
+
+	@Override
+	@GetMapping("/delimited/{plantId}/{startDate}/{endDate}")
+	public ResponseEntity<?> getDelimitatedData(@PathVariable Integer plantId, @PathVariable Long startDate, @PathVariable Long endDate) {
+		List<MeasurementDTO> measures = null;
+		try {
+			measures = service.getTagValuesByStartAndEndDate(plantId, startDate, endDate);
+		} catch (BadRequestDataException e) {
+			return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<>(measures, HttpStatus.OK ) ;
 	}
 }

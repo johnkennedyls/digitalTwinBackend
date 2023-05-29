@@ -10,4 +10,5 @@ public interface PlantController {
 	public ResponseEntity<?> addPlant(PlantInDTO plantDto);
 	public ResponseEntity<?> editPlant(PlantInDTO plantDto, Integer plantId);
 	public ResponseEntity<?> deletePlant(Integer plantId);
+	public ResponseEntity<?> getDelimitatedData(Integer plantId, Long startDate, Long endDate);
 }

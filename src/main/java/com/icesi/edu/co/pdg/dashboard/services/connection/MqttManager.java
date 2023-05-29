@@ -71,26 +71,14 @@ public class MqttManager implements CommandLineRunner  {
 			connectToMqtt();
 		}
 		client.subscribe(mqttTopic, (topic, msg) -> {
-<<<<<<< HEAD
-		    byte[] payload = msg.getPayload();
-		    try {
-		        MeasurementDTO[] measures = objectMapper.readValue(payload, MeasurementDTO[].class);
-		        webSocket.sendMeasure(measures);
-		    } catch (Exception e) {
-		        e.printStackTrace();
-		    }
-		});
-
-=======
             byte[] payload = msg.getPayload();
-            MeasurementDTO measure = objectMapper.readValue(payload, MeasurementDTO.class);
+            MeasurementDTO[] measures = objectMapper.readValue(payload, MeasurementDTO[].class);
             Context context = applicationContext.getBean(Context.class);
-            context.checkAlarms(measure);
-            
-            System.out.println("MQTT: "+measure.value);
-            webSocket.sendMeasure(measure);
+            for(MeasurementDTO measure: measures) {
+            	context.checkAlarms(measure);
+            }
+            webSocket.sendMeasure(measures);
         });
->>>>>>> 827c4346fbe2145d3e26af06a73e388762e1d7a6
 	}
 	
 	public void unsubscribeOfMqtt(String mqttTopic) throws MqttException {

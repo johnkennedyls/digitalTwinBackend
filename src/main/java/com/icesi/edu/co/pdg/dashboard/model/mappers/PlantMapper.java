@@ -8,7 +8,7 @@ import com.icesi.edu.co.pdg.dashboard.model.dtos.out.PlantListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.PlantOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.entity.Plant;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface PlantMapper {
 	PlantMapper INSTANCE = Mappers.getMapper(PlantMapper.class);
 	

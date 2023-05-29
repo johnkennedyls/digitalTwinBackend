@@ -2,6 +2,7 @@ package com.icesi.edu.co.pdg.dashboard.model.dtos;
 
 public class MapSvgTagDTO {
 	private String svgId;
+	private Integer idAsset;
 	private String tagName;
 	
 	public String getSvgId() {
@@ -15,5 +16,11 @@ public class MapSvgTagDTO {
 	}
 	public void setTagName(String tagName) {
 		this.tagName = tagName;
+	}
+	public Integer getIdAsset() {
+		return idAsset;
+	}
+	public void setIdAsset(Integer idAsset) {
+		this.idAsset = idAsset;
 	}
 }

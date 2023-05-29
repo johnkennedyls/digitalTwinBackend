@@ -13,8 +13,8 @@ class WebSocketServerManager {
         this.template = template;
     }
     
-    public void sendMeasure(MeasurementDTO measure) {
-    	this.template.convertAndSend("/topic/realtime",measure);
+    public void sendMeasure(MeasurementDTO[] measures) {
+    	this.template.convertAndSend("/topic/realtime",measures);
     }
 
 }

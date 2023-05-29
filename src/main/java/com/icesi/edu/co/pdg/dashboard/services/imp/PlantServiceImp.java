@@ -123,6 +123,7 @@ public class PlantServiceImp implements PlantService {
 		for(MapSvgTag svg :originalPlant.getSvgs()) {
 			MapSvgTagDTO currentSvg = new MapSvgTagDTO();
 			currentSvg.setSvgId(svg.getIdSvg());
+			currentSvg.setIdAsset(svg.getIdAsset());
 			currentSvg.setTagName(svg.getTagName());
 			svgs.add(currentSvg);
 		}

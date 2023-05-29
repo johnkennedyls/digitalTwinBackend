@@ -1,5 +1,6 @@
 package com.icesi.edu.co.pdg.dashboard.services.connection;
 
+
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -37,13 +38,13 @@ public class MqttManager implements CommandLineRunner  {
 	
 	@Override
 	public void run(String... args) throws Exception {
+		client = new MqttClient("tcp://"+mqttServerUri, MqttClient.generateClientId());
 		ProcessDTO[] processes = processManager.findProcessByWorkSpace(workspaceId);
-		System.out.println("Starting");
 		for(ProcessDTO currentProcess : processes) {
-			System.out.println("1");
-			ExecutionDTO[] executions = processManager.findExecutions(currentProcess.id, 0, 123123, true);
+			System.out.println("Process:"+currentProcess.id);
+			ExecutionDTO[] executions = processManager.findExecutions(currentProcess.id, 0, System.currentTimeMillis(), true);
 			for(ExecutionDTO execution: executions) {
-				System.out.println("2");
+				System.out.println("Execution: "+execution.id);
 				subscribeToMqtt(execution.id+"");
 			}
 		}
@@ -57,7 +58,7 @@ public class MqttManager implements CommandLineRunner  {
         options.setAutomaticReconnect(true);
         options.setCleanSession(true);
 
-        client = new MqttClient(mqttServerUri, MqttClient.generateClientId());
+        
         client.connect(options);
     }
 	
@@ -66,11 +67,15 @@ public class MqttManager implements CommandLineRunner  {
 			connectToMqtt();
 		}
 		client.subscribe(mqttTopic, (topic, msg) -> {
-            byte[] payload = msg.getPayload();
-            MeasurementDTO measure = objectMapper.readValue(payload, MeasurementDTO.class);
-            System.out.println("MQTT: "+measure.value);
-            webSocket.sendMeasure(measure);
-        });
+		    byte[] payload = msg.getPayload();
+		    try {
+		        MeasurementDTO[] measures = objectMapper.readValue(payload, MeasurementDTO[].class);
+		        webSocket.sendMeasure(measures);
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		});
+
 	}
 	
 	public void unsubscribeOfMqtt(String mqttTopic) throws MqttException {

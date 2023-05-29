@@ -3,14 +3,17 @@ package com.icesi.edu.co.pdg.dashboard.services.imp;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.icesi.edu.co.pdg.dashboard.exceptions.BadRequestDataException;
 import com.icesi.edu.co.pdg.dashboard.exceptions.UnexpectedException;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.in.ProcessInDTO;
+import com.icesi.edu.co.pdg.dashboard.model.dtos.out.ProcessListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.services.connection.MqttManager;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.ProcessService;
 
+import co.edu.icesi.dev.saamfi.saamfisecurity.delegate.SaamfiDelegate;
 import icesi.plantapiloto.common.controllers.ProcessManagerControllerPrx;
 import icesi.plantapiloto.common.dtos.ExecutionDTO;
 import icesi.plantapiloto.common.dtos.ProcessDTO;
@@ -26,11 +29,27 @@ public class ProcessServiceImp implements ProcessService{
 	
 	@Value("${webdasboard.workspace.id}")
 	private Integer workspaceId;
+	@Value("${saamfi.api.url}")
+	private String saamfiUrl;
 	
 	@Override
-	public ProcessDTO[] getAllProcess() {
+	public ProcessListOutDTO[] getAllProcess() {
 		ProcessDTO[] processList = processManager.findProcessByWorkSpace(workspaceId);
-		return processList;
+		ProcessListOutDTO[] list = new ProcessListOutDTO[processList.length];
+		for(int i = 0; i < processList.length;i++) {
+			list[i] = new ProcessListOutDTO();
+			list[i].id =  processList[i].id;
+			list[i].description =  processList[i].description;
+			list[i].instructions =  processList[i].instructions;
+			list[i].name =  processList[i].name;
+			list[i].workSpaceId =  processList[i].workSpaceId;
+			ExecutionDTO[] execs = processManager.findExecutions(processList[i].id, 0, System.currentTimeMillis(), true);
+			list[i].state = ProcessListOutDTO.PROCESS_STOPPED;
+			if(execs.length>0) {
+				list[i].state = ProcessListOutDTO.PROCESS_RUNNING;
+			}
+		}
+		return list;
 	}
 	
 	@Override
@@ -59,14 +78,21 @@ public class ProcessServiceImp implements ProcessService{
 		if(processId==null) {
 			throw new BadRequestDataException();
 		}
-		ExecutionDTO[] currentExecutions = processManager.findExecutions(processId, 0, 0, true);
+		
+		ExecutionDTO[] currentExecutions = processManager.findExecutions(processId, 0, System.currentTimeMillis(), true);
 		if(currentExecutions.length>0) {
+			System.out.println("QUE XD "+currentExecutions[currentExecutions.length-1].id);
+			continueExecution(currentExecutions[currentExecutions.length-1].id);
 			return;
 		}
-		Integer executionId = processManager.startProcess(processId, "Usuario de prueba");
+		SaamfiDelegate delegate = new SaamfiDelegate(saamfiUrl);
+		String token = (String) SecurityContextHolder.getContext().getAuthentication().getCredentials();
+		
+		Integer executionId = processManager.startProcess(processId, delegate.getUsernameFromJWT(token));
 		try {
 			mqttManager.subscribeToMqtt(executionId+"");
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new UnexpectedException();
 		}
 	}
@@ -74,24 +100,19 @@ public class ProcessServiceImp implements ProcessService{
 	@Override
 	public void pauseExecution(Integer processId) throws BadRequestDataException, MqttException {
 		
-		ExecutionDTO[] currentExecutions = processManager.findExecutions(processId, 0, 0, true);
+		ExecutionDTO[] currentExecutions = processManager.findExecutions(processId, 0, System.currentTimeMillis(), true);
 		if(currentExecutions.length<=0) {
 			throw new BadRequestDataException();
 		}
-		int executionId = currentExecutions[0].id;
+		int executionId = currentExecutions[currentExecutions.length-1].id;
 		
 		processManager.pauseExecutionProcess(executionId);
 		mqttManager.unsubscribeOfMqtt(executionId+"");
 	}
 
 	@Override
-	public void continueExecution(Integer processId) throws BadRequestDataException, UnexpectedException{
+	public void continueExecution(Integer executionId) throws BadRequestDataException, UnexpectedException{
 		
-		ExecutionDTO[] currentExecutions = processManager.findExecutions(processId, 0, 0, true);
-		if(currentExecutions.length<=0) {
-			throw new BadRequestDataException();
-		}
-		int executionId = currentExecutions[0].id;
 		processManager.continueExecutionProcess(executionId);
 		try {
 			mqttManager.subscribeToMqtt(executionId+"");
@@ -102,12 +123,12 @@ public class ProcessServiceImp implements ProcessService{
 
 	@Override
 	public void stopExecution(Integer processId) throws BadRequestDataException, MqttException {
-		ExecutionDTO[] currentExecutions = processManager.findExecutions(processId, 0, 0, true);
+		ExecutionDTO[] currentExecutions = processManager.findExecutions(processId, 0, System.currentTimeMillis(), true);
 		if(currentExecutions.length<=0) {
 			throw new BadRequestDataException();
 		}
-		int executionId = currentExecutions[0].id;
-		
+		int executionId = currentExecutions[currentExecutions.length-1].id;
+		System.out.println("DETENIENDO PROCESO "+executionId);
 		processManager.stopExecutionProcess(executionId);
 		mqttManager.unsubscribeOfMqtt(executionId+"");
 	}

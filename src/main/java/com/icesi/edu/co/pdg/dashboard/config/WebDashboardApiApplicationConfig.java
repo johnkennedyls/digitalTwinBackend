@@ -18,7 +18,7 @@ public class WebDashboardApiApplicationConfig implements WebSocketMessageBrokerC
 	
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/websocket").setAllowedOriginPatterns("*").withSockJS();
+        registry.addEndpoint("/public/websocket").setAllowedOriginPatterns("*").withSockJS();
     }
 
 	@Override

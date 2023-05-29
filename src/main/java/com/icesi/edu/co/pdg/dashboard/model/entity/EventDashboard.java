@@ -5,9 +5,12 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 
 import java.util.List;
 
@@ -23,6 +26,8 @@ public class EventDashboard implements Serializable {
 
 	@Id
 	@Column(name="event_id")
+	@SequenceGenerator(name = "DASHBOARD_EVENT_EVENTID_GENERATOR", sequenceName = "dashboard_event_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DASHBOARD_EVENT_EVENTID_GENERATOR")
 	private Integer eventId;
 
 	@Column(name="event_description")

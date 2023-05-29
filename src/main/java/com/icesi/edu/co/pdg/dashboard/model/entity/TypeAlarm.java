@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 
 /**
  * The persistent class for the type_alarm database table.
@@ -28,7 +29,8 @@ public class TypeAlarm implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@SequenceGenerator(name = "DASHBOARD_TYPEALARM_TYPEALARMID_GENERATOR", sequenceName = "dashboard_type_alarm_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DASHBOARD_TYPEALARM_TYPEALARMID_GENERATOR")
 	private Integer typeAlarmId;
 
 	private String condition;	

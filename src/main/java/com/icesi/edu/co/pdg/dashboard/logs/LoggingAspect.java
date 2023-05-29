@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.LogDashboardService;
 
-//@Aspect
-//@Component
+@Aspect
+@Component
 public class LoggingAspect {
 	
 	@Autowired
@@ -124,6 +124,6 @@ public class LoggingAspect {
 
 	@AfterThrowing(pointcut = "allDashboardOperations()", throwing = "ex")
 	public void afterExceptionInDashboardOperations(JoinPoint joinPoint, Exception ex) throws Exception {
-		  logDashboardService.save("INFO", ex.toString());
+		  logDashboardService.save("ERROR", ex.toString());
 	}
 }

@@ -1,9 +1,11 @@
 package com.icesi.edu.co.pdg.dashboard.controller.imp;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,11 +21,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.icesi.edu.co.pdg.dashboard.controller.interfaces.TypeAlarmController;
 import com.icesi.edu.co.pdg.dashboard.exceptions.BadRequestDataException;
 import com.icesi.edu.co.pdg.dashboard.exceptions.NoResultException;
+
 import com.icesi.edu.co.pdg.dashboard.model.dtos.TypeAlarmDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmDetailOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.entity.TypeAlarm;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.TypeAlarmService;
+import com.icesi.edu.co.pdg.dashboard.services.springexpression.Context;
+
+import icesi.plantapiloto.common.dtos.MeasurementDTO;
 
 @CrossOrigin("*")
 @RequestMapping("/typeAlarms")
@@ -87,13 +93,13 @@ public class TypeAlarmControllerImp implements TypeAlarmController{
 
 	@Override
 	@PutMapping("/edit/{typealarmid}")
-	public ResponseEntity<TypeAlarmDTO> editTypeAlarm(@PathVariable("typealarmid") Integer typealarmid, @RequestBody TypeAlarmDTO typealarm) throws Exception {
+	public ResponseEntity<?> editTypeAlarm(@PathVariable("typealarmid") Integer typealarmid, @RequestBody TypeAlarmDTO typealarm) throws Exception {
 		TypeAlarmDTO alarm;
 		try {
 			alarm = typeAlarmService.editTypeAlarm(typealarmid,typealarm);
 			return new ResponseEntity<>(alarm, HttpStatus.OK);
 		}catch(BadRequestDataException e) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}catch(NoResultException e) {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
@@ -112,5 +118,7 @@ public class TypeAlarmControllerImp implements TypeAlarmController{
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 	}
+
+
 
 }

@@ -18,9 +18,11 @@ import com.icesi.edu.co.pdg.dashboard.model.entity.EventDashboard;
 import com.icesi.edu.co.pdg.dashboard.model.entity.Plant;
 import com.icesi.edu.co.pdg.dashboard.model.entity.TypeAlarm;
 import com.icesi.edu.co.pdg.dashboard.model.mappers.TypeAlarmMapper;
+import com.icesi.edu.co.pdg.dashboard.repositories.AlarmRepository;
 import com.icesi.edu.co.pdg.dashboard.repositories.DashboardEventRepository;
 import com.icesi.edu.co.pdg.dashboard.repositories.PlantRepository;
 import com.icesi.edu.co.pdg.dashboard.repositories.TypeAlarmRepository;
+import com.icesi.edu.co.pdg.dashboard.services.interfaces.AlarmService;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.AssignedUserService;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.TypeAlarmService;
 
@@ -30,6 +32,8 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
 	
 	@Autowired
     private TypeAlarmRepository typeAlarmRepository;
+	@Autowired
+    private AlarmService alarmService;
 	@Autowired
     private PlantRepository plantRepository;
 	@Autowired
@@ -41,7 +45,8 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
 	public TypeAlarmDTO addTypeAlarm(TypeAlarmDTO typeAlarm) throws Exception {
 		if(typeAlarm.getTypeAlarmName()==null || typeAlarm.getTypeAlarmName().isEmpty() || 
 		typeAlarm.getTypeAlarmDescription()==null || typeAlarm.getTypeAlarmDescription().isEmpty() ||
-		typeAlarm.getCondition()==null || typeAlarm.getCondition().isEmpty()) {
+		typeAlarm.getCondition()==null || typeAlarm.getCondition().isEmpty() || typeAlarm.getEvent_id()==null
+		|| typeAlarm.getPlant_id()==null) {
 			throw new BadRequestDataException();
 		}else {
 			TypeAlarm typeAlarmFoundNamAndConditione=typeAlarmRepository.findByTypeAlarmName(typeAlarm.getTypeAlarmName());
@@ -66,10 +71,10 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
 					return typeAlarm;
 				}
 				else {
-					throw new BadRequestDataException("La condición ya existe");
+					throw new BadRequestDataException("La condición del tipo de alarma ya existe");
 				}
 			}else {
-				throw new BadRequestDataException("El nombre ya existe");
+				throw new BadRequestDataException("El nombre del tipo de alarma ya existe");
 			}
 			
 		}
@@ -80,28 +85,76 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
 	public TypeAlarmDTO editTypeAlarm(Integer typeAlarmid, TypeAlarmDTO typeAlarm) throws Exception {
 		if(typeAlarm==null || typeAlarmid <0 || typeAlarm.getTypeAlarmName()==null || typeAlarm.getTypeAlarmName().isEmpty() || 
 				typeAlarm.getTypeAlarmDescription()==null || typeAlarm.getTypeAlarmDescription().isEmpty() ||
-				typeAlarm.getCondition()==null || typeAlarm.getCondition().isEmpty() || typeAlarmid==null) {
+				typeAlarm.getCondition()==null || typeAlarm.getCondition().isEmpty() || typeAlarmid==null 
+				|| typeAlarm.getEvent_id()==null || typeAlarm.getPlant_id()==null) {
 			throw new BadRequestDataException();
 		}else {
+			TypeAlarm typeAlarmFoundNamAndCondition=null;
 			TypeAlarm typeAlarmEdited=typeAlarmRepository.findById(typeAlarmid).get();
 			if(typeAlarmEdited!=null) {
-				typeAlarmEdited.setTypeAlarmId(typeAlarmid);
-				typeAlarmEdited.setTypeAlarmName(typeAlarm.getTypeAlarmName());
-				typeAlarmEdited.setTypeAlarmDescription(typeAlarm.getTypeAlarmDescription());
+				Optional<Plant> plant=plantRepository.findById(typeAlarm.getPlant_id());
+				Optional<EventDashboard> event=dashboardEventRepository.findById(typeAlarm.getEvent_id());
 				
-				if(typeAlarm.getUsersAssigned()!=null) {
-					assignedUserService.deleteByTypeAlarmTypeAlarmId(typeAlarmid);
-					List <AssignedUser> list=typeAlarm.assignedUserListDTOoAssignedUserList();
-					assignedUserService.addAssignedUser(list,typeAlarmid);
+				if(!plant.isEmpty() && !event.isEmpty()) {
+					if(typeAlarmEdited.getTypeAlarmName().equals(typeAlarm.getTypeAlarmName())) {						
+						if(typeAlarmEdited.getCondition().equals(typeAlarm.getCondition())) {
+							return editTypeAlarmValidation(typeAlarmid,typeAlarm,typeAlarmEdited,plant.get(),event.get());
+						}else {
+							typeAlarmFoundNamAndCondition=typeAlarmRepository.findByCondition(typeAlarm.getCondition());
+							if(typeAlarmFoundNamAndCondition==null) {
+								return editTypeAlarmValidation(typeAlarmid,typeAlarm,typeAlarmEdited,plant.get(),event.get());
+							}
+							else {
+								throw new BadRequestDataException("La condición del tipo de alarma ya existe");
+							}
+						}
+					}else {
+						typeAlarmFoundNamAndCondition=typeAlarmRepository.findByTypeAlarmName(typeAlarm.getTypeAlarmName());
+						if(typeAlarmFoundNamAndCondition==null) {
+							if(typeAlarmEdited.getCondition().equals(typeAlarm.getCondition())) {
+								return editTypeAlarmValidation(typeAlarmid,typeAlarm,typeAlarmEdited,plant.get(),event.get());
+							}else {
+								typeAlarmFoundNamAndCondition=typeAlarmRepository.findByCondition(typeAlarm.getCondition());
+								if(typeAlarmFoundNamAndCondition==null) {
+									return editTypeAlarmValidation(typeAlarmid,typeAlarm,typeAlarmEdited,plant.get(),event.get());
+								}
+								else {
+									throw new BadRequestDataException("La condición del tipo de alarma ya existe");
+								}
+							}
+						}else {
+							throw new BadRequestDataException("El nombre del tipo de alarma ya existe");
+						}
+					}
+				}else {
+					throw new BadRequestDataException();
 				}
-								
-				typeAlarmRepository.save(typeAlarmEdited);	
-				return typeAlarm;
+				
 			}else {
 				throw new NoResultException();
 			}
 		}
 	}
+	@Override
+	public TypeAlarmDTO editTypeAlarmValidation(Integer typeAlarmid, TypeAlarmDTO typeAlarm,TypeAlarm typeAlarmEdited,Plant plant, EventDashboard event) throws Exception {
+		typeAlarmEdited.setTypeAlarmId(typeAlarmid);
+		typeAlarmEdited.setTypeAlarmName(typeAlarm.getTypeAlarmName());
+		typeAlarmEdited.setTypeAlarmDescription(typeAlarm.getTypeAlarmDescription());
+		typeAlarmEdited.setCondition(typeAlarm.getCondition());
+		typeAlarmEdited.setNumberAlarmsMax(typeAlarm.getNumberAlarmsMax());
+		typeAlarmEdited.setPlant(plant);
+		typeAlarmEdited.setDashboardEvent(event);
+		
+		if(typeAlarm.getUsersAssigned()!=null) {
+			assignedUserService.deleteByTypeAlarmTypeAlarmId(typeAlarmid);
+			List <AssignedUser> list=typeAlarm.assignedUserListDTOoAssignedUserList();
+			assignedUserService.addAssignedUser(list,typeAlarmid);
+		}
+						
+		typeAlarmRepository.save(typeAlarmEdited);	
+		return typeAlarm;
+	}
+	
 
 	@Override
 	public TypeAlarm deleteTypeAlarm(Integer typeAlarmid) throws Exception {
@@ -111,6 +164,7 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
 			Optional<TypeAlarm> typeAlarmDeleted=typeAlarmRepository.findById(typeAlarmid);
 			if(!typeAlarmDeleted.isEmpty()) {
 				assignedUserService.deleteByTypeAlarmTypeAlarmId(typeAlarmid);
+				alarmService.deleteByTypeAlarmTypeAlarmId(typeAlarmid);
 				typeAlarmRepository.deleteById(typeAlarmid);
 				return typeAlarmDeleted.get();
 			}else {
@@ -163,4 +217,5 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
                        
             return typealarmsDTO;
 	}
+
 }

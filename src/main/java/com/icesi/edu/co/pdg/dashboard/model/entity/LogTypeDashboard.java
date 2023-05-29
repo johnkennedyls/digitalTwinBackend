@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 
 
 /**
@@ -25,7 +26,8 @@ public class LogTypeDashboard implements Serializable {
 
 	@Id
 	@Column(name="log_type_id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@SequenceGenerator(name = "DASHBOARD_LOGTYPE_LOGTYPEID_GENERATOR", sequenceName = "dashboard_log_type_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DASHBOARD_LOGTYPE_LOGTYPEID_GENERATOR")
 	private Integer logTypeId;
 
 	@Column(name="log_type_description")

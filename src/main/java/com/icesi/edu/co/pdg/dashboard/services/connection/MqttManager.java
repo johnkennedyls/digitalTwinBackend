@@ -1,15 +1,17 @@
 package com.icesi.edu.co.pdg.dashboard.services.connection;
 
 import org.eclipse.paho.client.mqttv3.IMqttClient;
+
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.icesi.edu.co.pdg.dashboard.services.springexpression.Context;
 
 import icesi.plantapiloto.common.controllers.ProcessManagerControllerPrx;
 import icesi.plantapiloto.common.dtos.ExecutionDTO;
@@ -27,6 +29,8 @@ public class MqttManager implements CommandLineRunner  {
     private String mqttServerUri;
 	@Value("${webdasboard.workspace.id}")
     private Integer workspaceId;
+	@Autowired
+	 private ApplicationContext applicationContext;
 	
 	private IMqttClient client;
 	private final ObjectMapper objectMapper;
@@ -68,6 +72,9 @@ public class MqttManager implements CommandLineRunner  {
 		client.subscribe(mqttTopic, (topic, msg) -> {
             byte[] payload = msg.getPayload();
             MeasurementDTO measure = objectMapper.readValue(payload, MeasurementDTO.class);
+            Context context = applicationContext.getBean(Context.class);
+            context.checkAlarms(measure);
+            
             System.out.println("MQTT: "+measure.value);
             webSocket.sendMeasure(measure);
         });

@@ -21,8 +21,8 @@ import com.icesi.edu.co.pdg.dashboard.model.dtos.out.AlarmListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.AlarmService;
 
 @RestController
-@CrossOrigin("*")
 @RequestMapping("/alarms")
+@CrossOrigin("Access-Control-Allow-Origin")
 public class AlarmControllerImp implements AlarmController {
 	
 	@Autowired

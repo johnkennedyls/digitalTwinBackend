@@ -17,9 +17,9 @@ import com.icesi.edu.co.pdg.dashboard.exceptions.NoResultException;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.EventDashboardDTO;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.DashboardEventService;
 
-@CrossOrigin("*")
-@RequestMapping("/events")
 @RestController
+@RequestMapping("/events")
+@CrossOrigin("Access-Control-Allow-Origin")
 public class DashboardEventImp implements DashboardEventController {
 	
 	@Autowired
@@ -29,12 +29,8 @@ public class DashboardEventImp implements DashboardEventController {
 	@GetMapping("/")
 	public ResponseEntity<List<EventDashboardDTO>> getAllEvents() throws Exception {
 		List<EventDashboardDTO> respOutDTO = new ArrayList<EventDashboardDTO>();
-		try {
-			respOutDTO = dashboardEventService.getAllEvents();
-			return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
-		}catch(NoResultException e) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-		}
+		respOutDTO = dashboardEventService.getAllEvents();
+		return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
 	}
 
 }

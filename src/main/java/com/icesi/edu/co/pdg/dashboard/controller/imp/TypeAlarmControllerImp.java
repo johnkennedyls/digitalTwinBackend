@@ -60,7 +60,6 @@ public class TypeAlarmControllerImp implements TypeAlarmController{
 		List<TypeAlarmListOutDTO> respOutDTO = new ArrayList<TypeAlarmListOutDTO>();
 		respOutDTO = typeAlarmService.getAllTypeAlarms();
 		return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
-
 	}
 	
 	@Override
@@ -69,7 +68,6 @@ public class TypeAlarmControllerImp implements TypeAlarmController{
 		List<TypeAlarmListOutDTO> respOutDTO = new ArrayList<TypeAlarmListOutDTO>();
 		respOutDTO = typeAlarmService.getAllTypeAlarmsByPlantid(plantid);
 		return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
-
 	}
 
 	@Override

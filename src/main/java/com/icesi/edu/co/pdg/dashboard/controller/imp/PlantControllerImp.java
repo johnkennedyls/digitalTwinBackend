@@ -36,6 +36,7 @@ public class PlantControllerImp implements PlantController {
 	@Override
 	@GetMapping("")
 	public ResponseEntity<?> getAllPlants() {
+		System.out.println("ASDOASUJDH");
 		List<PlantListOutDTO> plants = service.getAllPlants();
 		return ResponseEntity.ok(plants);
 	}
@@ -54,7 +55,6 @@ public class PlantControllerImp implements PlantController {
 	}
 	
 	@Override
-	@PreAuthorize("hasAnyRole('Admin-plant','Create-users')")
 	@PostMapping("/add")
 	public ResponseEntity<?> addPlant(@RequestBody PlantInDTO plantDTO)  {
 		try {

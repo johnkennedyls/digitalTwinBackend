@@ -17,6 +17,7 @@ import com.icesi.edu.co.pdg.dashboard.exceptions.NoResultException;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.MapSvgTagDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.TagDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.in.PlantInDTO;
+import com.icesi.edu.co.pdg.dashboard.model.dtos.out.MeasureListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.PlantListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.PlantOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.entity.Plant;
@@ -56,25 +57,10 @@ public class PlantServiceImp implements PlantService {
 	@Override
 	public List<PlantListOutDTO> getAllPlants() {
 		List<PlantListOutDTO> result = new ArrayList<>();
-		List<AssetDTO> assets = Arrays.asList(assetManager.findByWorkSpace(workspaceId));
 		List<Plant> plants = plantRepository.findAll();
 		
-		for(AssetDTO asset: assets) {
-			if(asset.typeName==typeTagName || asset.state.equals("R")) {
-				assets.remove(asset);
-			}
-		}
-		
-		if(assets.size()==0) {
-			return result;
-		}
-		
-		Map<Integer, AssetDTO> assetMap = assets.stream().collect(Collectors.toMap(asset -> asset.assetId, asset -> asset));
-		Map<Integer, Plant> plantMap = plants.stream().collect(Collectors.toMap(Plant::getAssetId, plant -> plant));
-				
-		plantMap.forEach((id,plant) -> {
-			AssetDTO asset = assetMap.get(id);	
-
+		for(Plant plant: plants) {
+			AssetDTO asset = assetManager.findById(plant.getAssetId());
 			PlantListOutDTO plantOut = PlantMapper.INSTANCE.plantToPlantListOutDTO(plant);
 			List<TagDTO> tags = new ArrayList<>();
 			for(AssetDTO tag: asset.childrens) {
@@ -84,33 +70,31 @@ public class PlantServiceImp implements PlantService {
 				currentTag.setState(tag.state.charAt(0));
 				tags.add(currentTag);
 			}
-			
 			plantOut.setTags(tags);
 			result.add(plantOut);
-		});
+		}
 		
 		return result;
 	}
 
 	@Override
 	public PlantOutDTO getPlantById(Integer id) throws NoResultException {
-		Optional<Plant> plant = plantRepository.findById(id);
-		if(plant.isEmpty()) {
+		Optional<Plant> plantOp = plantRepository.findById(id);
+		if(plantOp.isEmpty()) {
 			throw new NoResultException();
 		}
-		Plant originalPlant = plant.get();
+		Plant plant = plantOp.get();
 		
-		List<AssetDTO> assets = Arrays.asList(assetManager.findByWorkSpace(workspaceId));
-		Map<Integer, AssetDTO> assetMap = assets.stream().collect(Collectors.toMap(asset -> asset.assetId, asset -> asset));
-		AssetDTO assetPlant = assetMap.get(originalPlant.getAssetId());
+		
+		AssetDTO assetPlant = assetManager.findById(plant.getAssetId());
 		
 		PlantOutDTO result = new PlantOutDTO();
 		
-		result.setPlantName(originalPlant.getPlantName());
-		result.setPlantPhoto(originalPlant.getPlantPhoto());
-		result.setPlantDescription(originalPlant.getPlantDescription());
-		result.setConventions(originalPlant.getConventions());
-		result.setSvgImage(originalPlant.getSvgImage());
+		result.setPlantName(plant.getPlantName());
+		result.setPlantPhoto(plant.getPlantPhoto());
+		result.setPlantDescription(plant.getPlantDescription());
+		result.setConventions(plant.getConventions());
+		result.setSvgImage(plant.getSvgImage());
 		List<TagDTO> tags = new ArrayList<>();
 		for(AssetDTO tag : assetPlant.childrens) {
 			TagDTO currentTag = new TagDTO();
@@ -123,7 +107,7 @@ public class PlantServiceImp implements PlantService {
 			tags.add(currentTag);
 		}
 		List<MapSvgTagDTO> svgs = new ArrayList<>();
-		for(MapSvgTag svg :originalPlant.getSvgs()) {
+		for(MapSvgTag svg :plant.getSvgs()) {
 			MapSvgTagDTO currentSvg = new MapSvgTagDTO();
 			currentSvg.setSvgId(svg.getIdSvg());
 			currentSvg.setIdAsset(svg.getIdAsset());
@@ -185,13 +169,13 @@ public class PlantServiceImp implements PlantService {
 	// TODO
 	// Temporary meanwhile create the modification method in the AssetManager
 	@Override
-	public void editPlant(PlantInDTO plant, Integer plantId) throws BadRequestDataException {
+	public void editPlant(PlantInDTO plantDto, Integer plantId) throws BadRequestDataException {
 		if(
-			plant.getPlantName()==null || plant.getPlantName().isEmpty() ||
-			plant.getPlantDescription() == null || plant.getPlantDescription().isEmpty() ||
-			plant.getSvgImage() == null || plant.getSvgImage().isEmpty() || 
-			plant.getTags() == null || plant.getTags().size() == 0 ||
-			plant.getMapSvgTag() == null || plant.getMapSvgTag().size() == 0
+			plantDto.getPlantName()==null || plantDto.getPlantName().isEmpty() ||
+			plantDto.getPlantDescription() == null || plantDto.getPlantDescription().isEmpty() ||
+			plantDto.getSvgImage() == null || plantDto.getSvgImage().isEmpty() || 
+			plantDto.getTags() == null || plantDto.getTags().size() == 0 ||
+			plantDto.getMapSvgTag() == null || plantDto.getMapSvgTag().size() == 0
 		){
 			throw new BadRequestDataException();
 		}
@@ -201,12 +185,9 @@ public class PlantServiceImp implements PlantService {
 			throw new BadRequestDataException();
 		}
 		
-		Plant originalPlant = originalPlantOp.get();
+		Plant plant = originalPlantOp.get();
 		
-		List<AssetDTO> assets = Arrays.asList(assetManager.findByWorkSpace(workspaceId));
-		Map<Integer, AssetDTO> assetMap = assets.stream().collect(Collectors.toMap(asset -> asset.assetId, asset -> asset));
-		
-		AssetDTO assetPlant = assetMap.get(originalPlant.getAssetId());
+		AssetDTO assetPlant = assetManager.findById(plant.getAssetId());
 		for(AssetDTO tag: assetPlant.childrens) {
 			mapRepository.deleteByIdAsset(tag.assetId);
 			assetManager.deletById(tag.assetId);
@@ -223,15 +204,15 @@ public class PlantServiceImp implements PlantService {
 			throw new RuntimeException("Error interno, intente más tarde");
 		}
 		
-		Plant finalPlant = PlantMapper.INSTANCE.plantInDTOToPlant(plant);
+		Plant finalPlant = PlantMapper.INSTANCE.plantInDTOToPlant(plantDto);
 		finalPlant.setPlantId(plantId);
 		finalPlant.setAssetId(assetId);
 		
 		plantRepository.save(finalPlant);
 
-		List<MapSvgTagDTO> preSvgs = plant.getMapSvgTag();
+		List<MapSvgTagDTO> preSvgs = plantDto.getMapSvgTag();
 		List<MapSvgTag> svgs = new ArrayList<>();
-		for(TagDTO tag : plant.getTags()) {
+		for(TagDTO tag : plantDto.getTags()) {
 			Integer tagId = assetManager.saveAsset(tag.getName(), tag.getDescription(), typeTagId, workspaceId, assetId, state, null);
 			MapSvgTag svg = new MapSvgTag();
 			
@@ -259,26 +240,25 @@ public class PlantServiceImp implements PlantService {
 			throw new BadRequestDataException();
 		}
 		
-		Plant originalPlant = originalPlantOp.get();
-		List<AssetDTO> assets = Arrays.asList(assetManager.findByWorkSpace(workspaceId));
-		Map<Integer, AssetDTO> assetMap = assets.stream().collect(Collectors.toMap(asset -> asset.assetId, asset -> asset));
+		Plant plant = originalPlantOp.get();
 		
-		AssetDTO assetPlant = assetMap.get(originalPlant.getAssetId());
+		AssetDTO assetPlant = assetManager.findById(plant.getAssetId());
+		plantRepository.deleteById(plantId);
 		for(AssetDTO tag: assetPlant.childrens) {
 			assetManager.deletById(tag.assetId);
 		}
 		assetManager.deletById(assetPlant.assetId);	
-		plantRepository.deleteById(plantId);
+		
 	}
 	
 	@Override
-	public List<MeasurementDTO> getTagValuesByStartAndEndDate(Integer plantId, Long startDate, Long endDate) throws BadRequestDataException {
+	public List<MeasureListOutDTO> getTagValuesByStartAndEndDate(Integer plantId, Long startDate, Long endDate) throws BadRequestDataException {
 		Optional<Plant> plantOp = plantRepository.findById(plantId);
 		if(plantOp.isEmpty()) {
 			throw new BadRequestDataException();
 		}
 		Plant plant = plantOp.get();
-		List<MeasurementDTO> measures = new ArrayList<>();
+		List<MeasureListOutDTO> measures = new ArrayList<>();
 		AssetDTO[] assetList = assetManager.findByWorkSpace(workspaceId);
 		AssetDTO asset = new AssetDTO();
 		for(AssetDTO cAsset : assetList) {
@@ -288,7 +268,11 @@ public class PlantServiceImp implements PlantService {
 			}
 		}
 		for(AssetDTO cAsset : asset.childrens) {
-			measures.addAll(Arrays.asList(measureManager.getMeasurments(cAsset.assetId, startDate, endDate)));
+			MeasurementDTO[] currentMeasures = measureManager.getMeasurments(cAsset.assetId, startDate, endDate);
+			MeasureListOutDTO measure = new MeasureListOutDTO();
+			measure.setAssetId(cAsset.assetId);
+			measure.setMeasures(currentMeasures);
+			measures.add(measure);
 		}
 		return measures;
 	}

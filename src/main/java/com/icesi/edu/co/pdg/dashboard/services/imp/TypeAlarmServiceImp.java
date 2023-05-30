@@ -1,15 +1,23 @@
 package com.icesi.edu.co.pdg.dashboard.services.imp;
 
 import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.Gson;
+import java.lang.reflect.Type;
 import com.icesi.edu.co.pdg.dashboard.exceptions.BadRequestDataException;
 import com.icesi.edu.co.pdg.dashboard.exceptions.NoResultException;
+import com.icesi.edu.co.pdg.dashboard.model.dtos.SaamfiUserSpeOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.TypeAlarmDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmDetailOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmListOutDTO;
@@ -18,7 +26,6 @@ import com.icesi.edu.co.pdg.dashboard.model.entity.EventDashboard;
 import com.icesi.edu.co.pdg.dashboard.model.entity.Plant;
 import com.icesi.edu.co.pdg.dashboard.model.entity.TypeAlarm;
 import com.icesi.edu.co.pdg.dashboard.model.mappers.TypeAlarmMapper;
-import com.icesi.edu.co.pdg.dashboard.repositories.AlarmRepository;
 import com.icesi.edu.co.pdg.dashboard.repositories.DashboardEventRepository;
 import com.icesi.edu.co.pdg.dashboard.repositories.PlantRepository;
 import com.icesi.edu.co.pdg.dashboard.repositories.TypeAlarmRepository;
@@ -40,6 +47,13 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
     private DashboardEventRepository dashboardEventRepository;
 	@Autowired
 	private AssignedUserService assignedUserService;
+    @Value("${saamfi.api.institutions.icesi.id}")
+    private String inst_id;
+    @Value("${saamfi.api.systems.dashboard.id}")
+    private String sys_id;
+    @Value("${saamfi.api.url}")
+    private String saamfi_url;
+
 
 	@Override
 	public TypeAlarmDTO addTypeAlarm(TypeAlarmDTO typeAlarm) throws Exception {
@@ -216,6 +230,43 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
             }
                        
             return typealarmsDTO;
+	}
+	@Override
+	public List<SaamfiUserSpeOutDTO> getAllEmailUsers() throws Exception {
+		List<SaamfiUserSpeOutDTO> respOutDTO = new ArrayList<SaamfiUserSpeOutDTO>();
+		try {
+            URL url = new URL(saamfi_url+"/public/institutions/"+inst_id+"/systems/"+sys_id+"/users");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("GET");
+
+            int responseCode = conn.getResponseCode();
+
+
+            if(responseCode == HttpURLConnection.HTTP_OK){ // success
+                BufferedReader in = new BufferedReader(new InputStreamReader(
+                        conn.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                System.out.println(response.toString());
+                Gson gson = new Gson();
+                Type userListType = new TypeToken<ArrayList<SaamfiUserSpeOutDTO>>(){}.getType();
+
+                respOutDTO = gson.fromJson(response.toString(), userListType);
+            } else {
+                System.out.println("GET request not worked");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+		return respOutDTO;
 	}
 
 }

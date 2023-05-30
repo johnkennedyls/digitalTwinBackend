@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.icesi.edu.co.pdg.dashboard.controller.interfaces.TypeAlarmController;
 import com.icesi.edu.co.pdg.dashboard.exceptions.BadRequestDataException;
 import com.icesi.edu.co.pdg.dashboard.exceptions.NoResultException;
-
+import com.icesi.edu.co.pdg.dashboard.model.dtos.SaamfiUserSpeOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.TypeAlarmDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.AlarmListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmDetailOutDTO;
@@ -112,6 +112,12 @@ public class TypeAlarmControllerImp implements TypeAlarmController{
 		}
 	}
 
-
+	@Override
+	@GetMapping("/emails")
+	public ResponseEntity<List<SaamfiUserSpeOutDTO>> getAllEmailUsers() throws Exception {
+		List<SaamfiUserSpeOutDTO> respOutDTO = new ArrayList<SaamfiUserSpeOutDTO>();
+		respOutDTO = typeAlarmService.getAllEmailUsers();
+		return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
+	}
 
 }

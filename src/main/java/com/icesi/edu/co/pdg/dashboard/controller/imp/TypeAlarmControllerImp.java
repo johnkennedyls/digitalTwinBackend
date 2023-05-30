@@ -23,6 +23,7 @@ import com.icesi.edu.co.pdg.dashboard.exceptions.BadRequestDataException;
 import com.icesi.edu.co.pdg.dashboard.exceptions.NoResultException;
 
 import com.icesi.edu.co.pdg.dashboard.model.dtos.TypeAlarmDTO;
+import com.icesi.edu.co.pdg.dashboard.model.dtos.out.AlarmListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmDetailOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.entity.TypeAlarm;
@@ -31,9 +32,9 @@ import com.icesi.edu.co.pdg.dashboard.services.springexpression.Context;
 
 import icesi.plantapiloto.common.dtos.MeasurementDTO;
 
-@CrossOrigin("*")
-@RequestMapping("/typeAlarms")
 @RestController
+@RequestMapping("/typeAlarms")
+@CrossOrigin("Access-Control-Allow-Origin")
 public class TypeAlarmControllerImp implements TypeAlarmController{
 	
 	@Autowired
@@ -57,24 +58,16 @@ public class TypeAlarmControllerImp implements TypeAlarmController{
 	@GetMapping("/")
 	public ResponseEntity<List<TypeAlarmListOutDTO>> getAllTypeAlarms() throws Exception {
 		List<TypeAlarmListOutDTO> respOutDTO = new ArrayList<TypeAlarmListOutDTO>();
-		try {
-			respOutDTO = typeAlarmService.getAllTypeAlarms();
-			return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
-		}catch(NoResultException e) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-		}
+		respOutDTO = typeAlarmService.getAllTypeAlarms();
+		return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
 	}
 	
 	@Override
 	@GetMapping("/plant/{plantid}")
 	public ResponseEntity<List<TypeAlarmListOutDTO>> getAllTypeAlarmsByPlant(@PathVariable("plantid") Integer plantid) throws Exception {
 		List<TypeAlarmListOutDTO> respOutDTO = new ArrayList<TypeAlarmListOutDTO>();
-		try {
-			respOutDTO = typeAlarmService.getAllTypeAlarmsByPlantid(plantid);
-			return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
-		}catch(NoResultException e) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-		}
+		respOutDTO = typeAlarmService.getAllTypeAlarmsByPlantid(plantid);
+		return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
 	}
 
 	@Override

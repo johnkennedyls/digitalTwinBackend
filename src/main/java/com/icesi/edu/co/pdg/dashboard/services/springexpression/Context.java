@@ -36,7 +36,9 @@ public class Context {
 				alarmDTO.setActivationDate(timestamp);
 			}
 		}
-		alarmService.addAlarm(alarmDTO);
+		if(alarmDTO!=null) {
+			alarmService.addAlarm(alarmDTO);	
+		}
 	}
 
 	private boolean evaluateCondition(MeasurementDTO tagValue, String condition) {

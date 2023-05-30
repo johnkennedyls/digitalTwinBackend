@@ -22,8 +22,8 @@ import com.icesi.edu.co.pdg.dashboard.model.dtos.in.ActionHistoryInDTO;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.ActionHistoryService;
 
 @RestController
-@CrossOrigin("*")
 @RequestMapping("/actionHistory")
+@CrossOrigin("Access-Control-Allow-Origin")
 public class ActionHistoryControllerImp implements ActionHistoryController {
 	
 	@Autowired
@@ -33,12 +33,8 @@ public class ActionHistoryControllerImp implements ActionHistoryController {
 	@GetMapping("/{alarmid}")
 	public ResponseEntity<List<ActionHistoryDTO>> getAllActionsHistoryByAlarm(@PathVariable("alarmid") Integer alarmid) throws Exception {
 		List<ActionHistoryDTO> respOutDTO = new ArrayList<ActionHistoryDTO>();
-		try {
-			respOutDTO = actionHistoryService.getAllActionsHistoryByAlarmId(alarmid);
-			return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
-		}catch(BadRequestDataException e) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-		}
+		respOutDTO = actionHistoryService.getAllActionsHistoryByAlarmId(alarmid);
+		return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,22 +50,26 @@ public class LogDashboardServiceImp implements LogDashboardService{
 	@Override
 	public void save(String logTypeName, String description) throws Exception {		
 		if(!logTypeName.isEmpty()) {
-			String token = (String) SecurityContextHolder.getContext().getAuthentication().getCredentials();
-			if(token!=null) {
-				LogDashboard log =new LogDashboard();
-				Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-				log.setLogDate(timestamp);
-				if(logTypeName.equals(info.getLogTypeName())) {
-					log.setLogType(info);
-				}else if(logTypeName.equals(warn.getLogTypeName())) {
-					log.setLogType(warn);
-				}else {
-					log.setLogType(error);
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			if (authentication != null) {
+			    String token = (String) authentication.getCredentials();
+			    if(token!=null) {
+					LogDashboard log =new LogDashboard();
+					Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+					log.setLogDate(timestamp);
+					if(logTypeName.equals(info.getLogTypeName())) {
+						log.setLogType(info);
+					}else if(logTypeName.equals(warn.getLogTypeName())) {
+						log.setLogType(warn);
+					}else {
+						log.setLogType(error);
+					}
+					log.setLoggedUser(saamfiDelegate.getUsernameFromJWT(token));
+					log.setDetailLog(description);
+					logDashboardRepository.save(log);
 				}
-				log.setLoggedUser(saamfiDelegate.getUsernameFromJWT(token));
-				log.setDetailLog(description);
-				logDashboardRepository.save(log);
 			}
+			
 		}else {
 			throw new BadRequestDataException();
 		}

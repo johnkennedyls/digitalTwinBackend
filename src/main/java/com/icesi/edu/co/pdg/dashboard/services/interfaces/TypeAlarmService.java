@@ -3,6 +3,9 @@ package com.icesi.edu.co.pdg.dashboard.services.interfaces;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+
+import com.icesi.edu.co.pdg.dashboard.model.dtos.SaamfiUserSpeOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.TypeAlarmDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmDetailOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmListOutDTO;
@@ -21,10 +24,13 @@ public interface TypeAlarmService {
 
 	public List<TypeAlarmListOutDTO> getAllTypeAlarms () throws Exception;
 
-	List<TypeAlarmListOutDTO> getAllTypeAlarmsByPlantid(Integer plantid) throws Exception;
+	public List<TypeAlarmListOutDTO> getAllTypeAlarmsByPlantid(Integer plantid) throws Exception;
 
-	TypeAlarmDTO editTypeAlarmValidation(Integer typeAlarmid, TypeAlarmDTO typeAlarm, TypeAlarm typeAlarmEdited, Plant plant,
+	public TypeAlarmDTO editTypeAlarmValidation(Integer typeAlarmid, TypeAlarmDTO typeAlarm, TypeAlarm typeAlarmEdited, Plant plant,
 			EventDashboard event) throws Exception;
 
-	TypeAlarmDTO editTypeAlarm(Integer typeAlarmid, TypeAlarmDTO typeAlarm) throws Exception;
+	public TypeAlarmDTO editTypeAlarm(Integer typeAlarmid, TypeAlarmDTO typeAlarm) throws Exception;
+
+
+	public List<SaamfiUserSpeOutDTO> getAllEmailUsers() throws Exception;
 }

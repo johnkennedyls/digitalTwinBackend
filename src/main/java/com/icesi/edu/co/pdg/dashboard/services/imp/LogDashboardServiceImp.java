@@ -2,11 +2,11 @@ package com.icesi.edu.co.pdg.dashboard.services.imp;
 
 import java.sql.Timestamp;
 
-
-
+import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,38 +36,62 @@ public class LogDashboardServiceImp implements LogDashboardService{
 
 	@Autowired
 	public LogDashboardServiceImp( LogDashboardRepository logDashboardRepository,LogTypeDashboardRepository logTypeDashboardRepository) {
-		System.out.println(saamfiUrl);
-		
-		saamfiDelegate=new SaamfiDelegate("http://xgrid103:8080/saamfiapi");
+	
 		this.logDashboardRepository=logDashboardRepository;
 		this.logTypeDashboardRepository=logTypeDashboardRepository;
-		info=logTypeDashboardRepository.findByLogTypeName("INFO");
-		warn=logTypeDashboardRepository.findByLogTypeName("WARN");
-		error=logTypeDashboardRepository.findByLogTypeName("ERROR");
 	}
-
+	
+	 @PostConstruct
+	    public void init() {
+	        System.out.println(saamfiUrl);
+	        saamfiDelegate = new SaamfiDelegate(saamfiUrl);  
+	        info = logTypeDashboardRepository.findByLogTypeName("INFO");
+	        warn = logTypeDashboardRepository.findByLogTypeName("WARN");
+	        error = logTypeDashboardRepository.findByLogTypeName("ERROR");
+	    }
 	@Override
 	public void save(String logTypeName, String description) throws Exception {		
 		if(!logTypeName.isEmpty()) {
-			String token = (String) SecurityContextHolder.getContext().getAuthentication().getCredentials();
-			if(token!=null) {
-				LogDashboard log =new LogDashboard();
-				Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-				log.setLogDate(timestamp);
-				if(logTypeName.equals(info.getLogTypeName())) {
-					log.setLogType(info);
-				}else if(logTypeName.equals(warn.getLogTypeName())) {
-					log.setLogType(warn);
-				}else {
-					log.setLogType(error);
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			if (authentication != null) {
+			    String token = (String) authentication.getCredentials();
+			    if(token!=null) {
+			    	if(logTypeName.equals(info.getLogTypeName()) && info!=null) {
+			    		LogDashboard log =new LogDashboard();
+			    		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+						log.setLogDate(timestamp);
+						log.setLogType(info);
+						log.setLoggedUser(saamfiDelegate.getUsernameFromJWT(token));
+						log.setDetailLog(description);
+						save(log);
+			    	}				
+			    	else if(logTypeName.equals(warn.getLogTypeName()) && info!=null) {
+			    		LogDashboard log =new LogDashboard();
+			    		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+						log.setLogDate(timestamp);
+						log.setLogType(warn);
+						log.setLoggedUser(saamfiDelegate.getUsernameFromJWT(token));
+						log.setDetailLog(description);
+						save(log);
+					}else if(logTypeName.equals(error.getLogTypeName()) && warn!=null) {
+						LogDashboard log =new LogDashboard();
+			    		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+						log.setLogDate(timestamp);
+						log.setLogType(error);
+						log.setLoggedUser(saamfiDelegate.getUsernameFromJWT(token));
+						log.setDetailLog(description);
+						save(log);
+					}
 				}
-				log.setLoggedUser(saamfiDelegate.getUsernameFromJWT(token));
-				log.setDetailLog(description);
-				logDashboardRepository.save(log);
 			}
+			
 		}else {
 			throw new BadRequestDataException();
 		}
+	}
+	@Override
+	public void save(LogDashboard log) throws Exception {		
+		logDashboardRepository.save(log);
 	}
 
 

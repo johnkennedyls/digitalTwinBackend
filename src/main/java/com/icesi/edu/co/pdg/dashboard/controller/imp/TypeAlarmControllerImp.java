@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.icesi.edu.co.pdg.dashboard.controller.interfaces.TypeAlarmController;
 import com.icesi.edu.co.pdg.dashboard.exceptions.BadRequestDataException;
 import com.icesi.edu.co.pdg.dashboard.exceptions.NoResultException;
-
+import com.icesi.edu.co.pdg.dashboard.model.dtos.SaamfiUserSpeOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.TypeAlarmDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmDetailOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmListOutDTO;
@@ -57,24 +57,16 @@ public class TypeAlarmControllerImp implements TypeAlarmController{
 	@GetMapping("/")
 	public ResponseEntity<List<TypeAlarmListOutDTO>> getAllTypeAlarms() throws Exception {
 		List<TypeAlarmListOutDTO> respOutDTO = new ArrayList<TypeAlarmListOutDTO>();
-		try {
-			respOutDTO = typeAlarmService.getAllTypeAlarms();
-			return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
-		}catch(NoResultException e) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-		}
+		respOutDTO = typeAlarmService.getAllTypeAlarms();
+		return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
 	}
 	
 	@Override
 	@GetMapping("/plant/{plantid}")
 	public ResponseEntity<List<TypeAlarmListOutDTO>> getAllTypeAlarmsByPlant(@PathVariable("plantid") Integer plantid) throws Exception {
 		List<TypeAlarmListOutDTO> respOutDTO = new ArrayList<TypeAlarmListOutDTO>();
-		try {
-			respOutDTO = typeAlarmService.getAllTypeAlarmsByPlantid(plantid);
-			return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
-		}catch(NoResultException e) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-		}
+		respOutDTO = typeAlarmService.getAllTypeAlarmsByPlantid(plantid);
+		return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
 	}
 
 	@Override
@@ -119,6 +111,12 @@ public class TypeAlarmControllerImp implements TypeAlarmController{
 		}
 	}
 
-
+	@Override
+	@GetMapping("/emails")
+	public ResponseEntity<List<SaamfiUserSpeOutDTO>> getAllEmailUsers() throws Exception {
+		List<SaamfiUserSpeOutDTO> respOutDTO = new ArrayList<SaamfiUserSpeOutDTO>();
+		respOutDTO = typeAlarmService.getAllEmailUsers();
+		return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
+	}
 
 }

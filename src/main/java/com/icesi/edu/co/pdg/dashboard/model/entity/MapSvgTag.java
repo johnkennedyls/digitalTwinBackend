@@ -5,9 +5,12 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 /**
  * The persistent class for the svg database table.
  * 
@@ -15,8 +18,13 @@ import javax.persistence.ManyToOne;
 @Entity
 public class MapSvgTag implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
+	@Column(name="map_svg_id")
+	@SequenceGenerator(name = "DASHBOARD_MAP_SVG_ID_GENERATOR", sequenceName = "dashboard_map_svg_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DASHBOARD_MAP_SVG_ID_GENERATOR")
+	private Integer mapSvgId;
+	
 	@Column(name="id_svg")
 	private String idSvg;
 

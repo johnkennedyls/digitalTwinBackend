@@ -32,10 +32,7 @@ build/
 ### VS Code ###
 .vscode/
 
-<<<<<<< HEAD
 ## Gradle ##
-=======
->>>>>>> 827c4346fbe2145d3e26af06a73e388762e1d7a6
 .gradle
 **/build/
 !src/**/build/

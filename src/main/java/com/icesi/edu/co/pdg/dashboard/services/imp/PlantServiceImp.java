@@ -142,6 +142,8 @@ public class PlantServiceImp implements PlantService {
 		}
 		
 		Plant finalPlant = PlantMapper.INSTANCE.plantInDTOToPlant(plant);
+		System.out.println("PLANT DTO: "+plant.getPlantPhoto());
+		System.out.println("PLANT: "+finalPlant.getPlantPhoto());
 		finalPlant.setAssetId(assetId);
 		finalPlant = plantRepository.save(finalPlant);
 		

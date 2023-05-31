@@ -4,10 +4,10 @@
 cd ..
 
 # Remove current bin and build directories
-# rm -rf bin build
+rm -rf bin build
 
 # Run gradle clean build
-# ./gradlew clean build
+./gradlew clean build
 
 # Copy the war file to the current directory
 cp build/libs/web-dashboard-api-0.0.1.war .

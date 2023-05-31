@@ -19,8 +19,4 @@ public interface ActionHistoryMapper {
 	ActionHistory actionHistoryInDTOtoActionHistory(ActionHistoryInDTO actionHistoryInDTO);
 	
 	ActionHistoryDTO actionHistorytoActionHistoryDTO(ActionHistory actionHistory);
-	
-	
-
-
 }

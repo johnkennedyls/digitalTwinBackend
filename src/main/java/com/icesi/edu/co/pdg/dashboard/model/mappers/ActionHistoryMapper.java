@@ -1,20 +1,17 @@
 package com.icesi.edu.co.pdg.dashboard.model.mappers;
 
-import java.util.List;
-
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 import com.icesi.edu.co.pdg.dashboard.model.dtos.ActionHistoryDTO;
 
 import com.icesi.edu.co.pdg.dashboard.model.dtos.in.ActionHistoryInDTO;
 import com.icesi.edu.co.pdg.dashboard.model.entity.ActionHistory;
+import com.icesi.edu.co.pdg.dashboard.model.mappers.imp.ActionHistoryMapperImpl;
 
 
-@Mapper
 public interface ActionHistoryMapper {
 	
-	ActionHistoryMapper INSTANCE = Mappers.getMapper(ActionHistoryMapper.class);
+	ActionHistoryMapper INSTANCE = new ActionHistoryMapperImpl();
+	
 	
 	ActionHistory actionHistoryInDTOtoActionHistory(ActionHistoryInDTO actionHistoryInDTO);
 	

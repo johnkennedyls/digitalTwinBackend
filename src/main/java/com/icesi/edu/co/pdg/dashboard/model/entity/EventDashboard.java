@@ -36,9 +36,6 @@ public class EventDashboard implements Serializable {
 	@Column(name="event_name")
 	private String eventName;
 
-	@Column(name="type_alarm_id")
-	private Integer typeAlarmId;
-
 	//bi-directional many-to-one association to TypeAlarm
 	@OneToMany(mappedBy="dashboardEvent")
 	private List<TypeAlarm> typeAlarms;
@@ -68,14 +65,6 @@ public class EventDashboard implements Serializable {
 
 	public void setEventName(String eventName) {
 		this.eventName = eventName;
-	}
-
-	public Integer getTypeAlarmId() {
-		return this.typeAlarmId;
-	}
-
-	public void setTypeAlarmId(Integer typeAlarmId) {
-		this.typeAlarmId = typeAlarmId;
 	}
 
 	public List<TypeAlarm> getTypeAlarms() {

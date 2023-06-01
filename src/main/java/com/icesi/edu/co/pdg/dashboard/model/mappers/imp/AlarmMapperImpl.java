@@ -1,4 +1,4 @@
-package com.icesi.edu.co.pdg.dashboard.model.mappers;
+package com.icesi.edu.co.pdg.dashboard.model.mappers.imp;
 
 import com.icesi.edu.co.pdg.dashboard.model.dtos.AlarmDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.AlarmDetailOutDTO;
@@ -7,17 +7,13 @@ import com.icesi.edu.co.pdg.dashboard.model.entity.Alarm;
 import com.icesi.edu.co.pdg.dashboard.model.entity.Plant;
 import com.icesi.edu.co.pdg.dashboard.model.entity.StateAlarm;
 import com.icesi.edu.co.pdg.dashboard.model.entity.TypeAlarm;
+import com.icesi.edu.co.pdg.dashboard.model.mappers.AlarmMapper;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
-@Generated(
-    value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-05-31T21:06:41-0500",
-    comments = "version: 1.3.1.Final, compiler: Eclipse JDT (IDE) 1.4.300.v20221108-0856, environment: Java 17.0.6 (Eclipse Adoptium)"
-)
-@Component
 public class AlarmMapperImpl implements AlarmMapper {
 
     @Override
@@ -51,9 +47,6 @@ public class AlarmMapperImpl implements AlarmMapper {
         if ( typeAlarm != null ) {
             alarmListOutDTO.setTypeAlarmName( typeAlarm.getTypeAlarmName() );
             alarmListOutDTO.setCondition( typeAlarm.getCondition() );
-        }
-        if ( plant != null ) {
-            alarmListOutDTO.setPlantName( plant.getPlantName() );
         }
         if ( stateAlarm != null ) {
             alarmListOutDTO.setStateAlarmName( stateAlarm.getStateAlarmName() );
@@ -91,9 +84,6 @@ public class AlarmMapperImpl implements AlarmMapper {
         if ( typeAlarm != null ) {
             alarmDetailOutDTO.setTypeAlarmName( typeAlarm.getTypeAlarmName() );
             alarmDetailOutDTO.setCondition( typeAlarm.getCondition() );
-        }
-        if ( plant != null ) {
-            alarmDetailOutDTO.setPlantName( plant.getPlantName() );
         }
         if ( stateAlarm != null ) {
             alarmDetailOutDTO.setStateAlarmName( stateAlarm.getStateAlarmName() );

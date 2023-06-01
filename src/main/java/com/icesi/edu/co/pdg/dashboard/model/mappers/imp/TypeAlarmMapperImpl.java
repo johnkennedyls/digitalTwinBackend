@@ -1,4 +1,4 @@
-package com.icesi.edu.co.pdg.dashboard.model.mappers;
+package com.icesi.edu.co.pdg.dashboard.model.mappers.imp;
 
 import com.icesi.edu.co.pdg.dashboard.model.dtos.TypeAlarmDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmDetailOutDTO;
@@ -6,17 +6,13 @@ import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.entity.EventDashboard;
 import com.icesi.edu.co.pdg.dashboard.model.entity.Plant;
 import com.icesi.edu.co.pdg.dashboard.model.entity.TypeAlarm;
+import com.icesi.edu.co.pdg.dashboard.model.mappers.TypeAlarmMapper;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
-@Generated(
-    value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-05-31T21:06:42-0500",
-    comments = "version: 1.3.1.Final, compiler: Eclipse JDT (IDE) 1.4.300.v20221108-0856, environment: Java 17.0.6 (Eclipse Adoptium)"
-)
-@Component
 public class TypeAlarmMapperImpl implements TypeAlarmMapper {
 
     @Override
@@ -27,10 +23,10 @@ public class TypeAlarmMapperImpl implements TypeAlarmMapper {
 
         TypeAlarmDTO typeAlarmDTO = new TypeAlarmDTO();
 
+        typeAlarmDTO.setTypeAlarmName( typeAlarm.getTypeAlarmName() );
+        typeAlarmDTO.setTypeAlarmDescription( typeAlarm.getTypeAlarmDescription() );
         typeAlarmDTO.setCondition( typeAlarm.getCondition() );
         typeAlarmDTO.setNumberAlarmsMax( typeAlarm.getNumberAlarmsMax() );
-        typeAlarmDTO.setTypeAlarmDescription( typeAlarm.getTypeAlarmDescription() );
-        typeAlarmDTO.setTypeAlarmName( typeAlarm.getTypeAlarmName() );
 
         return typeAlarmDTO;
     }
@@ -44,9 +40,9 @@ public class TypeAlarmMapperImpl implements TypeAlarmMapper {
         TypeAlarm typeAlarm = new TypeAlarm();
 
         typeAlarm.setCondition( typeAlarmDTO.getCondition() );
-        typeAlarm.setNumberAlarmsMax( typeAlarmDTO.getNumberAlarmsMax() );
         typeAlarm.setTypeAlarmDescription( typeAlarmDTO.getTypeAlarmDescription() );
         typeAlarm.setTypeAlarmName( typeAlarmDTO.getTypeAlarmName() );
+        typeAlarm.setNumberAlarmsMax( typeAlarmDTO.getNumberAlarmsMax() );
 
         return typeAlarm;
     }
@@ -60,9 +56,9 @@ public class TypeAlarmMapperImpl implements TypeAlarmMapper {
         TypeAlarm typeAlarm = new TypeAlarm();
 
         typeAlarm.setCondition( typeAlarmDTO.getCondition() );
-        typeAlarm.setNumberAlarmsMax( typeAlarmDTO.getNumberAlarmsMax() );
         typeAlarm.setTypeAlarmDescription( typeAlarmDTO.getTypeAlarmDescription() );
         typeAlarm.setTypeAlarmName( typeAlarmDTO.getTypeAlarmName() );
+        typeAlarm.setNumberAlarmsMax( typeAlarmDTO.getNumberAlarmsMax() );
 
         return typeAlarm;
     }
@@ -90,14 +86,11 @@ public class TypeAlarmMapperImpl implements TypeAlarmMapper {
         TypeAlarmListOutDTO typeAlarmListOutDTO = new TypeAlarmListOutDTO();
 
         if ( typeAlarm != null ) {
-            typeAlarmListOutDTO.setCondition( typeAlarm.getCondition() );
-            typeAlarmListOutDTO.setNumberAlarmsMax( typeAlarm.getNumberAlarmsMax() );
-            typeAlarmListOutDTO.setTypeAlarmDescription( typeAlarm.getTypeAlarmDescription() );
             typeAlarmListOutDTO.setTypeAlarmId( typeAlarm.getTypeAlarmId() );
             typeAlarmListOutDTO.setTypeAlarmName( typeAlarm.getTypeAlarmName() );
-        }
-        if ( plant != null ) {
-            typeAlarmListOutDTO.setPlantName( plant.getPlantName() );
+            typeAlarmListOutDTO.setTypeAlarmDescription( typeAlarm.getTypeAlarmDescription() );
+            typeAlarmListOutDTO.setCondition( typeAlarm.getCondition() );
+            typeAlarmListOutDTO.setNumberAlarmsMax( typeAlarm.getNumberAlarmsMax() );
         }
 
         return typeAlarmListOutDTO;
@@ -115,13 +108,10 @@ public class TypeAlarmMapperImpl implements TypeAlarmMapper {
             typeAlarmDetailOutDTO.setId( id );
         }
         if ( typeAlarm != null ) {
+            typeAlarmDetailOutDTO.setTypeAlarmName( typeAlarm.getTypeAlarmName() );
+            typeAlarmDetailOutDTO.setTypeAlarmDescription( typeAlarm.getTypeAlarmDescription() );
             typeAlarmDetailOutDTO.setCondition( typeAlarm.getCondition() );
             typeAlarmDetailOutDTO.setNumberAlarmsMax( typeAlarm.getNumberAlarmsMax() );
-            typeAlarmDetailOutDTO.setTypeAlarmDescription( typeAlarm.getTypeAlarmDescription() );
-            typeAlarmDetailOutDTO.setTypeAlarmName( typeAlarm.getTypeAlarmName() );
-        }
-        if ( plant != null ) {
-            typeAlarmDetailOutDTO.setPlantName( plant.getPlantName() );
         }
         if ( event != null ) {
             typeAlarmDetailOutDTO.setEventName( event.getEventName() );

@@ -28,9 +28,8 @@ public interface TypeAlarmService {
 
 	public TypeAlarmDTO editTypeAlarmValidation(Integer typeAlarmid, TypeAlarmDTO typeAlarm, TypeAlarm typeAlarmEdited, Plant plant,
 			EventDashboard event) throws Exception;
-
 	public TypeAlarmDTO editTypeAlarm(Integer typeAlarmid, TypeAlarmDTO typeAlarm) throws Exception;
-
-
 	public List<SaamfiUserSpeOutDTO> getAllEmailUsers() throws Exception;
+
+
 }

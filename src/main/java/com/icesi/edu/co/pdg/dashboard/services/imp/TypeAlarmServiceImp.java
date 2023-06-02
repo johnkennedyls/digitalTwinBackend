@@ -40,21 +40,30 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
 	@Autowired
     private TypeAlarmRepository typeAlarmRepository;
 	@Autowired
-    private AlarmService alarmService;
-	@Autowired
     private PlantRepository plantRepository;
 	@Autowired
     private DashboardEventRepository dashboardEventRepository;
-	@Autowired
-	private AssignedUserService assignedUserService;
+	
     @Value("${saamfi.api.institutions.icesi.id}")
     private String inst_id;
     @Value("${saamfi.api.systems.dashboard.id}")
     private String sys_id;
     @Value("${saamfi.api.url}")
     private String saamfi_url;
-
-
+    
+    private AssignedUserService assignedUserService;
+    private AlarmService alarmService;
+    
+    @Autowired
+    public void setAlarmService(AlarmService alarmService) {
+		this.alarmService = alarmService;
+	}
+    
+    @Autowired
+    public void setAssignedUserService(AssignedUserService assignedUserService) {
+		this.assignedUserService = assignedUserService;
+	}
+    
 	@Override
 	public TypeAlarmDTO addTypeAlarm(TypeAlarmDTO typeAlarm) throws Exception {
 		if(typeAlarm.getTypeAlarmName()==null || typeAlarm.getTypeAlarmName().isEmpty() || 
@@ -195,7 +204,7 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
 			Optional<TypeAlarm> typeAlarm=typeAlarmRepository.findById(typeAlarmid);
 			if(!typeAlarm.isEmpty()) {
 				TypeAlarmDetailOutDTO typeAlarmDTO=TypeAlarmMapper.INSTANCE.typeAlarmToTypeAlarmDetailOutDTO(typeAlarm.get().getTypeAlarmId(),typeAlarm.get(),typeAlarm.get().getPlant(),typeAlarm.get().getDashboardEvent());
-				typeAlarmDTO.setUsersAssigned(typeAlarm.get().getEmailsAssignedUsers());
+				typeAlarmDTO.setUsersAssigned(alarmService.getEmailsAssignedUsers(typeAlarm.get()));
 				return typeAlarmDTO;
 			}else{
 				throw new NoResultException();
@@ -212,7 +221,7 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
             List<TypeAlarmListOutDTO> typealarmsDTO = new ArrayList<TypeAlarmListOutDTO>();
             for(TypeAlarm typeAlarm:typeAlarms) {
             	TypeAlarmListOutDTO alarmListDTO=TypeAlarmMapper.INSTANCE.typeAlarmToAlarmListOutDTO(typeAlarm, typeAlarm.getPlant());
-            	alarmListDTO.setUsersAssigned(typeAlarm.getEmailsAssignedUsers());
+            	alarmListDTO.setUsersAssigned(alarmService.getEmailsAssignedUsers(typeAlarm));
             	typealarmsDTO.add(alarmListDTO);
             }
                        
@@ -225,7 +234,7 @@ public class TypeAlarmServiceImp implements TypeAlarmService{
             List<TypeAlarmListOutDTO> typealarmsDTO = new ArrayList<TypeAlarmListOutDTO>();
             for(TypeAlarm typeAlarm:typeAlarms) {
             	TypeAlarmListOutDTO alarmListDTO=TypeAlarmMapper.INSTANCE.typeAlarmToAlarmListOutDTO(typeAlarm, typeAlarm.getPlant());
-            	alarmListDTO.setUsersAssigned(typeAlarm.getEmailsAssignedUsers());
+            	alarmListDTO.setUsersAssigned(alarmService.getEmailsAssignedUsers(typeAlarm));
             	typealarmsDTO.add(alarmListDTO);
             }
                        

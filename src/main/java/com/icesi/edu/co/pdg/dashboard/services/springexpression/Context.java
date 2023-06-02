@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,7 @@ public class Context {
 	@Autowired
 	private AlarmService alarmService;
 
+	@Transactional
 	public void checkAlarms(MeasurementDTO measurementDTO) throws Exception {
 		AlarmDTO alarmDTO=null;
 

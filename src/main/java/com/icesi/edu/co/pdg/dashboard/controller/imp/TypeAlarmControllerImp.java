@@ -37,8 +37,12 @@ import icesi.plantapiloto.common.dtos.MeasurementDTO;
 @CrossOrigin("Access-Control-Allow-Origin")
 public class TypeAlarmControllerImp implements TypeAlarmController{
 	
-	@Autowired
     private TypeAlarmService typeAlarmService;
+    
+    @Autowired
+    public void setTypeAlarmService(TypeAlarmService typeAlarmService) {
+		this.typeAlarmService = typeAlarmService;
+	}
 
 	@Override
 	@GetMapping("/{typealarmid}")

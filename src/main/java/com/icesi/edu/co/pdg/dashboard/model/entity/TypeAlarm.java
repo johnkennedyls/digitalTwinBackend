@@ -162,21 +162,7 @@ public class TypeAlarm implements Serializable {
 	public void setNumberAlarmsMax(Integer numberAlarmsMax) {
 		this.numberAlarmsMax = numberAlarmsMax;
 	}
-	public List<String> getEmailsAssignedUsers() {
-		 if ( this.assignedUsers == null ) {
-	            return null;
-	        }
-		 
-		 List<String> list = new ArrayList<String>( this.assignedUsers.size() );
-		 
-		  for ( AssignedUser assignedUser : this.assignedUsers ) {
-			  String email= assignedUser.getEmail();
-			  list.add(email);
-	        }
-		  
-		  return list;
-		 
-	}
+	
 	
 
 }

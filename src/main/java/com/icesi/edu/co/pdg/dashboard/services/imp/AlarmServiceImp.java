@@ -12,16 +12,15 @@ import com.icesi.edu.co.pdg.dashboard.exceptions.BadRequestDataException;
 import com.icesi.edu.co.pdg.dashboard.exceptions.NoResultException;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.ActionHistoryDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.AlarmDTO;
-import com.icesi.edu.co.pdg.dashboard.model.dtos.TypeAlarmDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.AlarmDetailOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.AlarmListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.entity.ActionHistory;
 import com.icesi.edu.co.pdg.dashboard.model.entity.Alarm;
+import com.icesi.edu.co.pdg.dashboard.model.entity.AssignedUser;
 import com.icesi.edu.co.pdg.dashboard.model.entity.StateAlarm;
 import com.icesi.edu.co.pdg.dashboard.model.entity.TypeAlarm;
 import com.icesi.edu.co.pdg.dashboard.model.mappers.ActionHistoryMapper;
 import com.icesi.edu.co.pdg.dashboard.model.mappers.AlarmMapper;
-import com.icesi.edu.co.pdg.dashboard.model.mappers.TypeAlarmMapper;
 import com.icesi.edu.co.pdg.dashboard.repositories.AlarmRepository;
 import com.icesi.edu.co.pdg.dashboard.repositories.StateAlarmRepository;
 import com.icesi.edu.co.pdg.dashboard.repositories.TypeAlarmRepository;
@@ -29,7 +28,6 @@ import com.icesi.edu.co.pdg.dashboard.services.interfaces.AlarmService;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.EmailService;
 
 @Service
-@Transactional
 public class AlarmServiceImp implements AlarmService {
 	
 	@Autowired
@@ -38,14 +36,18 @@ public class AlarmServiceImp implements AlarmService {
 	private TypeAlarmRepository typeAlarmRepository;
 	@Autowired
 	private StateAlarmRepository stateAlarmRepository;
-	@Autowired
+	
 	private EmailService emailService;
 	
 	private List<Alarm> alarmsToSend;
 	
-	@Autowired
 	public AlarmServiceImp() {
 		this.alarmsToSend = new ArrayList<>();
+	}
+	
+	@Autowired
+	public void setEmailService(EmailService emailService) {
+		this.emailService = emailService;
 	}
 
 	@Override
@@ -56,10 +58,10 @@ public class AlarmServiceImp implements AlarmService {
 		}else {
 			alarmDTO.setStateAlarm(stateAlarm);
 			Alarm alarm = AlarmMapper.INSTANCE.alarmDTOtoalarm(alarmDTO);
-			alarmRepository.save(alarm);
+			alarm = alarmRepository.save(alarm);
 			alarmsToSend.add(alarm);
 			if(checkMaxAlarmsReached(alarm.getTypeAlarm())) {
-				emailService.sendEmail(alarm.getTypeAlarm().getEmailsAssignedUsers(), alarmDTO.getTypeAlarm(),alarmsToSend);
+				emailService.sendEmail(getEmailsAssignedUsers(alarm.getTypeAlarm()), alarmDTO.getTypeAlarm(),alarmsToSend);
 				alarmsToSend.clear();
 	        }
 		}
@@ -71,7 +73,7 @@ public class AlarmServiceImp implements AlarmService {
             List<AlarmListOutDTO> alarmsDTO = new ArrayList<AlarmListOutDTO>();
             for(Alarm alarm:alarms) {
             	AlarmListOutDTO alarmListDTO=AlarmMapper.INSTANCE.alarmToalarmListOutDTO(alarm,alarm.getTypeAlarm(),alarm.getTypeAlarm().getPlant(),alarm.getStateAlarm());
-            	alarmListDTO.setUsersAssigned(alarm.getTypeAlarm().getEmailsAssignedUsers());
+            	alarmListDTO.setUsersAssigned(getEmailsAssignedUsers(alarm.getTypeAlarm()));
             	alarmsDTO.add(alarmListDTO);
             }
                        
@@ -101,7 +103,7 @@ public class AlarmServiceImp implements AlarmService {
 	            		ActionHistoryDTO actionHistoryDTO=ActionHistoryMapper.INSTANCE.actionHistorytoActionHistoryDTO(actionHistory);
 	            		actionHistoriesDTO.add(actionHistoryDTO);
 	            	}
-	            	alarmDTO.setUsersAssigned(alarm.get().getTypeAlarm().getEmailsAssignedUsers());   
+	            	alarmDTO.setUsersAssigned(getEmailsAssignedUsers(alarm.get().getTypeAlarm()));   
 	            	alarmDTO.setActionsHistory(actionHistoriesDTO);
 	            return alarmDTO;
 	        }
@@ -113,7 +115,7 @@ public class AlarmServiceImp implements AlarmService {
             List<AlarmListOutDTO> alarmsDTO = new ArrayList<AlarmListOutDTO>();
             for(Alarm alarm:alarms) {
             	AlarmListOutDTO alarmListDTO=AlarmMapper.INSTANCE.alarmToalarmListOutDTO(alarm,alarm.getTypeAlarm(),alarm.getTypeAlarm().getPlant(),alarm.getStateAlarm());
-            	alarmListDTO.setUsersAssigned(alarm.getTypeAlarm().getEmailsAssignedUsers());
+            	alarmListDTO.setUsersAssigned(getEmailsAssignedUsers(alarm.getTypeAlarm()));
             	alarmsDTO.add(alarmListDTO);
             }
                        
@@ -126,7 +128,7 @@ public class AlarmServiceImp implements AlarmService {
             List<AlarmListOutDTO> alarmsDTO = new ArrayList<AlarmListOutDTO>();
             for(Alarm alarm:alarms) {
             	AlarmListOutDTO alarmListDTO=AlarmMapper.INSTANCE.alarmToalarmListOutDTO(alarm,alarm.getTypeAlarm(),alarm.getTypeAlarm().getPlant(),alarm.getStateAlarm());
-            	alarmListDTO.setUsersAssigned(alarm.getTypeAlarm().getEmailsAssignedUsers());
+            	alarmListDTO.setUsersAssigned(getEmailsAssignedUsers(alarm.getTypeAlarm()));
             	alarmsDTO.add(alarmListDTO);
             }
                        
@@ -138,7 +140,7 @@ public class AlarmServiceImp implements AlarmService {
             List<AlarmListOutDTO> alarmsDTO = new ArrayList<AlarmListOutDTO>();
             for(Alarm alarm:alarms) {
             	AlarmListOutDTO alarmListDTO=AlarmMapper.INSTANCE.alarmToalarmListOutDTO(alarm,alarm.getTypeAlarm(),alarm.getTypeAlarm().getPlant(),alarm.getStateAlarm());
-            	alarmListDTO.setUsersAssigned(alarm.getTypeAlarm().getEmailsAssignedUsers());
+            	alarmListDTO.setUsersAssigned(getEmailsAssignedUsers(alarm.getTypeAlarm()));
             	alarmsDTO.add(alarmListDTO);
             }
                        
@@ -150,7 +152,7 @@ public class AlarmServiceImp implements AlarmService {
             List<AlarmListOutDTO> alarmsDTO = new ArrayList<AlarmListOutDTO>();
             for(Alarm alarm:alarms) {
             	AlarmListOutDTO alarmListDTO=AlarmMapper.INSTANCE.alarmToalarmListOutDTO(alarm,alarm.getTypeAlarm(),alarm.getTypeAlarm().getPlant(),alarm.getStateAlarm());
-            	alarmListDTO.setUsersAssigned(alarm.getTypeAlarm().getEmailsAssignedUsers());
+            	alarmListDTO.setUsersAssigned(getEmailsAssignedUsers(alarm.getTypeAlarm()));
             	alarmsDTO.add(alarmListDTO);
             }
                        
@@ -158,6 +160,7 @@ public class AlarmServiceImp implements AlarmService {
 	}
 	
 	@Override
+	@Transactional
 	public void deleteByTypeAlarmTypeAlarmId(Integer typeAlarmid) throws Exception {
 		if( typeAlarmid<0 || typeAlarmid==null) {
 			throw new BadRequestDataException();
@@ -170,6 +173,23 @@ public class AlarmServiceImp implements AlarmService {
 			}
 		}
 		
+	}
+	
+	@Override
+	public List<String> getEmailsAssignedUsers(TypeAlarm typeAlarm) {
+		 if ( typeAlarm.getAssignedUsers() == null ) {
+	            return null;
+	        }
+		 
+		 List<String> list = new ArrayList<String>( typeAlarm.getAssignedUsers().size() );
+		 
+		  for ( AssignedUser assignedUser : typeAlarm.getAssignedUsers() ) {
+			  String email= assignedUser.getEmail();
+			  list.add(email);
+	        }
+		  
+		  return list;
+		 
 	}
 
 }

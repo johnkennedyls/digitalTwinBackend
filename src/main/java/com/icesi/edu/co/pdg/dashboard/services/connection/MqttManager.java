@@ -73,15 +73,23 @@ public class MqttManager implements CommandLineRunner  {
 		System.out.println("Que meir");
 		client.subscribe(mqttTopic, (topic, msg) -> {
             byte[] payload = msg.getPayload();
+            final MeasurementDTO[] measures = objectMapper.readValue(payload, MeasurementDTO[].class);
             try {
-            MeasurementDTO[] measures = objectMapper.readValue(payload, MeasurementDTO[].class);
             Context context = applicationContext.getBean(Context.class);
-            for(MeasurementDTO measure: measures) {
-            	context.checkAlarms(measure);
-            }
-            webSocket.sendMeasure(measures);
+            new Thread(()->{
+            	for(MeasurementDTO measure: measures) {
+                	try {
+						context.checkAlarms(measure);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+                }
+            }).start();
+            
             }catch(Exception e) {
             	e.printStackTrace();
+            }finally {
+            	webSocket.sendMeasure(measures);
             }
         });
 	}

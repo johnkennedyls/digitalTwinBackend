@@ -46,7 +46,7 @@ public class MqttManager implements CommandLineRunner  {
 		ProcessDTO[] processes = processManager.findProcessByWorkSpace(workspaceId);
 		for(ProcessDTO currentProcess : processes) {
 			System.out.println("Process:"+currentProcess.id);
-			ExecutionDTO[] executions = processManager.findExecutions(currentProcess.id, 0, System.currentTimeMillis(), true);
+			ExecutionDTO[] executions = processManager.findExecutions(currentProcess.id, 0, System.currentTimeMillis(), "running");
 			for(ExecutionDTO execution: executions) {
 				System.out.println("Execution: "+execution.id);
 				subscribeToMqtt(execution.id+"");

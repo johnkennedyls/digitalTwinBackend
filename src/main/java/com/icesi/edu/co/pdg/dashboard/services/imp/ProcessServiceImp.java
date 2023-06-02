@@ -43,7 +43,7 @@ public class ProcessServiceImp implements ProcessService{
 			list[i].instructions =  processList[i].instructions;
 			list[i].name =  processList[i].name;
 			list[i].workSpaceId =  processList[i].workSpaceId;
-			ExecutionDTO[] execs = processManager.findExecutions(processList[i].id, 0, System.currentTimeMillis(), true);
+			ExecutionDTO[] execs = processManager.findExecutions(processList[i].id, 0, System.currentTimeMillis(), "running");
 			list[i].state = ProcessListOutDTO.PROCESS_STOPPED;
 			if(execs.length>0) {
 				list[i].state = ProcessListOutDTO.PROCESS_RUNNING;
@@ -79,7 +79,7 @@ public class ProcessServiceImp implements ProcessService{
 			throw new BadRequestDataException();
 		}
 		
-		ExecutionDTO[] currentExecutions = processManager.findExecutions(processId, 0, System.currentTimeMillis(), true);
+		ExecutionDTO[] currentExecutions = processManager.findExecutions(processId, 0, System.currentTimeMillis(), "running");
 		if(currentExecutions.length>0) {
 			System.out.println("QUE XD "+currentExecutions[currentExecutions.length-1].id);
 			continueExecution(currentExecutions[currentExecutions.length-1].id);
@@ -100,7 +100,7 @@ public class ProcessServiceImp implements ProcessService{
 	@Override
 	public void pauseExecution(Integer processId) throws BadRequestDataException, MqttException {
 		
-		ExecutionDTO[] currentExecutions = processManager.findExecutions(processId, 0, System.currentTimeMillis(), true);
+		ExecutionDTO[] currentExecutions = processManager.findExecutions(processId, 0, System.currentTimeMillis(), "running");
 		if(currentExecutions.length<=0) {
 			throw new BadRequestDataException();
 		}
@@ -123,7 +123,7 @@ public class ProcessServiceImp implements ProcessService{
 
 	@Override
 	public void stopExecution(Integer processId) throws BadRequestDataException, MqttException {
-		ExecutionDTO[] currentExecutions = processManager.findExecutions(processId, 0, System.currentTimeMillis(), true);
+		ExecutionDTO[] currentExecutions = processManager.findExecutions(processId, 0, System.currentTimeMillis(), "running");
 		if(currentExecutions.length<=0) {
 			throw new BadRequestDataException();
 		}

@@ -1,11 +1,8 @@
 package com.icesi.edu.co.pdg.dashboard.services.imp;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +28,7 @@ import icesi.plantapiloto.common.controllers.AssetManagerControllerPrx;
 import icesi.plantapiloto.common.controllers.MeasurementManagerControllerPrx;
 import icesi.plantapiloto.common.dtos.MeasurementDTO;
 import icesi.plantapiloto.common.dtos.output.AssetDTO;
+import icesi.plantapiloto.common.model.MetaData;
 
 @Service
 @Transactional
@@ -121,13 +119,16 @@ public class PlantServiceImp implements PlantService {
 
 	@Override
 	public void addPlant(PlantInDTO plant) throws BadRequestDataException {
+		
 		System.out.println(plant.getMapSvgTag().size());
 		if(
 			plant.getPlantName()==null || plant.getPlantName().isEmpty() ||
 			plant.getPlantDescription() == null || plant.getPlantDescription().isEmpty() ||
 			plant.getSvgImage() == null || plant.getSvgImage().isEmpty() || 
 			plant.getTags() == null || plant.getTags().size() == 0 ||
-			plant.getMapSvgTag() == null || plant.getMapSvgTag().size() == 0
+			plant.getMapSvgTag() == null || plant.getMapSvgTag().size() == 0 ||
+			plant.getPlantIp() == null || plant.getPlantIp().isEmpty() || 
+			plant.getPlantSlot() == null || plant.getPlantSlot().isEmpty()
 		){
 			throw new BadRequestDataException();
 		}
@@ -136,7 +137,19 @@ public class PlantServiceImp implements PlantService {
 		String desc = plant.getPlantDescription();
 		String state = "A";
 		
-		Integer assetId = assetManager.saveAsset(name, desc, typePlantId, workspaceId, -1, state, null);
+		MetaData plantIp = new MetaData();
+		plantIp.setName("plc.ip");
+		plantIp.setValue(plant.getPlantIp());
+		plantIp.setDescription("");
+		MetaData plantSlot = new MetaData();
+		plantSlot.setName("plc.slot");
+		plantSlot.setValue(plant.getPlantSlot());
+		plantSlot.setDescription("");
+		
+		MetaData[] metaDatas = new MetaData[2];
+		metaDatas[0] = plantIp;
+		metaDatas[1] = plantSlot;
+		Integer assetId = assetManager.saveAsset(name, desc, typePlantId, workspaceId, -1, state, metaDatas);
 		if(assetId==-1) {
 			throw new RuntimeException("Error interno, intente más tarde");
 		}

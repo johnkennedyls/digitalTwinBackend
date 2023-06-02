@@ -2,8 +2,6 @@ package com.icesi.edu.co.pdg.dashboard.services.connection;
 
 
 import org.eclipse.paho.client.mqttv3.IMqttClient;
-
-import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +24,13 @@ public class MqttManager implements CommandLineRunner  {
 	ProcessManagerControllerPrx processManager;
 	@Autowired
 	WebSocketServerManager webSocket;
-	@Value("${mqtt.server.uri}")
-    private String mqttServerUri;
+	@Autowired
+	private ApplicationContext applicationContext;
+	@Autowired
+	private IMqttClient client;
 	@Value("${webdasboard.workspace.id}")
     private Integer workspaceId;
-	@Autowired
-	 private ApplicationContext applicationContext;
 	
-	private IMqttClient client;
 	private final ObjectMapper objectMapper;
 	
 	public MqttManager() {
@@ -42,7 +39,6 @@ public class MqttManager implements CommandLineRunner  {
 	
 	@Override
 	public void run(String... args) throws Exception {
-		client = new MqttClient("tcp://"+mqttServerUri, MqttClient.generateClientId());
 		ProcessDTO[] processes = processManager.findProcessByWorkSpace(workspaceId);
 		for(ProcessDTO currentProcess : processes) {
 			System.out.println("Process:"+currentProcess.id);

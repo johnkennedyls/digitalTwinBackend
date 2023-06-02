@@ -25,8 +25,13 @@ import com.icesi.edu.co.pdg.dashboard.services.interfaces.AlarmService;
 @CrossOrigin("Access-Control-Allow-Origin")
 public class AlarmControllerImp implements AlarmController {
 	
-	@Autowired
+	
     private AlarmService alarmService;
+    
+    @Autowired
+    public void setAlarmService(AlarmService alarmService) {
+		this.alarmService = alarmService;
+	}
 
 	@Override
 	@GetMapping("/")

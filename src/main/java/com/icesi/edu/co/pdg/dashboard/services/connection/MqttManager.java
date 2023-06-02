@@ -68,8 +68,8 @@ public class MqttManager implements CommandLineRunner  {
 		}
 		client.subscribe(mqttTopic, (topic, msg) -> {
             byte[] payload = msg.getPayload();
+            final MeasurementDTO[] measures = objectMapper.readValue(payload, MeasurementDTO[].class);
             try {
-            MeasurementDTO[] measures = objectMapper.readValue(payload, MeasurementDTO[].class);
             Context context = applicationContext.getBean(Context.class);
             new Thread(()->{
             	 for(MeasurementDTO measure: measures) {
@@ -78,12 +78,13 @@ public class MqttManager implements CommandLineRunner  {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-                 }
+                }
             }).start();
-           
-            webSocket.sendMeasure(measures);
+            
             }catch(Exception e) {
             	e.printStackTrace();
+            }finally {
+            	webSocket.sendMeasure(measures);
             }
         });
 	}

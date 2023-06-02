@@ -28,5 +28,6 @@ public interface AlarmService {
 
 	void addAlarm(AlarmDTO alarmsDTO) throws Exception;
 	
+	List<String> getEmailsAssignedUsers(TypeAlarm typeAlarm);
 
 }

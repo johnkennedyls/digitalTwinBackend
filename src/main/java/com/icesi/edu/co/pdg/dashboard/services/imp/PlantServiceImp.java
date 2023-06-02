@@ -87,7 +87,8 @@ public class PlantServiceImp implements PlantService {
 		AssetDTO assetPlant = assetManager.findById(plant.getAssetId());
 		
 		PlantOutDTO result = new PlantOutDTO();
-		
+		result.setPlantIp(assetPlant.props.get("plc.ip"));
+		result.setPlantSlot(assetPlant.props.get("plc.slot"));
 		result.setPlantName(plant.getPlantName());
 		result.setPlantPhoto(plant.getPlantPhoto());
 		result.setPlantDescription(plant.getPlantDescription());

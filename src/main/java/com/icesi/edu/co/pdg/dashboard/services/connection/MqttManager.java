@@ -2,12 +2,12 @@ package com.icesi.edu.co.pdg.dashboard.services.connection;
 
 
 import org.eclipse.paho.client.mqttv3.IMqttClient;
+
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icesi.edu.co.pdg.dashboard.services.springexpression.Context;
@@ -25,11 +25,11 @@ public class MqttManager implements CommandLineRunner  {
 	@Autowired
 	WebSocketServerManager webSocket;
 	@Autowired
-	private ApplicationContext applicationContext;
-	@Autowired
 	private IMqttClient client;
 	@Value("${webdasboard.workspace.id}")
     private Integer workspaceId;
+	@Autowired
+	Context context;
 	
 	private final ObjectMapper objectMapper;
 	
@@ -39,6 +39,7 @@ public class MqttManager implements CommandLineRunner  {
 	
 	@Override
 	public void run(String... args) throws Exception {
+          
 		ProcessDTO[] processes = processManager.findProcessByWorkSpace(workspaceId);
 		for(ProcessDTO currentProcess : processes) {
 			System.out.println("Process:"+currentProcess.id);
@@ -70,15 +71,14 @@ public class MqttManager implements CommandLineRunner  {
             byte[] payload = msg.getPayload();
             final MeasurementDTO[] measures = objectMapper.readValue(payload, MeasurementDTO[].class);
             try {
-            Context context = applicationContext.getBean(Context.class);
             new Thread(()->{
             	 for(MeasurementDTO measure: measures) {
-                 	try {
-						context.checkAlarms(measure);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-                }
+                  	try {
+ 						context.checkAlarms(measure);
+ 					} catch (Exception e) {
+ 						e.printStackTrace();
+ 					}
+                 }
             }).start();
             
             }catch(Exception e) {

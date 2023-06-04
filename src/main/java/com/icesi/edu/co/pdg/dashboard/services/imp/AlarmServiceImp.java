@@ -1,8 +1,13 @@
 package com.icesi.edu.co.pdg.dashboard.services.imp;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+
+import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,8 +31,12 @@ import com.icesi.edu.co.pdg.dashboard.repositories.StateAlarmRepository;
 import com.icesi.edu.co.pdg.dashboard.repositories.TypeAlarmRepository;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.AlarmService;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.EmailService;
+import java.util.Timer;
+import java.util.TimerTask;
+import org.hibernate.Hibernate;
 
 @Service
+@Transactional
 public class AlarmServiceImp implements AlarmService {
 	
 	@Autowired
@@ -39,7 +48,11 @@ public class AlarmServiceImp implements AlarmService {
 	
 	private EmailService emailService;
 	
-	private List<Alarm> alarmsToSend;
+	private long nextEmailTime = 0;
+	
+	private List<Alarm> alarmsToSend = new ArrayList<>();
+	
+	private Timer timer = new Timer();
 	
 	public AlarmServiceImp() {
 		this.alarmsToSend = new ArrayList<>();
@@ -52,21 +65,43 @@ public class AlarmServiceImp implements AlarmService {
 
 	@Override
 	public void addAlarm(AlarmDTO alarmDTO) throws Exception {
-		StateAlarm stateAlarm=stateAlarmRepository.findByStateAlarmNameContaining("Activa");
-		if(stateAlarm==null) {
-			throw new NoResultException();
-		}else {
-			alarmDTO.setStateAlarm(stateAlarm);
-			Alarm alarm = AlarmMapper.INSTANCE.alarmDTOtoalarm(alarmDTO);
-			alarm = alarmRepository.save(alarm);
-			alarmsToSend.add(alarm);
-			if(checkMaxAlarmsReached(alarm.getTypeAlarm())) {
-				emailService.sendEmail(getEmailsAssignedUsers(alarm.getTypeAlarm()), alarmDTO.getTypeAlarm(),alarmsToSend);
-				alarmsToSend.clear();
+	    StateAlarm stateAlarm = stateAlarmRepository.findByStateAlarmNameContaining("Activa");
+	    if(stateAlarm == null) {
+	        throw new NoResultException();
+	    } else {
+	        alarmDTO.setStateAlarm(stateAlarm);
+	        Alarm alarm = AlarmMapper.INSTANCE.alarmDTOtoalarm(alarmDTO);
+	        alarm = alarmRepository.save(alarm);
+	        alarmsToSend.add(alarm);
+
+	        TypeAlarm typeAlarm = alarm.getTypeAlarm();
+	        Hibernate.initialize(typeAlarm.getAssignedUsers());
+	        long now = System.currentTimeMillis();
+	        if (now >= nextEmailTime) {
+	        	List<Alarm> alarmsToSendSnapshot = new ArrayList<>(alarmsToSend);
+	        	int size = alarmsToSendSnapshot.size();
+	        	emailService.sendEmail(getEmailsAssignedUsers(typeAlarm), typeAlarm, alarmsToSendSnapshot, size);
+	            alarmsToSend.clear();
+	            nextEmailTime = now + TimeUnit.MINUTES.toMillis(10);
+	        } else if (alarmsToSend.size() == 1) { 
+	            timer.schedule(new TimerTask() {
+	                @Override
+	                public void run() {
+	                    try {
+	                    	List<Alarm> alarmsToSendSnapshot = new ArrayList<>(alarmsToSend);
+	        	        	int size = alarmsToSendSnapshot.size();
+	                    	 emailService.sendEmail(getEmailsAssignedUsers(typeAlarm), typeAlarm, alarmsToSendSnapshot,size);
+						} catch (IOException | MessagingException e) {
+							e.printStackTrace();
+						}
+	                    alarmsToSend.clear();
+	                }
+	            }, new Date(nextEmailTime));
 	        }
-		}
+	    }
 	}
 
+	
 	@Override
 	public List<AlarmListOutDTO> getAllAlarms() throws Exception {
 		List<Alarm> alarms = alarmRepository.findAll();
@@ -79,15 +114,6 @@ public class AlarmServiceImp implements AlarmService {
                        
             return alarmsDTO;
 	}
-	@Override
-	public Boolean checkMaxAlarmsReached(TypeAlarm typeAlarm) {
-	    if (this.alarmsToSend.size() >= typeAlarm.getNumberAlarmsMax()) {
-	        return true;
-	    }else {
-	    	return false;
-	    }
-	}
-
 	@Override
 	public AlarmDetailOutDTO getAlarm(Integer alarmid) throws Exception {
 		if(alarmid<0 || alarmid==null) {

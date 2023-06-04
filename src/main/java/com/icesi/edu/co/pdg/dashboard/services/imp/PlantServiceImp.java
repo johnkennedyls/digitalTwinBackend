@@ -1,6 +1,7 @@
 package com.icesi.edu.co.pdg.dashboard.services.imp;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,8 +64,12 @@ public class PlantServiceImp implements PlantService {
 			List<TagDTO> tags = new ArrayList<>();
 			for(AssetDTO tag: asset.childrens) {
 				TagDTO currentTag = new TagDTO();
+				if(tag.state.equals("R")) {
+					continue;
+				}
 				currentTag.setName(tag.name);
 				currentTag.setAssetId(tag.assetId);
+				currentTag.setDescription(tag.description);
 				currentTag.setState(tag.state.charAt(0));
 				tags.add(currentTag);
 			}
@@ -101,6 +106,7 @@ public class PlantServiceImp implements PlantService {
 				continue;
 			}
 			currentTag.setAssetId(tag.assetId);
+			currentTag.setDescription(tag.description);
 			currentTag.setName(tag.name);
 			currentTag.setState(tag.state.charAt(0));
 			tags.add(currentTag);
@@ -127,7 +133,6 @@ public class PlantServiceImp implements PlantService {
 			plant.getPlantDescription() == null || plant.getPlantDescription().isEmpty() ||
 			plant.getSvgImage() == null || plant.getSvgImage().isEmpty() || 
 			plant.getTags() == null || plant.getTags().size() == 0 ||
-			plant.getMapSvgTag() == null || plant.getMapSvgTag().size() == 0 ||
 			plant.getPlantIp() == null || plant.getPlantIp().isEmpty() || 
 			plant.getPlantSlot() == null || plant.getPlantSlot().isEmpty()
 		){
@@ -156,8 +161,6 @@ public class PlantServiceImp implements PlantService {
 		}
 		
 		Plant finalPlant = PlantMapper.INSTANCE.plantInDTOToPlant(plant);
-		System.out.println("PLANT DTO: "+plant.getPlantPhoto());
-		System.out.println("PLANT: "+finalPlant.getPlantPhoto());
 		finalPlant.setAssetId(assetId);
 		finalPlant = plantRepository.save(finalPlant);
 		
@@ -190,8 +193,7 @@ public class PlantServiceImp implements PlantService {
 			plantDto.getPlantName()==null || plantDto.getPlantName().isEmpty() ||
 			plantDto.getPlantDescription() == null || plantDto.getPlantDescription().isEmpty() ||
 			plantDto.getSvgImage() == null || plantDto.getSvgImage().isEmpty() || 
-			plantDto.getTags() == null || plantDto.getTags().size() == 0 ||
-			plantDto.getMapSvgTag() == null || plantDto.getMapSvgTag().size() == 0
+			plantDto.getTags() == null || plantDto.getTags().size() == 0 
 		){
 			throw new BadRequestDataException();
 		}
@@ -200,36 +202,45 @@ public class PlantServiceImp implements PlantService {
 		if(originalPlantOp.isEmpty()) {
 			throw new BadRequestDataException();
 		}
+		String state = "A";
 		
 		Plant plant = originalPlantOp.get();
 		
-		AssetDTO assetPlant = assetManager.findById(plant.getAssetId());
-		for(AssetDTO tag: assetPlant.childrens) {
-			mapRepository.deleteByIdAsset(tag.assetId);
-			assetManager.deletById(tag.assetId);
-		}
-		assetManager.deletById(assetPlant.assetId);
+		HashMap<String,String> mapProps = new HashMap<String,String>();
+		mapProps.put("plc.ip", plantDto.getPlantIp());
+		mapProps.put("plc.slot", plantDto.getPlantSlot());
 		
+		AssetDTO assetPlant = assetManager.findById(plant.getAssetId());
+		
+		assetPlant.props = mapProps;
 		
 		String name = plant.getPlantName();
 		String desc = plant.getPlantDescription();
-		String state = "A";		
-		Integer assetId = assetManager.saveAsset(name, desc, typePlantId, workspaceId, -1, state, null);
-		
-		if(assetId==-1) {
-			throw new RuntimeException("Error interno, intente más tarde");
-		}
+		assetPlant.name = name;
+		assetPlant.description = desc;
+		assetManager.updateAsset(assetPlant);
 		
 		Plant finalPlant = PlantMapper.INSTANCE.plantInDTOToPlant(plantDto);
 		finalPlant.setPlantId(plantId);
-		finalPlant.setAssetId(assetId);
-		
-		plantRepository.save(finalPlant);
+		finalPlant.setAssetId(assetPlant.assetId);
+		finalPlant = plantRepository.save(finalPlant);
 
 		List<MapSvgTagDTO> preSvgs = plantDto.getMapSvgTag();
 		List<MapSvgTag> svgs = new ArrayList<>();
+		mapRepository.deleteAllByPlant(finalPlant);
 		for(TagDTO tag : plantDto.getTags()) {
-			Integer tagId = assetManager.saveAsset(tag.getName(), tag.getDescription(), typeTagId, workspaceId, assetId, state, null);
+			Integer tagId = -1;
+			if(tag.getAssetId()==null) {
+				tagId = assetManager.saveAsset(tag.getName(), tag.getDescription(), typeTagId, workspaceId, assetPlant.assetId, state, null);
+			}else {
+				AssetDTO oldTag = assetManager.findById(tag.getAssetId());
+				oldTag.name = tag.getName();
+				oldTag.description = tag.getDescription();
+				oldTag.state = tag.getState().toString();
+				assetManager.updateAsset(oldTag);
+				tagId = oldTag.assetId;
+			}
+			
 			MapSvgTag svg = new MapSvgTag();
 			
 			List<MapSvgTagDTO> toBeRemoved = new ArrayList<>();

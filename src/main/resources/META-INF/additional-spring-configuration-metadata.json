@@ -63,5 +63,10 @@
     "name": "webdasboard.workspace.id",
     "type": "java.lang.String",
     "description": "A description for 'webdasboard.workspace.id'"
+  },
+  {
+    "name": "webdasboard.workspace.id",
+    "type": "java.lang.String",
+    "description": "A description for 'webdasboard.workspace.id'"
   }
 ]}

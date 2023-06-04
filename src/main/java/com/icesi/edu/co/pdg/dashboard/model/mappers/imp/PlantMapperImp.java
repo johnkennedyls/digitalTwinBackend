@@ -14,7 +14,7 @@ public class PlantMapperImp implements PlantMapper{
 		plant.setConventions(plantDto.getConventions());
 		plant.setPlantDescription(plantDto.getPlantDescription());
 		plant.setPlantName(plantDto.getPlantName());
-		plant.setPlantPhoto(plantDto.getPlantName());
+		plant.setPlantPhoto(plantDto.getPlantPhoto());
 		plant.setSvgImage(plantDto.getSvgImage());
 	
 		return plant;

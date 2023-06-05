@@ -4,6 +4,7 @@ plugins {
 	id 'org.springframework.boot' version '2.7.12'
 	id 'io.spring.dependency-management' version '1.1.0'
 	id 'application'
+	id "com.bmuschko.cargo" version "2.9.0"
 }
 
 application {
@@ -58,7 +59,23 @@ sourceSets {
     main.java.srcDirs += 'bin/generated-sources/annotations'
 }
 
-
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+cargo {
+  containerId = 'tomcat9x'
+  port = 8080
+
+  deployable {
+      file = file('build/libs/web-dashboard-api-0.0.1.war')
+      context = '/dashboardapi/'
+  }
+
+  remote {
+      protocol = 'http'
+      hostname = 'xgrid103'
+      username = 'admin'
+      password = 'password'
+  }
 }

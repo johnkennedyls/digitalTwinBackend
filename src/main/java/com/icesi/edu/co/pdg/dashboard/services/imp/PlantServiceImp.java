@@ -139,17 +139,17 @@ public class PlantServiceImp implements PlantService {
 			throw new BadRequestDataException();
 		}
 		
-		String name = plant.getPlantName();
+		String name = plant.getPlantName().trim();
 		String desc = plant.getPlantDescription();
 		String state = "A";
 		
 		MetaData plantIp = new MetaData();
 		plantIp.setName("plc.ip");
-		plantIp.setValue(plant.getPlantIp());
+		plantIp.setValue(plant.getPlantIp().trim());
 		plantIp.setDescription("");
 		MetaData plantSlot = new MetaData();
 		plantSlot.setName("plc.slot");
-		plantSlot.setValue(plant.getPlantSlot());
+		plantSlot.setValue(plant.getPlantSlot().trim());
 		plantSlot.setDescription("");
 		
 		MetaData[] metaDatas = new MetaData[2];
@@ -207,14 +207,14 @@ public class PlantServiceImp implements PlantService {
 		Plant plant = originalPlantOp.get();
 		
 		HashMap<String,String> mapProps = new HashMap<String,String>();
-		mapProps.put("plc.ip", plantDto.getPlantIp());
-		mapProps.put("plc.slot", plantDto.getPlantSlot());
+		mapProps.put("plc.ip", plantDto.getPlantIp().trim());
+		mapProps.put("plc.slot", plantDto.getPlantSlot().trim());
 		
 		AssetDTO assetPlant = assetManager.findById(plant.getAssetId());
 		
 		assetPlant.props = mapProps;
 		
-		String name = plant.getPlantName();
+		String name = plant.getPlantName().trim();
 		String desc = plant.getPlantDescription();
 		assetPlant.name = name;
 		assetPlant.description = desc;

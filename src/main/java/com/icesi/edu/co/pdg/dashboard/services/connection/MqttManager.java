@@ -39,7 +39,6 @@ public class MqttManager implements CommandLineRunner  {
 	
 	@Override
 	public void run(String... args) throws Exception {
-          
 		ProcessDTO[] processes = processManager.findProcessByWorkSpace(workspaceId);
 		for(ProcessDTO currentProcess : processes) {
 			System.out.println("Process:"+currentProcess.id);
@@ -74,7 +73,9 @@ public class MqttManager implements CommandLineRunner  {
             new Thread(()->{
             	 for(MeasurementDTO measure: measures) {
                   	try {
- 						context.checkAlarms(measure);
+                  		if (!Double.isNaN(measure.value)) {
+                            context.checkAlarms(measure);
+                        }
  					} catch (Exception e) {
  						e.printStackTrace();
  					}

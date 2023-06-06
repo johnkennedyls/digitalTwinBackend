@@ -35,7 +35,7 @@ public class EmailServiceImp implements EmailService{
 }
 	
 	@Override
-	public void sendEmail(List<String> emails, TypeAlarm typeAlarm,List<Alarm> alarms,int numberAlarms) throws IOException, MessagingException {
+	public void sendEmail(List<String> emails, TypeAlarm typeAlarm,List<Alarm> alarms) throws IOException, MessagingException {
 		MimeMessage mimeMessage = mailSender.createMimeMessage();
 		MimeMessageHelper mimeHelper = new MimeMessageHelper(mimeMessage, "UTF-8");
 		
@@ -47,10 +47,6 @@ public class EmailServiceImp implements EmailService{
 		int index = htmlBuilder.indexOf("%PLANT_NAME%");
 		if (index != -1) {
 		  htmlBuilder.replace(index, index + "%PLANT_NAME%".length(), typeAlarm.getPlant().getPlantName());
-		}
-		index = htmlBuilder.indexOf("%NUM%");
-		if (index != -1) {
-		  htmlBuilder.replace(index, index + "%NUM%".length(), Integer.toString(numberAlarms));
 		}
 		index = htmlBuilder.indexOf("%TYPE_ALARM_NAME%");
 		if (index != -1) {

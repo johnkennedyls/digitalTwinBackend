@@ -19,6 +19,7 @@ import com.icesi.edu.co.pdg.dashboard.controller.interfaces.PlantController;
 import com.icesi.edu.co.pdg.dashboard.exceptions.BadRequestDataException;
 import com.icesi.edu.co.pdg.dashboard.exceptions.NoResultException;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.in.PlantInDTO;
+import com.icesi.edu.co.pdg.dashboard.model.dtos.out.MeasureListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.PlantListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.PlantOutDTO;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.PlantService;
@@ -93,7 +94,7 @@ public class PlantControllerImp implements PlantController {
 	@Override
 	@GetMapping("/delimited/{plantId}/{startDate}/{endDate}")
 	public ResponseEntity<?> getDelimitatedData(@PathVariable Integer plantId, @PathVariable Long startDate, @PathVariable Long endDate) {
-		List<MeasurementDTO> measures = null;
+		List<MeasureListOutDTO> measures = null;
 		try {
 			measures = service.getTagValuesByStartAndEndDate(plantId, startDate, endDate);
 		} catch (BadRequestDataException e) {

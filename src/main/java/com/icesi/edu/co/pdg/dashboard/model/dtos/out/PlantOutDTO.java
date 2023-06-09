@@ -10,8 +10,10 @@ public class PlantOutDTO {
 	private String plantDescription;
 	private String conventions;
 	private String plantPhoto;
-	private List<TagDTO> tags;
 	private String svgImage;
+	private String plantIp;
+	private String plantSlot;
+	private List<TagDTO> tags;
 	private List<MapSvgTagDTO> mapSvgTag;
 	
 	public String getPlantDescription() {
@@ -55,5 +57,17 @@ public class PlantOutDTO {
 	}
 	public void setMapSvgTag(List<MapSvgTagDTO> mapSvgTag) {
 		this.mapSvgTag = mapSvgTag;
+	}
+	public String getPlantIp() {
+		return plantIp;
+	}
+	public void setPlantIp(String plantIp) {
+		this.plantIp = plantIp;
+	}
+	public String getPlantSlot() {
+		return plantSlot;
+	}
+	public void setPlantSlot(String plantSlot) {
+		this.plantSlot = plantSlot;
 	}
 }

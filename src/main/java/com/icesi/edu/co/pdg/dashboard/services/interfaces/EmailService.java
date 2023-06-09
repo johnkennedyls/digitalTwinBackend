@@ -14,7 +14,7 @@ import com.icesi.edu.co.pdg.dashboard.model.entity.TypeAlarm;
 
 public interface EmailService {
 
-	void sendEmail(List<String> email, TypeAlarm typeAlarm, List<Alarm> alarms) throws IOException, MessagingException;
+	void sendEmail(List<String> emails, TypeAlarm typeAlarm, List<Alarm> alarms) throws IOException, MessagingException;
 
 
 }

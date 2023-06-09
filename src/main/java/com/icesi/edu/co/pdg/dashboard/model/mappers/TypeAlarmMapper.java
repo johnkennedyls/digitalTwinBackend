@@ -2,9 +2,6 @@ package com.icesi.edu.co.pdg.dashboard.model.mappers;
 
 import java.util.List;
 
-import org.mapstruct.Mapper;
-
-import org.mapstruct.factory.Mappers;
 
 import com.icesi.edu.co.pdg.dashboard.model.dtos.TypeAlarmDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmDetailOutDTO;
@@ -12,11 +9,12 @@ import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.entity.EventDashboard;
 import com.icesi.edu.co.pdg.dashboard.model.entity.Plant;
 import com.icesi.edu.co.pdg.dashboard.model.entity.TypeAlarm;
+import com.icesi.edu.co.pdg.dashboard.model.mappers.imp.TypeAlarmMapperImpl;
 
-@Mapper
+
 public interface TypeAlarmMapper {
 	
-	TypeAlarmMapper INSTANCE = Mappers.getMapper(TypeAlarmMapper.class);
+	TypeAlarmMapper INSTANCE = new TypeAlarmMapperImpl();
 	
 	TypeAlarmDTO typeAlarmToTypeAlarmDTO(TypeAlarm typeAlarm);
 	

@@ -21,12 +21,17 @@ import com.icesi.edu.co.pdg.dashboard.model.dtos.out.AlarmListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.AlarmService;
 
 @RestController
-@CrossOrigin("*")
 @RequestMapping("/alarms")
+@CrossOrigin("Access-Control-Allow-Origin")
 public class AlarmControllerImp implements AlarmController {
 	
-	@Autowired
+	
     private AlarmService alarmService;
+    
+    @Autowired
+    public void setAlarmService(AlarmService alarmService) {
+		this.alarmService = alarmService;
+	}
 
 	@Override
 	@GetMapping("/")
@@ -49,7 +54,20 @@ public class AlarmControllerImp implements AlarmController {
 		respOutDTO = alarmService.getAllAlarmsActive();
 		return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
 	}
-	
+	@Override
+	@GetMapping("/history/{plantid}")
+	public ResponseEntity<List<AlarmListOutDTO>> getAllAlarmsClosedByPlantId(@PathVariable("plantid") Integer plantid) throws Exception {
+		List<AlarmListOutDTO> respOutDTO = new ArrayList<AlarmListOutDTO>();
+		respOutDTO = alarmService.getAllAlarmsClosedByPlantId(plantid);
+		return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
+	}
+	@Override
+	@GetMapping("/active/{plantid}")
+	public ResponseEntity<List<AlarmListOutDTO>> getAllAlarmsActiveByPlantId(@PathVariable("plantid") Integer plantid) throws Exception {
+		List<AlarmListOutDTO> respOutDTO = new ArrayList<AlarmListOutDTO>();
+		respOutDTO = alarmService.getAllAlarmsActiveByPlantId(plantid);
+		return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
+	}
 	@Override
 	@GetMapping("/{alarmid}")
 	public ResponseEntity<AlarmDetailOutDTO> getAlarmById(@PathVariable("alarmid") Integer alarmid) throws Exception {

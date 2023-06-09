@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 /**
  * The persistent class for the log database table.
  * 
@@ -22,7 +23,8 @@ public class LogDashboard implements Serializable {
 
 	@Id
 	@Column(name="log_id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@SequenceGenerator(name = "DASHBOARD_LOG_LOGID_GENERATOR", sequenceName = "dashboard_log_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DASHBOARD_LOG_LOGID_GENERATOR")
 	private Integer logId;
 
 	@Column(name="detail_log")

@@ -5,9 +5,12 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 
 import java.util.List;
 
@@ -23,6 +26,8 @@ public class EventDashboard implements Serializable {
 
 	@Id
 	@Column(name="event_id")
+	@SequenceGenerator(name = "DASHBOARD_EVENT_EVENTID_GENERATOR", sequenceName = "dashboard_event_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DASHBOARD_EVENT_EVENTID_GENERATOR")
 	private Integer eventId;
 
 	@Column(name="event_description")
@@ -30,9 +35,6 @@ public class EventDashboard implements Serializable {
 
 	@Column(name="event_name")
 	private String eventName;
-
-	@Column(name="type_alarm_id")
-	private Integer typeAlarmId;
 
 	//bi-directional many-to-one association to TypeAlarm
 	@OneToMany(mappedBy="dashboardEvent")
@@ -63,14 +65,6 @@ public class EventDashboard implements Serializable {
 
 	public void setEventName(String eventName) {
 		this.eventName = eventName;
-	}
-
-	public Integer getTypeAlarmId() {
-		return this.typeAlarmId;
-	}
-
-	public void setTypeAlarmId(Integer typeAlarmId) {
-		this.typeAlarmId = typeAlarmId;
 	}
 
 	public List<TypeAlarm> getTypeAlarms() {

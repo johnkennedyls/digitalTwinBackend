@@ -1,14 +1,14 @@
 package com.icesi.edu.co.pdg.dashboard.model.mappers;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 import com.icesi.edu.co.pdg.dashboard.model.dtos.EventDashboardDTO;
 import com.icesi.edu.co.pdg.dashboard.model.entity.EventDashboard;
-@Mapper
+import com.icesi.edu.co.pdg.dashboard.model.mappers.imp.EventDashboardMapperImpl;
+
+
 public interface EventDashboardMapper {
-	EventDashboardMapper INSTANCE = Mappers.getMapper(EventDashboardMapper.class);
 	
+	EventDashboardMapper INSTANCE = new EventDashboardMapperImpl();
 	EventDashboardDTO eventDashboardToEventDashboardDTO(EventDashboard eventDashboard);
 
 }

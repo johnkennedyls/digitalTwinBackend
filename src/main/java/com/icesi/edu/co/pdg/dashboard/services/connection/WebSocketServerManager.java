@@ -14,6 +14,7 @@ class WebSocketServerManager {
     }
     
     public void sendMeasure(MeasurementDTO[] measures) {
+    	System.out.println("Mensaje");
     	this.template.convertAndSend("/topic/realtime",measures);
     }
 

@@ -17,8 +17,8 @@ import com.icesi.edu.co.pdg.dashboard.model.dtos.StateAlarmInDTO;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.StateAlarmService;
 
 @RestController
-@CrossOrigin("*")
 @RequestMapping("/statesAlarm")
+@CrossOrigin("Access-Control-Allow-Origin")
 public class StateAlarmControllerImp implements StateAlarmController{
 
 	@Autowired

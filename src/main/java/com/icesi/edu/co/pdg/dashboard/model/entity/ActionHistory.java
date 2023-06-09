@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 
 
 /**
@@ -25,7 +26,8 @@ public class ActionHistory implements Serializable {
 
 	@Id
 	@Column(name="action_history_id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@SequenceGenerator(name = "DASHBOARD_ACTIONHISTORY_ACTIONHISTORYID_GENERATOR", sequenceName = "dashboard_action_history_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DASHBOARD_ACTIONHISTORY_ACTIONHISTORYID_GENERATOR")
 	private Integer actionHistoryId;
 
 	@Column(name="action_history_date")

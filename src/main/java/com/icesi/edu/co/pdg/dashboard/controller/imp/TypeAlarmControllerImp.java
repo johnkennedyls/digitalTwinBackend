@@ -1,9 +1,11 @@
 package com.icesi.edu.co.pdg.dashboard.controller.imp;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,19 +21,28 @@ import org.springframework.web.bind.annotation.RestController;
 import com.icesi.edu.co.pdg.dashboard.controller.interfaces.TypeAlarmController;
 import com.icesi.edu.co.pdg.dashboard.exceptions.BadRequestDataException;
 import com.icesi.edu.co.pdg.dashboard.exceptions.NoResultException;
+import com.icesi.edu.co.pdg.dashboard.model.dtos.SaamfiUserSpeOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.TypeAlarmDTO;
+import com.icesi.edu.co.pdg.dashboard.model.dtos.out.AlarmListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmDetailOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.out.TypeAlarmListOutDTO;
 import com.icesi.edu.co.pdg.dashboard.model.entity.TypeAlarm;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.TypeAlarmService;
+import com.icesi.edu.co.pdg.dashboard.services.springexpression.Context;
 
-@CrossOrigin("*")
-@RequestMapping("/typeAlarms")
+import icesi.plantapiloto.common.dtos.MeasurementDTO;
+
 @RestController
+@RequestMapping("/typeAlarms")
+@CrossOrigin("Access-Control-Allow-Origin")
 public class TypeAlarmControllerImp implements TypeAlarmController{
 	
-	@Autowired
     private TypeAlarmService typeAlarmService;
+    
+    @Autowired
+    public void setTypeAlarmService(TypeAlarmService typeAlarmService) {
+		this.typeAlarmService = typeAlarmService;
+	}
 
 	@Override
 	@GetMapping("/{typealarmid}")
@@ -51,24 +62,16 @@ public class TypeAlarmControllerImp implements TypeAlarmController{
 	@GetMapping("/")
 	public ResponseEntity<List<TypeAlarmListOutDTO>> getAllTypeAlarms() throws Exception {
 		List<TypeAlarmListOutDTO> respOutDTO = new ArrayList<TypeAlarmListOutDTO>();
-		try {
-			respOutDTO = typeAlarmService.getAllTypeAlarms();
-			return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
-		}catch(NoResultException e) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-		}
+		respOutDTO = typeAlarmService.getAllTypeAlarms();
+		return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
 	}
 	
 	@Override
 	@GetMapping("/plant/{plantid}")
 	public ResponseEntity<List<TypeAlarmListOutDTO>> getAllTypeAlarmsByPlant(@PathVariable("plantid") Integer plantid) throws Exception {
 		List<TypeAlarmListOutDTO> respOutDTO = new ArrayList<TypeAlarmListOutDTO>();
-		try {
-			respOutDTO = typeAlarmService.getAllTypeAlarmsByPlantid(plantid);
-			return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
-		}catch(NoResultException e) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-		}
+		respOutDTO = typeAlarmService.getAllTypeAlarmsByPlantid(plantid);
+		return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
 	}
 
 	@Override
@@ -87,13 +90,13 @@ public class TypeAlarmControllerImp implements TypeAlarmController{
 
 	@Override
 	@PutMapping("/edit/{typealarmid}")
-	public ResponseEntity<TypeAlarmDTO> editTypeAlarm(@PathVariable("typealarmid") Integer typealarmid, @RequestBody TypeAlarmDTO typealarm) throws Exception {
+	public ResponseEntity<?> editTypeAlarm(@PathVariable("typealarmid") Integer typealarmid, @RequestBody TypeAlarmDTO typealarm) throws Exception {
 		TypeAlarmDTO alarm;
 		try {
 			alarm = typeAlarmService.editTypeAlarm(typealarmid,typealarm);
 			return new ResponseEntity<>(alarm, HttpStatus.OK);
 		}catch(BadRequestDataException e) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}catch(NoResultException e) {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
@@ -111,6 +114,14 @@ public class TypeAlarmControllerImp implements TypeAlarmController{
 		}catch(NoResultException e) {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
+	}
+
+	@Override
+	@GetMapping("/emails")
+	public ResponseEntity<List<SaamfiUserSpeOutDTO>> getAllEmailUsers() throws Exception {
+		List<SaamfiUserSpeOutDTO> respOutDTO = new ArrayList<SaamfiUserSpeOutDTO>();
+		respOutDTO = typeAlarmService.getAllEmailUsers();
+		return new ResponseEntity<>(respOutDTO, HttpStatus.OK);
 	}
 
 }

@@ -14,6 +14,7 @@ import com.icesi.edu.co.pdg.dashboard.services.connection.MqttManager;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.ProcessService;
 
 import co.edu.icesi.dev.saamfi.saamfisecurity.delegate.SaamfiDelegate;
+import icesi.plantapiloto.common.consts.ExecutionState;
 import icesi.plantapiloto.common.controllers.ProcessManagerControllerPrx;
 import icesi.plantapiloto.common.dtos.ExecutionDTO;
 import icesi.plantapiloto.common.dtos.ProcessDTO;
@@ -46,7 +47,6 @@ public class ProcessServiceImp implements ProcessService{
 			ExecutionDTO[] execs = processManager.findExecutions(processList[i].id, 0, System.currentTimeMillis(), "running");
 			list[i].state = ProcessListOutDTO.PROCESS_STOPPED;
 			if(execs.length>0) {
-				
 				list[i].state = execs[0].state.equalsIgnoreCase("running") ? ProcessListOutDTO.PROCESS_RUNNING : ProcessListOutDTO.PROCESS_PAUSED;
 			}
 		}

@@ -78,9 +78,7 @@ public class AlarmServiceImp implements AlarmService {
 	        Hibernate.initialize(typeAlarm.getAssignedUsers());
 	        long now = System.currentTimeMillis();
 	        if (now >= nextEmailTime) {
-	        	List<Alarm> alarmsToSendSnapshot = new ArrayList<>(alarmsToSend);
-	        	int size = alarmsToSendSnapshot.size();
-	        	emailService.sendEmail(getEmailsAssignedUsers(typeAlarm), typeAlarm, alarmsToSendSnapshot, size);
+	        	emailService.sendEmail(getEmailsAssignedUsers(typeAlarm), typeAlarm, new ArrayList<>(alarmsToSend));
 	            alarmsToSend.clear();
 	            nextEmailTime = now + TimeUnit.MINUTES.toMillis(10);
 	        } else if (alarmsToSend.size() == 1) { 
@@ -88,9 +86,7 @@ public class AlarmServiceImp implements AlarmService {
 	                @Override
 	                public void run() {
 	                    try {
-	                    	List<Alarm> alarmsToSendSnapshot = new ArrayList<>(alarmsToSend);
-	        	        	int size = alarmsToSendSnapshot.size();
-	                    	 emailService.sendEmail(getEmailsAssignedUsers(typeAlarm), typeAlarm, alarmsToSendSnapshot,size);
+	                    	 emailService.sendEmail(getEmailsAssignedUsers(typeAlarm), typeAlarm, new ArrayList<>(alarmsToSend));
 						} catch (IOException | MessagingException e) {
 							e.printStackTrace();
 						}

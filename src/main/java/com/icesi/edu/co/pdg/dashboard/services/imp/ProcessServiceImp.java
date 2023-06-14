@@ -75,6 +75,23 @@ public class ProcessServiceImp implements ProcessService{
 	}
 	
 	@Override
+	public ExecutionDTO[] getExecutionByProcess(Integer processId)
+			throws BadRequestDataException, UnexpectedException {
+		
+		if(processId==null) {
+			throw new BadRequestDataException();
+		}
+		ExecutionDTO[] currentExecutions = null;
+		try {
+			currentExecutions = processManager.findExecutions(processId, 0, System.currentTimeMillis(), null);
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw new UnexpectedException();
+		}
+		return currentExecutions;
+	}
+	
+	@Override
 	public void startExecution(Integer processId) throws BadRequestDataException, UnexpectedException{
 		if(processId==null) {
 			throw new BadRequestDataException();
@@ -82,7 +99,11 @@ public class ProcessServiceImp implements ProcessService{
 		
 		ExecutionDTO[] currentExecutions = processManager.findExecutions(processId, 0, System.currentTimeMillis(), "running");
 		if(currentExecutions.length>0) {
-			System.out.println("QUE XD "+currentExecutions[currentExecutions.length-1].id);
+			throw new BadRequestDataException("Ya este proceso se encuetra corriendo");
+		}
+		
+		currentExecutions = processManager.findExecutions(processId, 0, System.currentTimeMillis(), "paused");
+		if(currentExecutions.length>0) {
 			continueExecution(currentExecutions[currentExecutions.length-1].id);
 			return;
 		}
@@ -97,7 +118,7 @@ public class ProcessServiceImp implements ProcessService{
 			throw new UnexpectedException();
 		}
 	}
-
+	
 	@Override
 	public void pauseExecution(Integer processId) throws BadRequestDataException, MqttException {
 		
@@ -133,5 +154,4 @@ public class ProcessServiceImp implements ProcessService{
 		processManager.stopExecutionProcess(executionId);
 		mqttManager.unsubscribeOfMqtt(executionId+"");
 	}
-	
 }

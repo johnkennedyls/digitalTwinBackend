@@ -18,6 +18,7 @@ import com.icesi.edu.co.pdg.dashboard.exceptions.UnexpectedException;
 import com.icesi.edu.co.pdg.dashboard.model.dtos.in.ProcessInDTO;
 import com.icesi.edu.co.pdg.dashboard.services.interfaces.ProcessService;
 
+import icesi.plantapiloto.common.dtos.ExecutionDTO;
 import icesi.plantapiloto.common.dtos.ProcessDTO;
 
 @RestController()
@@ -33,6 +34,20 @@ public class ProcessControllerImp implements ProcessController {
 	public ResponseEntity<?> getAllProcess() {
 		ProcessDTO[] processes =  processService.getAllProcess();
 		return ResponseEntity.ok(processes);
+	}
+	
+	@Override
+	@GetMapping("/{processId}/executions")
+	public ResponseEntity<?> getExecutionsByProcess(@PathVariable Integer processId) {
+		ExecutionDTO[] executions = null;
+		
+		try {
+			executions = processService.getExecutionByProcess(processId);
+		} catch (BadRequestDataException | UnexpectedException e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
+		} 
+		return ResponseEntity.ok(executions);
 	}
 
 	@Override
@@ -91,5 +106,4 @@ public class ProcessControllerImp implements ProcessController {
 		}
 		return ResponseEntity.ok("Proceso detenido correctamente");
 	}
-
 }

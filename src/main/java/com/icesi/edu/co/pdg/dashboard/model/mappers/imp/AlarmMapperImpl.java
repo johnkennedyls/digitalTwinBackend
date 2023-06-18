@@ -51,6 +51,9 @@ public class AlarmMapperImpl implements AlarmMapper {
         if ( stateAlarm != null ) {
             alarmListOutDTO.setStateAlarmName( stateAlarm.getStateAlarmName() );
         }
+        if ( plant != null ) {
+            alarmListOutDTO.setPlantName(plant.getPlantName());;
+        }
 
         return alarmListOutDTO;
     }

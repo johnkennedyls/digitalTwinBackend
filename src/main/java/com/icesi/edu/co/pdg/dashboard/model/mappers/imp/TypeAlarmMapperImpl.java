@@ -90,6 +90,7 @@ public class TypeAlarmMapperImpl implements TypeAlarmMapper {
             typeAlarmListOutDTO.setTypeAlarmDescription( typeAlarm.getTypeAlarmDescription() );
             typeAlarmListOutDTO.setCondition( typeAlarm.getCondition() );
             typeAlarmListOutDTO.setNumberAlarmsMax( typeAlarm.getNumberAlarmsMax() );
+            typeAlarmListOutDTO.setPlantName(plant.getPlantName());
         }
 
         return typeAlarmListOutDTO;

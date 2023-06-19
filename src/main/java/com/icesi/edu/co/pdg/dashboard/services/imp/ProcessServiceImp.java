@@ -75,6 +75,24 @@ public class ProcessServiceImp implements ProcessService{
 	}
 	
 	@Override
+	public void editProcess(ProcessInDTO process, Integer processId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteProcess(Integer processId) throws BadRequestDataException, UnexpectedException {
+		if(processId==null) {
+			throw new BadRequestDataException();
+		}
+		processId = processManager.deleteProcessById(processId);
+		
+		if(processId == null || processId < 0) {
+			throw new UnexpectedException();
+		}
+	}
+	
+	@Override
 	public ExecutionDTO[] getExecutionByProcess(Integer processId)
 			throws BadRequestDataException, UnexpectedException {
 		

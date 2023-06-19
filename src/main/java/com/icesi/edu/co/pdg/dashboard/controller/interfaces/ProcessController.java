@@ -8,6 +8,8 @@ public interface ProcessController {
 	public ResponseEntity<?> getAllProcess();
 	public ResponseEntity<?> getExecutionsByProcess(Integer processId);
 	public ResponseEntity<?> addProcess(ProcessInDTO processDto);
+	public ResponseEntity<?> editProcess(ProcessInDTO processDto, Integer processId);
+	public ResponseEntity<?> deleteProcess(Integer processId);
 	public ResponseEntity<?> startProcess(Integer processId);
 	public ResponseEntity<?> pauseProcess(Integer processId);
 	public ResponseEntity<?> stopProcess(Integer processId);

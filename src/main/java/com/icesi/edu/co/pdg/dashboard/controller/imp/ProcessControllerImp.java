@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -62,6 +63,27 @@ public class ProcessControllerImp implements ProcessController {
 	}
 
 	@Override
+	public ResponseEntity<?> editProcess(ProcessInDTO processDto, Integer processId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	@DeleteMapping("/delete/{processId}")
+	public ResponseEntity<?> deleteProcess(@PathVariable Integer processId) {
+		try {
+			processService.deleteProcess(processId);
+		} catch (BadRequestDataException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+		} catch (UnexpectedException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return ResponseEntity.ok("Proceso borrado correctamente");
+	}
+
+	@Override
 	@PostMapping("/start/{processId}")
 	public ResponseEntity<?> startProcess(@PathVariable Integer processId) {
 		try {
@@ -70,7 +92,7 @@ public class ProcessControllerImp implements ProcessController {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
 		} catch(UnexpectedException e) {
-//			e.printStackTrace();
+			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return ResponseEntity.ok("Proceso inciado correctamente");

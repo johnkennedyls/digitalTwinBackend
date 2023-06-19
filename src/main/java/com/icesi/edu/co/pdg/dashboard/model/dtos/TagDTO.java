@@ -4,6 +4,7 @@ public class TagDTO {
 	
 	private Integer assetId;
 	private String name;
+	private String dataType;
 	private String description;
 	private Character state;
 	
@@ -30,5 +31,11 @@ public class TagDTO {
 	}
 	public void setAssetId(Integer assetId) {
 		this.assetId = assetId;
+	}
+	public String getDataType() {
+		return dataType;
+	}
+	public void setDataType(String dataType) {
+		this.dataType = dataType;
 	} 
 }

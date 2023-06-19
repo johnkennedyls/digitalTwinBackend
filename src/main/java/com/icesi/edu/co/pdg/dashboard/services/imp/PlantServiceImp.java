@@ -109,6 +109,7 @@ public class PlantServiceImp implements PlantService {
 			currentTag.setDescription(tag.description);
 			currentTag.setName(tag.name);
 			currentTag.setState(tag.state.charAt(0));
+			currentTag.setDataType(tag.props.get("type"));
 			tags.add(currentTag);
 		}
 		List<MapSvgTagDTO> svgs = new ArrayList<>();
@@ -167,7 +168,12 @@ public class PlantServiceImp implements PlantService {
 		List<MapSvgTagDTO> preSvgs = plant.getMapSvgTag();
 		List<MapSvgTag> svgs = new ArrayList<>();
 		for(TagDTO tag : plant.getTags()) {
-			Integer tagId = assetManager.saveAsset(tag.getName(), tag.getDescription(), typeTagId, workspaceId, assetId, state, null);
+			metaDatas = new MetaData[1];
+			MetaData tagType = new MetaData();
+			tagType.setName("type");
+			tagType.setValue(tag.getDataType());
+			metaDatas[0] = tagType;
+			Integer tagId = assetManager.saveAsset(tag.getName(), tag.getDescription(), typeTagId, workspaceId, assetId, state, metaDatas);
 			List<MapSvgTagDTO> toBeRemoved = new ArrayList<>();
 			for(MapSvgTagDTO preSvg : preSvgs) {
 				MapSvgTag svg = new MapSvgTag();

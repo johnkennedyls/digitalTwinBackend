@@ -3,6 +3,7 @@ package com.icesi.edu.co.pdg.dashboard.services.imp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -172,6 +173,7 @@ public class PlantServiceImp implements PlantService {
 			MetaData tagType = new MetaData();
 			tagType.setName("type");
 			tagType.setValue(tag.getDataType());
+			tagType.setDescription("");
 			metaDatas[0] = tagType;
 			Integer tagId = assetManager.saveAsset(tag.getName(), tag.getDescription(), typeTagId, workspaceId, assetId, state, metaDatas);
 			List<MapSvgTagDTO> toBeRemoved = new ArrayList<>();
@@ -236,13 +238,22 @@ public class PlantServiceImp implements PlantService {
 		mapRepository.deleteAllByPlant(finalPlant);
 		for(TagDTO tag : plantDto.getTags()) {
 			Integer tagId = -1;
+			MetaData[] metaDatas = new MetaData[1];
+			MetaData tagType = new MetaData();
+			tagType.setName("type");
+			tagType.setValue(tag.getDataType());
+			metaDatas[0] = tagType;
 			if(tag.getAssetId()==null) {
-				tagId = assetManager.saveAsset(tag.getName(), tag.getDescription(), typeTagId, workspaceId, assetPlant.assetId, state, null);
+				
+				tagId = assetManager.saveAsset(tag.getName(), tag.getDescription(), typeTagId, workspaceId, assetPlant.assetId, state, metaDatas);
 			}else {
 				AssetDTO oldTag = assetManager.findById(tag.getAssetId());
 				oldTag.name = tag.getName();
 				oldTag.description = tag.getDescription();
 				oldTag.state = tag.getState().toString();
+				Map<String, String> props = new HashMap<>();
+				props.put("type", tag.getDataType());
+				oldTag.props = props;
 				assetManager.updateAsset(oldTag);
 				tagId = oldTag.assetId;
 			}

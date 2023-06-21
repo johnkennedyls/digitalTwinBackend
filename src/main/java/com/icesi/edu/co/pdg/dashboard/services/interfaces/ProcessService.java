@@ -11,7 +11,9 @@ import icesi.plantapiloto.common.dtos.ProcessDTO;
 
 public interface ProcessService {
 	public ProcessDTO[] getAllProcess();
-	public void addProcess(ProcessInDTO sd) throws BadRequestDataException;
+	public void addProcess(ProcessInDTO process) throws BadRequestDataException;
+	public void editProcess(ProcessInDTO process, Integer processId) throws BadRequestDataException;
+	public void deleteProcess(Integer processId) throws BadRequestDataException, UnexpectedException;
 	
 	public ExecutionDTO[] getExecutionByProcess(Integer processId) throws BadRequestDataException, UnexpectedException;
 	public void startExecution(Integer processId) throws BadRequestDataException, UnexpectedException;

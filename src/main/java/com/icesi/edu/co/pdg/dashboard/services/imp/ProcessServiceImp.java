@@ -46,6 +46,7 @@ public class ProcessServiceImp implements ProcessService{
 			list[i].workSpaceId =  processList[i].workSpaceId;
 			ExecutionDTO[] execs = processManager.findExecutions(processList[i].id, 0, System.currentTimeMillis(), "running");
 			list[i].state = ProcessListOutDTO.PROCESS_STOPPED;
+			list[i].assets = processList[i].assets;
 			if(execs.length>0) {
 				list[i].state = execs[0].state.equalsIgnoreCase("running") ? ProcessListOutDTO.PROCESS_RUNNING : ProcessListOutDTO.PROCESS_PAUSED;
 			}
@@ -71,6 +72,24 @@ public class ProcessServiceImp implements ProcessService{
 		}
 		for(Integer assetId : sd.getSelectedAssets()) {
 			processManager.addAssetToProcess(assetId, processId, 10000);
+		}
+	}
+	
+	@Override
+	public void editProcess(ProcessInDTO process, Integer processId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteProcess(Integer processId) throws BadRequestDataException, UnexpectedException {
+		if(processId==null) {
+			throw new BadRequestDataException();
+		}
+		processId = processManager.deleteProcessById(processId);
+		
+		if(processId == null || processId < 0) {
+			throw new UnexpectedException();
 		}
 	}
 	

@@ -50,6 +50,10 @@ gradle-app.setting
 
 ## MQTT
 paho*
+
+## General
 *.class
+*.war
+
 
 
